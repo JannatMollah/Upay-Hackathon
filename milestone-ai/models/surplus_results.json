@@ -1,0 +1,15 @@
+{
+  "val_mae": 278.31,
+  "val_r2": 0.9984,
+  "test_mae": 279.2,
+  "test_r2": 0.9986,
+  "test_rmse": 531.54,
+  "best_params": {
+    "subsample": 0.8,
+    "n_estimators": 200,
+    "min_child_weight": 5,
+    "max_depth": 6,
+    "learning_rate": 0.1,
+    "colsample_bytree": 0.8
+  }
+}

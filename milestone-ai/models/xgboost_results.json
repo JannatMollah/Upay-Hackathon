@@ -1,0 +1,70 @@
+{
+  "M2": {
+    "val_auc_roc": 0.7407,
+    "test_auc_roc": 0.7423,
+    "brier_score": 0.1342,
+    "precision": 0.8188,
+    "recall": 0.9875,
+    "f1": 0.8953,
+    "best_params": {
+      "subsample": 0.7,
+      "n_estimators": 100,
+      "min_child_weight": 5,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "gamma": 0.2,
+      "colsample_bytree": 0.8
+    }
+  },
+  "M3": {
+    "val_auc_roc": 0.7477,
+    "test_auc_roc": 0.7505,
+    "brier_score": 0.1709,
+    "precision": 0.761,
+    "recall": 0.9254,
+    "f1": 0.8351,
+    "best_params": {
+      "subsample": 0.7,
+      "n_estimators": 100,
+      "min_child_weight": 5,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "gamma": 0.2,
+      "colsample_bytree": 0.8
+    }
+  },
+  "M4": {
+    "val_auc_roc": 0.789,
+    "test_auc_roc": 0.784,
+    "brier_score": 0.1873,
+    "precision": 0.6763,
+    "recall": 0.7022,
+    "f1": 0.689,
+    "best_params": {
+      "subsample": 0.7,
+      "n_estimators": 100,
+      "min_child_weight": 5,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "gamma": 0.2,
+      "colsample_bytree": 0.8
+    }
+  },
+  "M5": {
+    "val_auc_roc": 0.7895,
+    "test_auc_roc": 0.7869,
+    "brier_score": 0.1782,
+    "precision": 0.6354,
+    "recall": 0.5115,
+    "f1": 0.5668,
+    "best_params": {
+      "subsample": 0.7,
+      "n_estimators": 100,
+      "min_child_weight": 5,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "gamma": 0.2,
+      "colsample_bytree": 0.8
+    }
+  }
+}

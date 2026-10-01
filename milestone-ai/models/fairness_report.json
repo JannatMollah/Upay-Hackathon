@@ -1,0 +1,186 @@
+{
+  "M2": {
+    "urban_vs_rural": {
+      "group_a": {
+        "group": "Urban",
+        "n": 2604,
+        "positive_rate": 0.8091397849462365,
+        "predicted_positive_rate": 0.9819508448540707,
+        "tpr": 0.9886,
+        "fpr": 0.9537,
+        "auc_roc": 0.7249
+      },
+      "group_b": {
+        "group": "Rural",
+        "n": 2616,
+        "positive_rate": 0.808868501529052,
+        "predicted_positive_rate": 0.9728593272171254,
+        "tpr": 0.9849,
+        "fpr": 0.922,
+        "auc_roc": 0.7615
+      },
+      "equalized_odds_ratio": 0.9668,
+      "passed": true
+    },
+    "male_vs_female": {
+      "group_a": {
+        "group": "Male",
+        "n": 4150,
+        "positive_rate": 0.8098795180722892,
+        "predicted_positive_rate": 0.9775903614457832,
+        "tpr": 0.986,
+        "fpr": 0.9417,
+        "auc_roc": 0.7331
+      },
+      "group_b": {
+        "group": "Female",
+        "n": 2589,
+        "positive_rate": 0.8165314793356508,
+        "predicted_positive_rate": 0.9791425260718424,
+        "tpr": 0.9891,
+        "fpr": 0.9347,
+        "auc_roc": 0.7432
+      },
+      "equalized_odds_ratio": 0.9926,
+      "passed": true
+    }
+  },
+  "M3": {
+    "urban_vs_rural": {
+      "group_a": {
+        "group": "Urban",
+        "n": 2604,
+        "positive_rate": 0.6904761904761905,
+        "predicted_positive_rate": 0.8494623655913979,
+        "tpr": 0.9049,
+        "fpr": 0.7258,
+        "auc_roc": 0.7369
+      },
+      "group_b": {
+        "group": "Rural",
+        "n": 2616,
+        "positive_rate": 0.7672018348623854,
+        "predicted_positive_rate": 0.9376911314984709,
+        "tpr": 0.9676,
+        "fpr": 0.8391,
+        "auc_roc": 0.7552
+      },
+      "equalized_odds_ratio": 0.865,
+      "passed": true
+    },
+    "male_vs_female": {
+      "group_a": {
+        "group": "Male",
+        "n": 4150,
+        "positive_rate": 0.711566265060241,
+        "predicted_positive_rate": 0.8693975903614458,
+        "tpr": 0.9201,
+        "fpr": 0.7444,
+        "auc_roc": 0.7468
+      },
+      "group_b": {
+        "group": "Female",
+        "n": 2589,
+        "positive_rate": 0.727694090382387,
+        "predicted_positive_rate": 0.8814213982232523,
+        "tpr": 0.931,
+        "fpr": 0.7489,
+        "auc_roc": 0.7491
+      },
+      "equalized_odds_ratio": 0.9883,
+      "passed": true
+    }
+  },
+  "M4": {
+    "urban_vs_rural": {
+      "group_a": {
+        "group": "Urban",
+        "n": 2604,
+        "positive_rate": 0.5149769585253456,
+        "predicted_positive_rate": 0.5917818740399385,
+        "tpr": 0.7942,
+        "fpr": 0.3769,
+        "auc_roc": 0.7722
+      },
+      "group_b": {
+        "group": "Rural",
+        "n": 2616,
+        "positive_rate": 0.3535932721712538,
+        "predicted_positive_rate": 0.2679663608562691,
+        "tpr": 0.4595,
+        "fpr": 0.1632,
+        "auc_roc": 0.767
+      },
+      "equalized_odds_ratio": 0.433,
+      "passed": false
+    },
+    "male_vs_female": {
+      "group_a": {
+        "group": "Male",
+        "n": 4150,
+        "positive_rate": 0.46650602409638553,
+        "predicted_positive_rate": 0.47807228915662653,
+        "tpr": 0.688,
+        "fpr": 0.2945,
+        "auc_roc": 0.7711
+      },
+      "group_b": {
+        "group": "Female",
+        "n": 2589,
+        "positive_rate": 0.44573194283507145,
+        "predicted_positive_rate": 0.47431440710699113,
+        "tpr": 0.7132,
+        "fpr": 0.2822,
+        "auc_roc": 0.7879
+      },
+      "equalized_odds_ratio": 0.9582,
+      "passed": true
+    }
+  },
+  "M5": {
+    "urban_vs_rural": {
+      "group_a": {
+        "group": "Urban",
+        "n": 2604,
+        "positive_rate": 0.3671274961597542,
+        "predicted_positive_rate": 0.2945468509984639,
+        "tpr": 0.5021,
+        "fpr": 0.1742,
+        "auc_roc": 0.7831
+      },
+      "group_b": {
+        "group": "Rural",
+        "n": 2616,
+        "positive_rate": 0.37003058103975534,
+        "predicted_positive_rate": 0.3065749235474006,
+        "tpr": 0.5176,
+        "fpr": 0.1826,
+        "auc_roc": 0.7811
+      },
+      "equalized_odds_ratio": 0.954,
+      "passed": true
+    },
+    "male_vs_female": {
+      "group_a": {
+        "group": "Male",
+        "n": 4150,
+        "positive_rate": 0.36168674698795183,
+        "predicted_positive_rate": 0.3002409638554217,
+        "tpr": 0.5163,
+        "fpr": 0.1778,
+        "auc_roc": 0.7836
+      },
+      "group_b": {
+        "group": "Female",
+        "n": 2589,
+        "positive_rate": 0.3816145229818463,
+        "predicted_positive_rate": 0.2966396292004635,
+        "tpr": 0.5061,
+        "fpr": 0.1674,
+        "auc_roc": 0.7951
+      },
+      "equalized_odds_ratio": 0.9415,
+      "passed": true
+    }
+  }
+}

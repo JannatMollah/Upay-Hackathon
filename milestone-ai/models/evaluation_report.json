@@ -1,0 +1,35 @@
+{
+  "model_version": "xgb_v1",
+  "milestones": {
+    "M2": {
+      "auc_roc": 0.7423,
+      "brier_score": 0.1342,
+      "precision": 0.8188,
+      "recall": 0.9875,
+      "f1": 0.8953
+    },
+    "M3": {
+      "auc_roc": 0.7505,
+      "brier_score": 0.1709,
+      "precision": 0.761,
+      "recall": 0.9254,
+      "f1": 0.8351
+    },
+    "M4": {
+      "auc_roc": 0.784,
+      "brier_score": 0.1873,
+      "precision": 0.6763,
+      "recall": 0.7022,
+      "f1": 0.689
+    },
+    "M5": {
+      "auc_roc": 0.7869,
+      "brier_score": 0.1782,
+      "precision": 0.6354,
+      "recall": 0.5115,
+      "f1": 0.5668
+    }
+  },
+  "overall_auc_roc": 0.7659,
+  "overall_brier": 0.1677
+}
