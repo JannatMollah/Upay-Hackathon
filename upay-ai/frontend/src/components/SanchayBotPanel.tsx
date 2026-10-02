@@ -14,6 +14,7 @@ interface SanchayBotPanelProps {
 
 export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, lang }) => {
   const [selectedTenure, setSelectedTenure] = useState<number>(12);
+  const [applied, setApplied] = useState<boolean>(false);
 
   if (!savingsData || !savingsData.cashflow) {
     return (
@@ -273,17 +274,69 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                fontSize: '0.78rem',
+                fontSize: '0.82rem',
                 color: 'var(--upay-blue)',
                 background: 'var(--upay-blue-soft)',
-                padding: '8px 12px',
+                padding: '9px 14px',
                 borderRadius: 'var(--radius-md)',
                 fontWeight: 500,
+                marginTop: '10px',
               }}
             >
-              <Check size={14} />
+              <Check size={15} />
               <span>{t('sanchay.free_cashout', lang)}</span>
             </div>
+
+            {/* DPS Enrollment Action */}
+            {applied ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: 'var(--color-success-bg)',
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-md)',
+                  color: 'var(--color-success)',
+                  fontSize: '0.86rem',
+                  fontWeight: 600,
+                  marginTop: '12px',
+                }}
+              >
+                <Check size={17} />
+                <span>
+                  {lang === 'bn'
+                    ? 'ইউসিবি ডিপিএস আবেদন সফলভাবে প্রক্রিয়াকরণ শুরু হয়েছে!'
+                    : 'UCB DPS Enrollment initiated successfully!'}
+                </span>
+              </div>
+            ) : (
+              <button
+                onClick={() => setApplied(true)}
+                style={{
+                  width: '100%',
+                  marginTop: '12px',
+                  padding: '11px 16px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-success)',
+                  color: '#fff',
+                  border: 'none',
+                  fontWeight: 700,
+                  fontSize: '0.90rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  transition: 'all 0.2s',
+                  boxShadow: 'var(--shadow-sm)',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <Award size={16} />
+                <span>{lang === 'bn' ? 'ডিপিএস একাউন্ট খুলুন' : 'Open DPS Account with UCB'}</span>
+              </button>
+            )}
           </div>
         ) : (
           <div style={{

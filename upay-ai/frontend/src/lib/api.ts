@@ -76,15 +76,19 @@ export const api = {
   },
 
   // === Agent Liquidity Forecast ===
-  getAgentsOverview: (area?: string, status?: string, limit = 50) => {
-    const params = new URLSearchParams({ limit: String(limit) });
-    if (area) params.set('area', area);
-    if (status) params.set('status', status);
+  getAgentsOverview: (area?: string, status?: string, limit = 10, offset = 0, search?: string) => {
+    const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+    if (area && area !== 'all') params.set('area', area);
+    if (status && status !== 'all') params.set('status', status);
+    if (search && search.trim()) params.set('search', search.trim());
     return apiFetch<any>(`/liquidity/agents?${params}`);
   },
 
   getAgentForecast: (agentId: string) =>
     apiFetch<any>(`/liquidity/agents/${agentId}/forecast`),
+
+  searchAgents: (q: string, limit = 8) =>
+    apiFetch<{ query: string; results: any[] }>(`/liquidity/search?q=${encodeURIComponent(q)}&limit=${limit}`),
 
   getLiquidityMetrics: () => apiFetch<any>('/liquidity/model/metrics'),
 };

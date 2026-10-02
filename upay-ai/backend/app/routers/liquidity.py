@@ -9,14 +9,25 @@ from ..services import liquidity_service
 router = APIRouter(prefix="/liquidity", tags=["Agent Liquidity"])
 
 
+@router.get("/search")
+async def search_agents(
+    q: str = Query(..., min_length=1, description="Search agent by ID, division, district, or area"),
+    limit: int = Query(8, ge=1, le=20),
+):
+    """Real-time autocomplete search for agent points."""
+    return liquidity_service.search_agents(q, limit)
+
+
 @router.get("/agents")
 async def get_agents_overview(
     area: Optional[str] = Query(None, description="Filter by area: urban, peri_urban, rural"),
     status: Optional[str] = Query(None, description="Filter by status: critical, low, adequate, healthy"),
-    limit: int = Query(50, ge=1, le=500),
+    search: Optional[str] = Query(None, description="Search by agent ID, division, district, or area"),
+    limit: int = Query(10, ge=1, le=500),
+    offset: int = Query(0, ge=0),
 ):
     """Get overview of all agent points with liquidity status."""
-    return liquidity_service.get_agents_overview(area, status, limit)
+    return liquidity_service.get_agents_overview(area, status, search, limit, offset)
 
 
 @router.get("/agents/{agent_id}/forecast")

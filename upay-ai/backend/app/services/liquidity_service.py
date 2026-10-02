@@ -64,33 +64,57 @@ def _load_feature_names():
     return _liquidity_cache["features"]
 
 
+def _get_latest_merged():
+    if "latest_merged" not in _liquidity_cache:
+        agents = _load_agents()
+        daily = _load_daily_data()
+        if agents.empty or daily.empty:
+            return pd.DataFrame(), None, {}, 0
+        latest_date = daily["date"].max()
+        latest = daily[daily["date"] == latest_date].copy()
+        merged = latest.merge(agents, on="agent_id")
+        status_counts = latest["liquidity_status"].value_counts().to_dict()
+        _liquidity_cache["latest_merged"] = (merged, latest_date, status_counts, len(agents))
+    return _liquidity_cache["latest_merged"]
+
+
 def get_agents_overview(area_filter: Optional[str] = None,
                         status_filter: Optional[str] = None,
-                        limit: int = 50) -> dict:
-    """Get overview of agent liquidity status."""
-    agents = _load_agents()
-    daily = _load_daily_data()
+                        search: Optional[str] = None,
+                        limit: int = 10,
+                        offset: int = 0) -> dict:
+    """Get overview of agent liquidity status with search, filtering, and pagination."""
+    merged, latest_date, status_counts, total_agents = _get_latest_merged()
 
-    if agents.empty or daily.empty:
-        return {"agents": [], "total": 0}
+    if merged.empty:
+        return {"agents": [], "total_agents": 0, "total_matching": 0, "status_summary": {}}
 
-    # Get latest day per agent
-    latest_date = daily["date"].max()
-    latest = daily[daily["date"] == latest_date].copy()
-
-    merged = latest.merge(agents, on="agent_id")
+    filtered = merged
 
     if area_filter and area_filter != "all":
-        merged = merged[merged["area_type"] == area_filter]
+        filtered = filtered[filtered["area_type"] == area_filter]
 
     if status_filter and status_filter != "all":
-        merged = merged[merged["liquidity_status"] == status_filter]
+        filtered = filtered[filtered["liquidity_status"] == status_filter]
 
-    # Sort by float ratio (most critical first)
-    merged = merged.sort_values("float_ratio").head(limit)
+    if search and search.strip():
+        q = search.strip().lower()
+        filtered = filtered[
+            filtered["agent_id"].astype(str).str.lower().str.contains(q) |
+            filtered["division"].astype(str).str.lower().str.contains(q) |
+            filtered["district"].astype(str).str.lower().str.contains(q) |
+            filtered["area_type"].astype(str).str.lower().str.contains(q) |
+            filtered["liquidity_status"].astype(str).str.lower().str.contains(q)
+        ]
+
+    total_matching = len(filtered)
+
+    # Sort by float ratio (most critical first) and paginate
+    sorted_df = filtered.sort_values("float_ratio")
+    page_df = sorted_df.iloc[offset : offset + limit]
 
     result_agents = []
-    for _, row in merged.iterrows():
+    for _, row in page_df.iterrows():
         result_agents.append({
             "agent_id": row["agent_id"],
             "area_type": row["area_type"],
@@ -107,13 +131,10 @@ def get_agents_overview(area_filter: Optional[str] = None,
             "tx_count": int(row["tx_count_out"]) + int(row["tx_count_in"]),
         })
 
-    # Summary stats
-    all_latest = daily[daily["date"] == latest_date]
-    status_counts = all_latest["liquidity_status"].value_counts().to_dict()
-
     return {
         "date": latest_date,
-        "total_agents": len(agents),
+        "total_agents": total_agents,
+        "total_matching": total_matching,
         "status_summary": {
             "critical": status_counts.get("critical", 0),
             "low": status_counts.get("low", 0),
@@ -258,3 +279,55 @@ def get_liquidity_model_metrics() -> dict:
         with open(path) as f:
             return json.load(f)
     return {"error": "Model metrics not available"}
+
+
+def search_agents(query: str, limit: int = 8) -> dict:
+    """Search agents by agent_id, division, district, or area_type."""
+    if not query or not query.strip():
+        return {"query": query, "results": []}
+
+    agents = _load_agents()
+    daily = _load_daily_data()
+    if agents.empty:
+        return {"query": query, "results": []}
+
+    q = query.strip().lower()
+
+    latest_status_map = {}
+    if not daily.empty:
+        latest_date = daily["date"].max()
+        latest = daily[daily["date"] == latest_date]
+        for _, row in latest.iterrows():
+            latest_status_map[row["agent_id"]] = {
+                "status": row.get("liquidity_status", "adequate"),
+                "cash_out": round(float(row.get("cash_out_volume", 0)), 0),
+            }
+
+    matches = []
+    for _, row in agents.iterrows():
+        aid = str(row["agent_id"])
+        div = str(row.get("division", ""))
+        dist = str(row.get("district", ""))
+        area = str(row.get("area_type", ""))
+
+        if (q in aid.lower() or
+            q in div.lower() or
+            q in dist.lower() or
+            q in area.lower()):
+            stat_info = latest_status_map.get(aid, {"status": "adequate", "cash_out": 0})
+            matches.append({
+                "agent_id": aid,
+                "division": div,
+                "district": dist,
+                "area_type": area,
+                "tier": str(row.get("tier", "Silver")),
+                "is_rmg_zone": bool(row.get("is_rmg_zone", False)),
+                "float_capacity": int(row.get("float_capacity_bdt", 100000)),
+                "liquidity_status": stat_info["status"],
+                "cash_out_volume": stat_info["cash_out"],
+            })
+            if len(matches) >= limit:
+                break
+
+    return {"query": query, "results": matches}
+
