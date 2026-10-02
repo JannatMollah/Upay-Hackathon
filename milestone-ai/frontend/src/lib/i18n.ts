@@ -2,7 +2,7 @@ export type Language = 'en' | 'bn';
 
 export const translations: Record<string, Record<Language, string>> = {
   // Brand & Header
-  'brand.name': { en: 'upay MilestoneAI', bn: 'উপায় মাইলস্টোন AI' },
+  'brand.name': { en: 'Upay AI', bn: 'উপায় AI' },
   'brand.slogan': { en: 'Activation & Savings Intelligence Platform', bn: 'অ্যাক্টিভেশন ও সঞ্চয় ইন্টেলিজেন্স প্ল্যাটফর্ম' },
   'nav.dashboard': { en: 'Overview Funnel', bn: 'ওভারভিউ ফানেল' },
   'nav.at_risk': { en: 'At-Risk Users', bn: 'ঝুঁকিপূর্ণ গ্রাহক' },

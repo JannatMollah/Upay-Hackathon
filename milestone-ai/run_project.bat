@@ -4,7 +4,7 @@ echo ========================================================
 echo Starting upay MilestoneAI + SanchayBot Stack...
 echo ========================================================
 
-cd /d "%~dp0milestone-ai"
+cd /d "%~dp0"
 
 :: Start Backend in a separate window
 start "FastAPI Backend" cmd /k "python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 --reload"

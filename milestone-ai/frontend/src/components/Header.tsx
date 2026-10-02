@@ -21,101 +21,49 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
   ];
 
   return (
-    <header
-      style={{
-        borderBottom: '1px solid var(--border-light)',
-        background: 'rgba(255, 255, 255, 0.92)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        padding: '0 32px',
-        height: '60px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}
-    >
-      {/* Brand */}
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <img
-          src="/upay-logo.webp"
-          alt="upay logo"
-          style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '10px',
-            objectFit: 'contain',
-          }}
-        />
-        <div>
-          <h1 style={{
-            fontSize: '1.05rem',
-            fontWeight: 700,
-            letterSpacing: '-0.025em',
-            color: 'var(--text-primary)',
-          }}>
-            {t('brand.name', lang)}
-          </h1>
-          <p style={{
-            fontSize: '0.65rem',
-            color: 'var(--text-dim)',
-            fontWeight: 500,
-            letterSpacing: '0.02em',
-          }}>
-            {t('brand.slogan', lang)}
-          </p>
-        </div>
-      </Link>
+    <header className="main-navbar-wrapper">
+      <div className="main-navbar-inner">
+        {/* Brand */}
+        <Link href="/" className="navbar-brand-link">
+          <img
+            src="/upay-logo.webp"
+            alt="upay logo"
+            className="navbar-brand-logo"
+          />
+          <span className="navbar-brand-title">
+            {lang === 'en' ? 'Upay' : 'উপায়'}{' '}
+            <span className="navbar-brand-accent">AI</span>
+          </span>
+        </Link>
 
-      {/* Nav items — center */}
-      <nav style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '2px',
-        background: 'var(--bg-subtle)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '3px',
-        border: '1px solid var(--border-light)',
-      }}>
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 16px',
-                borderRadius: '9px',
-                fontSize: '0.82rem',
-                fontWeight: isActive ? 600 : 500,
-                color: isActive ? 'var(--upay-blue)' : 'var(--text-muted)',
-                background: isActive ? 'var(--bg-white)' : 'transparent',
-                boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
-                transition: 'all 0.2s var(--ease-smooth)',
-              }}
-            >
-              <Icon size={15} />
-              <span>{t(item.labelKey, lang)}</span>
-            </Link>
-          );
-        })}
-      </nav>
+        {/* Nav items — center */}
+        <nav className="navbar-nav-group">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`navbar-nav-item ${isActive ? 'active' : ''}`}
+              >
+                <Icon size={15} />
+                <span>{t(item.labelKey, lang)}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-      {/* Right: Language toggle only */}
-      <button
-        onClick={() => onLanguageToggle(lang === 'en' ? 'bn' : 'en')}
-        className="btn-ghost"
-        style={{ padding: '6px 12px', fontSize: '0.78rem' }}
-      >
-        <Globe size={13} style={{ color: 'var(--upay-blue)' }} />
-        <span>{lang === 'en' ? 'বাংলা' : 'English'}</span>
-      </button>
+        {/* Right: Language toggle */}
+        <button
+          onClick={() => onLanguageToggle(lang === 'en' ? 'bn' : 'en')}
+          className="navbar-lang-btn"
+          aria-label="Toggle language"
+        >
+          <Globe size={14} style={{ color: 'var(--upay-blue)' }} />
+          <span>{lang === 'en' ? 'বাংলা' : 'English'}</span>
+        </button>
+      </div>
     </header>
   );
 };
