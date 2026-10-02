@@ -43,6 +43,9 @@ export const api = {
     return apiFetch<AtRiskResponse>(`/at-risk-users?${params}`);
   },
 
+  searchUsers: (q: string, limit = 8) =>
+    apiFetch<{ query: string; results: { user_id: string }[] }>(`/users/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+
   getUserPrediction: (userId: string) =>
     apiFetch<PredictionResponse>(`/users/${userId}/prediction`),
 

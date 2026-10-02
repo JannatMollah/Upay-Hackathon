@@ -40,7 +40,6 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
       className="glass-panel"
       style={{
         padding: '24px 28px',
-        borderLeft: '4px solid var(--color-success)',
       }}
     >
       {/* Title */}
@@ -118,7 +117,7 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
         <div
           style={{
             background: 'var(--color-warning-bg)',
-            border: '1px solid var(--color-warning-border)',
+            border: '1px solid var(--border-light)',
             borderRadius: 'var(--radius-lg)',
             padding: '12px 16px',
             marginBottom: '20px',
@@ -171,7 +170,7 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
               background: 'var(--bg-white)',
               padding: '20px',
               borderRadius: 'var(--radius-lg)',
-              border: '2px solid var(--color-success-border)',
+              border: '1px solid var(--border-light)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',

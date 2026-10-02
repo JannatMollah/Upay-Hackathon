@@ -3,7 +3,7 @@
 import React from 'react';
 import { MilestoneStat } from '../types';
 import { Language, t } from '../lib/i18n';
-import { TrendingDown, Users, ChevronRight, Activity } from 'lucide-react';
+import { TrendingDown, Users, Check } from 'lucide-react';
 
 interface FunnelChartProps {
   milestones: MilestoneStat[];
@@ -29,49 +29,35 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
     '#10B981',
   ];
 
-  const colorsBg = [
-    'rgba(30, 77, 140, 0.08)',
-    'rgba(37, 99, 235, 0.08)',
-    'rgba(14, 165, 233, 0.08)',
-    'rgba(6, 182, 212, 0.08)',
-    'rgba(5, 150, 105, 0.08)',
-    'rgba(16, 185, 129, 0.08)',
-  ];
-
   return (
     <div className="glass-panel" style={{ padding: '28px 28px 24px' }}>
       {/* Section Header */}
       <div className="section-header">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{
-              width: '28px', height: '28px',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--upay-blue-soft)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Activity size={14} style={{ color: 'var(--upay-blue)' }} />
-            </div>
-            <h2 className="section-title">{t('funnel.title', lang)}</h2>
-          </div>
-          <p className="section-subtitle" style={{ marginLeft: '36px' }}>
-            {t('funnel.subtitle', lang)}
+          <h2 className="section-title">{t('funnel.title', lang)}</h2>
+          <p className="section-subtitle" style={{ fontSize: '0.94rem', marginTop: '4px' }}>
+            {t('funnel.subtitle', lang)} •{' '}
+            <span style={{ color: 'var(--upay-blue)', fontWeight: 600 }}>
+              {lang === 'bn'
+                ? 'যেকোনো ধাপে ক্লিক করলে নিচের টেবিলে সেই মাইলস্টোন সক্রিয় হবে'
+                : 'Click any step to activate its tab in the table below'}
+            </span>
           </p>
         </div>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
-          fontSize: '0.82rem',
+          gap: '8px',
+          fontSize: '0.90rem',
           color: 'var(--text-muted)',
-          padding: '6px 14px',
+          padding: '7px 16px',
           borderRadius: 'var(--radius-full)',
           background: 'var(--bg-subtle)',
           border: '1px solid var(--border-light)',
         }}>
-          <Users size={14} />
+          <Users size={15} />
           <span>
-            {lang === 'bn' ? 'মোট: ' : 'Total: '}
+            {lang === 'bn' ? 'মোট গ্রাহক: ' : 'Total: '}
             <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>
               {totalUsers.toLocaleString()}
             </strong>
@@ -79,15 +65,14 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
         </div>
       </div>
 
-      {/* Funnel Bars */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {/* Funnel Bars — 6 milestone interactive bars */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {milestones.map((m, idx) => {
           const isSelected = selectedMilestone === m.milestone;
           const prevRate = idx > 0 ? milestones[idx - 1].rate : 1.0;
           const dropOffPct = idx > 0 ? ((prevRate - m.rate) * 100).toFixed(1) : null;
           const pct = (m.rate * 100).toFixed(1);
           const color = colors[idx % colors.length];
-          const bgColor = colorsBg[idx % colorsBg.length];
 
           return (
             <div
@@ -96,7 +81,17 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
               className={`funnel-bar ${isSelected ? 'active' : ''}`}
               style={{
                 animationDelay: `${idx * 0.06}s`,
+                padding: '14px 18px',
+                cursor: 'pointer',
+                border: isSelected ? '1.5px solid var(--upay-blue)' : '1px solid transparent',
+                boxShadow: isSelected ? '0 3px 12px rgba(37, 99, 235, 0.12)' : 'none',
+                transition: 'all 0.2s ease',
               }}
+              title={
+                lang === 'bn'
+                  ? `ক্লিক করে নিচের টেবিলে '${m.name_bn}' সক্রিয় করুন`
+                  : `Click to activate '${m.name_en}' in the table below`
+              }
             >
               <div style={{
                 display: 'flex',
@@ -105,56 +100,66 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
                 marginBottom: '10px',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  {/* Step circle indicator */}
                   <span
                     style={{
-                      fontWeight: 700,
-                      fontSize: '0.72rem',
-                      padding: '3px 10px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: isSelected ? color : bgColor,
-                      color: isSelected ? '#fff' : color,
-                      letterSpacing: '0.02em',
-                      transition: 'all 0.2s ease',
+                      width: '10px',
+                      height: '10px',
+                      borderRadius: '50%',
+                      background: color,
+                      display: 'inline-block',
+                      flexShrink: 0,
                     }}
-                  >
-                    {m.milestone}
-                  </span>
+                  />
                   <span style={{
-                    fontSize: '0.88rem',
-                    fontWeight: 600,
-                    color: 'var(--text-primary)',
+                    fontSize: '0.98rem',
+                    fontWeight: 700,
+                    color: isSelected ? 'var(--upay-blue)' : 'var(--text-primary)',
+                    letterSpacing: '-0.01em',
                   }}>
                     {lang === 'bn' ? m.name_bn : m.name_en}
                   </span>
                   {isSelected && (
-                    <ChevronRight size={14} style={{ color: 'var(--upay-blue)', marginLeft: '-4px' }} />
+                    <span
+                      className="badge badge-brand"
+                      style={{
+                        fontSize: '0.74rem',
+                        padding: '2px 8px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                      }}
+                    >
+                      <Check size={11} />
+                      {lang === 'bn' ? 'সক্রিয় ফিল্টার' : 'Active Filter'}
+                    </span>
                   )}
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   {dropOffPct && parseFloat(dropOffPct) > 0 && (
-                    <div className="badge badge-risk" style={{ fontSize: '0.72rem', gap: '3px' }}>
-                      <TrendingDown size={11} />
+                    <div className="badge badge-risk" style={{ fontSize: '0.78rem', gap: '4px', padding: '3px 8px' }}>
+                      <TrendingDown size={12} />
                       <span>-{dropOffPct}%</span>
                     </div>
                   )}
                   <span style={{
-                    fontSize: '0.82rem',
+                    fontSize: '0.90rem',
                     color: 'var(--text-muted)',
                     fontWeight: 500,
                     fontVariantNumeric: 'tabular-nums',
                   }}>
-                    <strong style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
+                    <strong style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.94rem' }}>
                       {m.completed_count.toLocaleString()}
                     </strong>
                     {' '}
-                    <span style={{ color: 'var(--text-dim)', fontSize: '0.78rem' }}>({pct}%)</span>
+                    <span style={{ color: 'var(--text-dim)', fontSize: '0.84rem' }}>({pct}%)</span>
                   </span>
                 </div>
               </div>
 
               {/* Progress bar */}
-              <div className="funnel-progress">
+              <div className="funnel-progress" style={{ height: '8px' }}>
                 <div
                   className="funnel-progress-fill"
                   style={{

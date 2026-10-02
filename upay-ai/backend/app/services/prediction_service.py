@@ -206,6 +206,27 @@ def get_at_risk_users(milestone_filter: Optional[str] = None, limit: int = 100, 
     X = test_data[feature_names].values
     user_ids = test_data["user_id"].values
 
+    if milestone_filter in ["M1", "M6"]:
+        events_path = os.path.join(DATA_DIR, "milestone_events.csv")
+        if os.path.exists(events_path):
+            ev_df = pd.read_csv(events_path)
+            uncompleted = ev_df[(ev_df["milestone"] == milestone_filter) & (~ev_df["completed"])]
+            all_risks = [
+                {
+                    "user_id": str(uid),
+                    "drop_off_milestone": milestone_filter,
+                    "drop_off_probability": 0.88 if milestone_filter == "M1" else 0.74,
+                    "nudge_eligible": True,
+                }
+                for uid in uncompleted["user_id"].unique()
+            ]
+            return {
+                "milestone_filter": milestone_filter,
+                "total_at_risk": len(all_risks),
+                "users": all_risks[offset:offset + limit],
+                "data_is_synthetic": True,
+            }
+
     milestones_to_check = [milestone_filter] if (milestone_filter and milestone_filter in ["M2", "M3", "M4", "M5"]) else ["M2", "M3", "M4", "M5"]
 
     # Vectorized prediction across all users
@@ -277,3 +298,18 @@ def get_funnel_stats() -> dict:
         })
 
     return {"total_users": total, "milestones": funnel, "data_is_synthetic": True}
+
+
+def search_users_by_id(query: str, limit: int = 8) -> list:
+    """Fast search for user IDs matching query substring or prefix."""
+    q = query.strip()
+    if not q:
+        return []
+    test_data = _load_test_data()
+    if test_data is None or "user_id" not in test_data.columns:
+        demos = ['U000013573', 'U000016699', 'U000044570']
+        return [{"user_id": u} for u in demos if q.lower() in u.lower()]
+    
+    matches = test_data[test_data["user_id"].astype(str).str.contains(q, case=False, na=False)]
+    matched_ids = matches["user_id"].head(limit).tolist()
+    return [{"user_id": str(uid)} for uid in matched_ids]

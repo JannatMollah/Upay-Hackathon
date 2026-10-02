@@ -36,16 +36,16 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, lang }) => {
         </div>
         <div>
           <h2 style={{
-            fontSize: '1.15rem',
+            fontSize: '1.45rem',
             fontWeight: 800,
             color: 'var(--text-primary)',
-            fontFamily: "'SF Mono', 'Fira Code', monospace",
-            letterSpacing: '0.02em',
+            fontFamily: "'Inter', sans-serif",
+            letterSpacing: '-0.02em',
           }}>
             {userId}
           </h2>
           <span style={{
-            fontSize: '0.78rem',
+            fontSize: '0.84rem',
             color: 'var(--color-success)',
             fontWeight: 600,
           }}>

@@ -3,8 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { AtRiskUser } from '../types';
-import { Language, t } from '../lib/i18n';
-import { ArrowUpRight, Filter, AlertCircle, Sparkles, ShieldAlert, Users } from 'lucide-react';
+import { Language, t, getMilestoneName } from '../lib/i18n';
+import { AlertCircle, Sparkles, Users, ChevronDown, RefreshCw } from 'lucide-react';
 
 interface AtRiskTableProps {
   users: AtRiskUser[];
@@ -12,6 +12,8 @@ interface AtRiskTableProps {
   currentFilter: string | null;
   onFilterChange: (m: string | null) => void;
   lang: Language;
+  onLoadMore?: () => void;
+  isLoadingMore?: boolean;
 }
 
 export const AtRiskTable: React.FC<AtRiskTableProps> = ({
@@ -20,45 +22,38 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
   currentFilter,
   onFilterChange,
   lang,
+  onLoadMore,
+  isLoadingMore = false,
 }) => {
+  // All 6 milestone filters matching the 6 Funnel items
   const filterOptions = [
-    { key: null, label: t('table.filter_all', lang) },
-    { key: 'M2', label: 'M2: Recharge' },
-    { key: 'M3', label: 'M3: Cash-In' },
-    { key: 'M4', label: 'M4: Merchant' },
-    { key: 'M5', label: 'M5: DPS' },
+    { key: 'M1', label: lang === 'bn' ? 'পিন সেটআপ' : 'PIN Setup' },
+    { key: 'M2', label: lang === 'bn' ? 'প্রথম রিচার্জ' : 'First Recharge' },
+    { key: 'M3', label: lang === 'bn' ? 'ক্যাশ-ইন / অ্যাড মানি' : 'Cash-in / Add Money' },
+    { key: 'M4', label: lang === 'bn' ? 'মার্চেন্ট পেমেন্ট' : 'Merchant Payment' },
+    { key: 'M5', label: lang === 'bn' ? 'ডিপিএস একাউন্ট' : 'Open DPS Account' },
+    { key: 'M6', label: lang === 'bn' ? 'সব ধাপ সম্পূর্ণ' : 'All Steps Complete' },
   ];
 
   return (
-    <div className="glass-panel" style={{ padding: '28px 28px 24px' }}>
+    <div id="at-risk-table-section" className="glass-panel" style={{ padding: '28px 28px 24px', scrollMarginTop: '20px' }}>
       {/* Section Header */}
       <div className="section-header">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{
-              width: '28px', height: '28px',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--color-danger-bg)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <ShieldAlert size={14} style={{ color: 'var(--color-danger)' }} />
-            </div>
-            <h2 className="section-title">{t('table.title', lang)}</h2>
-          </div>
-          <p className="section-subtitle" style={{ marginLeft: '36px' }}>
+          <h2 className="section-title">{t('table.title', lang)}</h2>
+          <p className="section-subtitle" style={{ fontSize: '0.94rem', marginTop: '4px' }}>
             {lang === 'bn'
               ? `মোট ${totalAtRisk.toLocaleString()} জন গ্রাহকের জন্য তাৎক্ষণিক ইন্টারভেনশন প্রয়োজন`
               : `Ranked by severity • ${totalAtRisk.toLocaleString()} users flagged for intervention`}
           </p>
         </div>
 
-        {/* Filter pills */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          <Filter size={14} style={{ color: 'var(--text-dim)', marginRight: '2px' }} />
+        {/* Filter pills for the 6 milestones without filter icon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           {filterOptions.map((opt) => (
             <button
-              key={opt.key || 'all'}
-              onClick={() => onFilterChange(opt.key)}
+              key={opt.key}
+              onClick={() => onFilterChange(currentFilter === opt.key ? null : opt.key)}
               className={`pill-filter ${currentFilter === opt.key ? 'active' : ''}`}
             >
               {opt.label}
@@ -73,7 +68,7 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
           width: '100%',
           borderCollapse: 'collapse',
           textAlign: 'left',
-          fontSize: '0.85rem',
+          fontSize: '0.95rem',
         }}>
           <thead>
             <tr style={{
@@ -87,11 +82,11 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
                 { text: t('table.action', lang), align: 'right' as const },
               ].map((col, i) => (
                 <th key={i} style={{
-                  padding: '12px 14px',
-                  fontWeight: 600,
-                  fontSize: '0.72rem',
+                  padding: '14px 16px',
+                  fontWeight: 700,
+                  fontSize: '0.80rem',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
+                  letterSpacing: '0.05em',
                   color: 'var(--text-dim)',
                   textAlign: col.align,
                 }}>
@@ -107,9 +102,10 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
                   padding: '48px 32px',
                   textAlign: 'center',
                   color: 'var(--text-dim)',
+                  fontSize: '0.94rem',
                 }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                    <Users size={24} style={{ color: 'var(--text-dim)', opacity: 0.5 }} />
+                    <Users size={26} style={{ color: 'var(--text-dim)', opacity: 0.5 }} />
                     <span>
                       {lang === 'bn' ? 'কোনো ঝুঁকিপূর্ণ গ্রাহক পাওয়া যায়নি।' : 'No users found matching current filter.'}
                     </span>
@@ -123,36 +119,39 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
 
                 return (
                   <tr
-                    key={u.user_id}
+                    key={`${u.user_id}-${index}`}
                     className="table-row"
                     style={{
-                      animation: `fadeInUp 0.3s var(--ease-out) ${index * 0.02}s both`,
+                      animation: `fadeInUp 0.3s var(--ease-out) ${Math.min(index * 0.02, 0.4)}s both`,
                     }}
                   >
-                    <td style={{ padding: '14px 14px', fontWeight: 600 }}>
+                    {/* User ID — Inter font, no background, enlarged size */}
+                    <td style={{ padding: '16px 16px' }}>
                       <span style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.82rem',
-                        letterSpacing: '0.02em',
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: '0.98rem',
+                        fontWeight: 700,
                         color: 'var(--text-primary)',
-                        padding: '2px 8px',
-                        borderRadius: 'var(--radius-sm)',
-                        background: 'var(--bg-subtle)',
+                        letterSpacing: '-0.01em',
                       }}>
                         {u.user_id}
                       </span>
                     </td>
-                    <td style={{ padding: '14px 14px' }}>
-                      <span className="badge badge-risk">
-                        <AlertCircle size={11} />
-                        {u.drop_off_milestone}
+
+                    {/* Drop-off milestone — Full name instead of M1/M2/M3 */}
+                    <td style={{ padding: '16px 16px' }}>
+                      <span className="badge badge-risk" style={{ fontSize: '0.82rem', padding: '5px 12px' }}>
+                        <AlertCircle size={13} />
+                        {getMilestoneName(u.drop_off_milestone, lang)}
                       </span>
                     </td>
-                    <td style={{ padding: '14px 14px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+
+                    {/* Risk Score */}
+                    <td style={{ padding: '16px 16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <div style={{
-                          width: '72px',
-                          height: '5px',
+                          width: '78px',
+                          height: '6px',
                           borderRadius: 'var(--radius-full)',
                           background: 'var(--bg-muted)',
                           overflow: 'hidden',
@@ -167,7 +166,7 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
                         </div>
                         <span style={{
                           fontWeight: 700,
-                          fontSize: '0.82rem',
+                          fontSize: '0.92rem',
                           color: isHighRisk ? 'var(--color-danger)' : 'var(--color-warning)',
                           fontVariantNumeric: 'tabular-nums',
                         }}>
@@ -175,25 +174,29 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
                         </span>
                       </div>
                     </td>
-                    <td style={{ padding: '14px 14px' }}>
-                      <span className="badge badge-success">
-                        <Sparkles size={10} />
-                        {lang === 'bn' ? 'নাজ যোগ্য' : 'Nudge Ready'}
+
+                    {/* Status */}
+                    <td style={{ padding: '16px 16px' }}>
+                      <span className="badge badge-success" style={{ fontSize: '0.82rem', padding: '5px 12px' }}>
+                        <Sparkles size={12} />
+                        {lang === 'bn' ? 'নাজ প্রস্তুত' : 'Nudge Ready'}
                       </span>
                     </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right' }}>
+
+                    {/* Action button without arrow icon */}
+                    <td style={{ padding: '16px 16px', textAlign: 'right' }}>
                       <Link
                         href={`/activation/${u.user_id}`}
                         className="btn-primary"
                         style={{
-                          padding: '7px 14px',
-                          fontSize: '0.78rem',
+                          padding: '8px 18px',
+                          fontSize: '0.88rem',
+                          fontWeight: 600,
                           borderRadius: 'var(--radius-md)',
                           boxShadow: 'var(--shadow-xs)',
                         }}
                       >
                         <span>{t('table.view_detail', lang)}</span>
-                        <ArrowUpRight size={13} />
                       </Link>
                     </td>
                   </tr>
@@ -203,6 +206,68 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
           </tbody>
         </table>
       </div>
+
+      {/* Load More Button — 10 at a time */}
+      {users.length < totalAtRisk && onLoadMore && (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
+          marginTop: '22px',
+          paddingTop: '18px',
+          borderTop: '1px solid var(--border-light)',
+        }}>
+          <button
+            onClick={onLoadMore}
+            disabled={isLoadingMore}
+            className="btn-primary"
+            style={{
+              padding: '10px 28px',
+              fontSize: '0.92rem',
+              fontWeight: 700,
+              borderRadius: 'var(--radius-md)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              cursor: isLoadingMore ? 'not-allowed' : 'pointer',
+              opacity: isLoadingMore ? 0.75 : 1,
+            }}
+          >
+            {isLoadingMore ? (
+              <>
+                <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                <span>{lang === 'bn' ? 'লোড হচ্ছে...' : 'Loading more users...'}</span>
+              </>
+            ) : (
+              <>
+                <ChevronDown size={17} />
+                <span>{lang === 'bn' ? 'আরও ১০ জন দেখুন (Load More)' : 'Load 10 More Users'}</span>
+              </>
+            )}
+          </button>
+          <span style={{ fontSize: '0.84rem', color: 'var(--text-muted)' }}>
+            {lang === 'bn'
+              ? `মোট ${totalAtRisk.toLocaleString()} জনের মধ্যে ${users.length} জন প্রদর্শিত`
+              : `Showing ${users.length} of ${totalAtRisk.toLocaleString()} users`}
+          </span>
+        </div>
+      )}
+
+      {users.length >= totalAtRisk && users.length > 0 && (
+        <div style={{
+          textAlign: 'center',
+          marginTop: '18px',
+          paddingTop: '12px',
+          borderTop: '1px solid var(--border-light)',
+          fontSize: '0.86rem',
+          color: 'var(--text-dim)',
+        }}>
+          {lang === 'bn'
+            ? `সবগুলো ${totalAtRisk.toLocaleString()} জন গ্রাহক প্রদর্শিত হয়েছে`
+            : `All ${totalAtRisk.toLocaleString()} users loaded`}
+        </div>
+      )}
     </div>
   );
 };

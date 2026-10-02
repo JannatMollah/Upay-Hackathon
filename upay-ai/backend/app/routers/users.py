@@ -6,7 +6,7 @@ GET /api/v1/users/{id}/prediction
 
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional
-from ..services.prediction_service import predict_user, get_at_risk_users
+from ..services.prediction_service import predict_user, get_at_risk_users, search_users_by_id
 from ..services.nudge_service import NudgeGenerator
 from ..services.trace_service import log_trace
 from ..models.schemas import AtRiskResponse, PredictionResponse
@@ -15,10 +15,17 @@ router = APIRouter(tags=["Users"])
 nudge_gen = NudgeGenerator()
 
 
+@router.get("/users/search")
+async def search_users(q: str = Query(..., min_length=1), limit: int = Query(8, ge=1, le=50)):
+    """Search user IDs matching query substring or prefix."""
+    results = search_users_by_id(q, limit=limit)
+    return {"query": q, "results": results}
+
+
 @router.get("/at-risk-users", response_model=AtRiskResponse)
 async def at_risk_users(
-    milestone: Optional[str] = Query(None, pattern="^M[2-5]$"),
-    limit: int = Query(100, ge=1, le=500),
+    milestone: Optional[str] = Query(None, pattern="^M[1-6]$"),
+    limit: int = Query(10, ge=1, le=500),
     offset: int = Query(0, ge=0),
 ):
     """Get ranked list of at-risk users."""

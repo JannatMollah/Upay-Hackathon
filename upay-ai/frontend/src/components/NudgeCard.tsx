@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Nudge } from '../types';
-import { Language, t } from '../lib/i18n';
+import { Language, t, getMilestoneName } from '../lib/i18n';
 import { Sparkles, ShieldCheck, Send, CheckCircle2, XCircle, Edit3 } from 'lucide-react';
 
 interface NudgeCardProps {
@@ -49,7 +49,6 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
       className="glass-panel"
       style={{
         padding: '24px 28px',
-        borderLeft: '4px solid var(--upay-blue)',
       }}
     >
       {/* Header */}
@@ -87,7 +86,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
         {[
           { label: t('nudge.channel', lang), value: nudge.channel_recommendation.toUpperCase(), color: 'var(--upay-blue)' },
           { label: t('nudge.bonus', lang), value: `৳${nudge.bonus_amount_bdt} BDT`, color: 'var(--color-warning)' },
-          { label: 'Target Milestone', value: nudge.target_milestone, color: 'var(--text-primary)' },
+          { label: lang === 'bn' ? 'লক্ষ্য মাইলস্টোন' : 'Target Milestone', value: getMilestoneName(nudge.target_milestone, lang), color: 'var(--text-primary)' },
           {
             label: 'Status',
             value: approvedState ? approvedState.toUpperCase() : 'PENDING',
@@ -194,7 +193,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
               padding: '14px 18px',
               borderRadius: 'var(--radius-lg)',
               background: 'var(--upay-blue-soft)',
-              border: '1px solid rgba(30, 77, 140, 0.12)',
+              border: '1px solid var(--border-light)',
               fontSize: '0.95rem',
               lineHeight: 1.7,
               color: 'var(--text-primary)',
@@ -235,7 +234,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
             background: 'var(--color-success-bg)',
             padding: '12px 16px',
             borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--color-success-border)',
+            border: '1px solid var(--border-light)',
           }}
         >
           <CheckCircle2 size={16} />
@@ -253,7 +252,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
             background: 'var(--color-danger-bg)',
             padding: '12px 16px',
             borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--color-danger-border)',
+            border: '1px solid var(--border-light)',
           }}
         >
           <XCircle size={16} />

@@ -90,7 +90,7 @@ export default function LiquidityPage() {
       {/* Status Summary Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
         {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
-          <div key={key} className="glass-panel" style={{ padding: '16px 20px', cursor: 'pointer', borderLeft: `3px solid ${cfg.color}` }}
+          <div key={key} className="glass-panel" style={{ padding: '16px 20px', cursor: 'pointer' }}
             onClick={() => setStatusFilter(statusFilter === key ? 'all' : key)}
           >
             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
@@ -244,7 +244,7 @@ export default function LiquidityPage() {
                     display: 'flex', alignItems: 'center', gap: '10px',
                     padding: '8px 12px', borderRadius: 'var(--radius-md)',
                     background: day.is_salary_day ? '#fffbeb' : 'var(--bg-subtle)',
-                    border: day.is_salary_day ? '1px solid #fcd34d' : '1px solid var(--border-light)',
+                    border: '1px solid var(--border-light)',
                   }}>
                     <div style={{ width: '80px', flexShrink: 0 }}>
                       <div style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-primary)' }}>

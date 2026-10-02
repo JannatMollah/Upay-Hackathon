@@ -8,7 +8,7 @@ import { Target, PiggyBank, Landmark } from 'lucide-react';
 interface ToolItem {
   id: string;
   href: string;
-  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
+  icon: React.ComponentType<any>;
   color: string;
   glow: string;
   bg: string;
@@ -107,9 +107,9 @@ export default function HubPage() {
       <div className="hub-hero">
         <h1 className="hub-title">
           {lang === 'bn' ? (
-            <>উপায় <span style={{ color: 'var(--upay-blue)' }}>AI</span> হাব</>
+            <>উপায় <span style={{ color: 'var(--upay-blue)' }}>AI</span></>
           ) : (
-            <>Upay <span style={{ color: 'var(--upay-blue)' }}>AI</span> Hub</>
+            <>Upay <span style={{ color: 'var(--upay-blue)' }}>AI</span></>
           )}
         </h1>
 

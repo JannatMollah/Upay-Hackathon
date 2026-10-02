@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Explanation } from '../types';
-import { Language, t } from '../lib/i18n';
+import { Language, t, getMilestoneName } from '../lib/i18n';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface ShapWaterfallProps {
@@ -61,8 +61,9 @@ export const ShapWaterfall: React.FC<ShapWaterfallProps> = ({
               {t('user.shap_title', lang)}
             </h3>
             {targetMilestone && (
-              <span className="badge badge-risk" style={{ fontSize: '0.7rem' }}>
-                Target: {targetMilestone}
+              <span className="badge badge-risk" style={{ fontSize: '0.80rem', padding: '3px 10px' }}>
+                {lang === 'bn' ? 'ঝুঁকির মাইলস্টোন: ' : 'Target: '}
+                {getMilestoneName(targetMilestone, lang)}
               </span>
             )}
           </div>

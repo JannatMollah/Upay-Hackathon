@@ -88,50 +88,59 @@ export const FairnessPanel: React.FC<FairnessPanelProps> = ({ fairnessData, lang
               const mfRatio = mf.equalized_odds_ratio !== undefined ? mf.equalized_odds_ratio : 0.96;
               const mfPass = mf.passed !== undefined ? mf.passed : mfRatio >= 0.8;
 
+              const milestoneFullName = {
+                M2: lang === 'bn' ? 'প্রথম রিচার্জ' : 'First Recharge',
+                M3: lang === 'bn' ? 'ক্যাশ-ইন / অ্যাড মানি' : 'Cash-in / Add Money',
+                M4: lang === 'bn' ? 'মার্চেন্ট পেমেন্ট' : 'Merchant QR Payment',
+                M5: lang === 'bn' ? 'ডিপিএস একাউন্ট' : 'Open DPS Account',
+              }[m] || m;
+
               return (
                 <tr key={m} style={{ borderBottom: '1px solid var(--border-light)' }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-subtle)')}
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                 >
-                  <td style={{ padding: '12px 14px', fontWeight: 700 }}>
-                    <span className="badge badge-brand">{m}</span>
+                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.94rem' }}>
+                    {milestoneFullName}
                   </td>
                   <td style={{
-                    padding: '12px 14px',
+                    padding: '14px 16px',
                     fontWeight: 600,
                     color: uvPass ? 'var(--color-success)' : 'var(--color-danger)',
+                    fontSize: '0.92rem',
                   }}>
                     {uvRatio.toFixed(3)}
                   </td>
-                  <td style={{ padding: '12px 14px' }}>
+                  <td style={{ padding: '14px 16px' }}>
                     {uvPass ? (
-                      <span className="badge badge-success">
-                        <CheckCircle2 size={11} />
+                      <span className="badge badge-success" style={{ fontSize: '0.80rem' }}>
+                        <CheckCircle2 size={12} />
                         PASS
                       </span>
                     ) : (
-                      <span className="badge badge-risk">
-                        <XCircle size={11} />
+                      <span className="badge badge-risk" style={{ fontSize: '0.80rem' }}>
+                        <XCircle size={12} />
                         FLAGGED
                       </span>
                     )}
                   </td>
                   <td style={{
-                    padding: '12px 14px',
+                    padding: '14px 16px',
                     fontWeight: 600,
                     color: mfPass ? 'var(--color-success)' : 'var(--color-danger)',
+                    fontSize: '0.92rem',
                   }}>
                     {mfRatio.toFixed(3)}
                   </td>
-                  <td style={{ padding: '12px 14px' }}>
+                  <td style={{ padding: '14px 16px' }}>
                     {mfPass ? (
-                      <span className="badge badge-success">
-                        <CheckCircle2 size={11} />
+                      <span className="badge badge-success" style={{ fontSize: '0.80rem' }}>
+                        <CheckCircle2 size={12} />
                         PASS
                       </span>
                     ) : (
-                      <span className="badge badge-risk">
-                        <XCircle size={11} />
+                      <span className="badge badge-risk" style={{ fontSize: '0.80rem' }}>
+                        <XCircle size={12} />
                         FLAGGED
                       </span>
                     )}
@@ -143,28 +152,28 @@ export const FairnessPanel: React.FC<FairnessPanelProps> = ({ fairnessData, lang
         </table>
       </div>
 
-      {/* M4 Disparity Alert */}
+      {/* Merchant QR Payment Disparity Alert */}
       <div
         style={{
           background: 'var(--color-danger-bg)',
-          border: '1px solid var(--color-danger-border)',
+          border: '1px solid var(--border-light)',
           borderRadius: 'var(--radius-lg)',
-          padding: '14px 18px',
+          padding: '16px 20px',
           display: 'flex',
-          gap: '12px',
+          gap: '14px',
           alignItems: 'flex-start',
         }}
       >
-        <ShieldAlert size={18} style={{ color: 'var(--color-danger)', flexShrink: 0, marginTop: '2px' }} />
-        <div style={{ fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-          <strong style={{ color: 'var(--color-danger)' }}>
+        <ShieldAlert size={20} style={{ color: 'var(--color-danger)', flexShrink: 0, marginTop: '2px' }} />
+        <div style={{ fontSize: '0.90rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+          <strong style={{ color: 'var(--color-danger)', display: 'block', marginBottom: '4px' }}>
             {lang === 'bn'
-              ? 'ন্যায্যতা বিশ্লেষণ ও ব্যবসায়িক সিদ্ধান্ত (M4 Disparity Insight):'
-              : 'Fairness Discovery & Strategic Recommendation (M4 Disparity):'}
+              ? 'ন্যায্যতা বিশ্লেষণ ও ব্যবসায়িক সিদ্ধান্ত (মার্চেন্ট পেমেন্ট বৈষম্য বিশ্লেষণ):'
+              : 'Fairness Discovery & Strategic Recommendation (Merchant Payment Disparity):'}
           </strong>{' '}
           {lang === 'bn'
-            ? 'মাইলস্টোন M4 (মার্চেন্ট পেমেন্ট)-এ শহরাঞ্চল ও গ্রামাঞ্চলের মধ্যে বৈষম্য শনাক্ত হয়েছে (EO ratio: 0.433)। এর মূল কারণ গ্রামাঞ্চলে QR মার্চেন্ট পয়েন্টের সংখ্যা সীমিত (Pattern P3)। প্রস্তাবনা: গ্রামীণ ব্যবহারকারীদের জন্য QR মার্চেন্টের বদলে বিকল্প পেমেন্ট বা এজেন্ট নেটওয়ার্ক ইন্টারভেনশন অফার করা।'
-            : 'Milestone M4 (Merchant QR Payment) triggered a fairness alert between urban and rural cohorts (EO ratio: 0.433 vs 0.80 threshold). This reflects real ground reality: rural regions have fewer onboarded QR merchants (Pattern P3). Rather than suppressing this, upay can target merchant onboarding or offer alternative rural digital utility incentives!'}
+            ? 'মার্চেন্ট পেমেন্ট ধাপে শহরাঞ্চল ও গ্রামাঞ্চলের মধ্যে বৈষম্য শনাক্ত হয়েছে (EO ratio: 0.433)। এর মূল কারণ গ্রামাঞ্চলে QR মার্চেন্ট পয়েন্টের সংখ্যা সীমিত (Pattern P3)। প্রস্তাবনা: গ্রামীণ ব্যবহারকারীদের জন্য QR মার্চেন্টের বদলে বিকল্প পেমেন্ট বা এজেন্ট নেটওয়ার্ক ইন্টারভেনশন অফার করা।'
+            : 'Merchant QR Payment milestone triggered a fairness alert between urban and rural cohorts (EO ratio: 0.433 vs 0.80 threshold). This reflects real ground reality: rural regions have fewer onboarded QR merchants (Pattern P3). Rather than suppressing this, upay can target merchant onboarding or offer alternative rural digital utility incentives!'}
         </div>
       </div>
     </div>

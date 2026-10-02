@@ -67,12 +67,31 @@ export const translations: Record<string, Record<Language, string>> = {
 
   // Milestones
   'm.M1': { en: 'PIN Setup', bn: 'পিন সেটআপ' },
-  'm.M2': { en: 'First Mobile Recharge', bn: 'প্রথম রিচার্জ' },
-  'm.M3': { en: 'Cash-In / Add Money', bn: 'ক্যাশ-ইন / অ্যাড মানি' },
-  'm.M4': { en: 'Merchant QR Payment', bn: 'মার্চেন্ট QR পেমেন্ট' },
-  'm.M5': { en: 'Open DPS Account', bn: 'ডিপিএস খোলা' },
-  'm.M6': { en: 'Full Lifecycle Complete', bn: 'সব ধাপ সম্পন্ন' },
+  'm.M2': { en: 'First Recharge', bn: 'প্রথম রিচার্জ' },
+  'm.M3': { en: 'Cash-in / Add Money', bn: 'ক্যাশ-ইন / অ্যাড মানি' },
+  'm.M4': { en: 'Merchant Payment', bn: 'মার্চেন্ট পেমেন্ট' },
+  'm.M5': { en: 'Open DPS Account', bn: 'ডিপিএস একাউন্ট' },
+  'm.M6': { en: 'All Steps Complete', bn: 'সব ধাপ সম্পূর্ণ' },
 };
+
+export const MILESTONE_NAMES: Record<string, { en: string; bn: string }> = {
+  M1: { en: 'PIN Setup', bn: 'পিন সেটআপ' },
+  M2: { en: 'First Recharge', bn: 'প্রথম রিচার্জ' },
+  M3: { en: 'Cash-in / Add Money', bn: 'ক্যাশ-ইন / অ্যাড মানি' },
+  M4: { en: 'Merchant Payment', bn: 'মার্চেন্ট পেমেন্ট' },
+  M5: { en: 'Open DPS Account', bn: 'ডিপিএস একাউন্ট' },
+  M6: { en: 'All Steps Complete', bn: 'সব ধাপ সম্পূর্ণ' },
+};
+
+export function getMilestoneName(code: string | null | undefined, lang: Language = 'en'): string {
+  if (!code) return '';
+  const item = MILESTONE_NAMES[code];
+  if (item) {
+    return lang === 'bn' ? item.bn : item.en;
+  }
+  // If string contains M1:, M2:, etc. prefix, strip it
+  return code.replace(/^M[1-6]:?\s*/i, '');
+}
 
 export function t(key: string, lang: Language = 'en'): string {
   if (translations[key] && translations[key][lang]) {
@@ -80,3 +99,4 @@ export function t(key: string, lang: Language = 'en'): string {
   }
   return key;
 }
+

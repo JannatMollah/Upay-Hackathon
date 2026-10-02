@@ -130,13 +130,12 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, lang }) => {
                 borderBottom: '2px solid var(--border-light)',
                 color: 'var(--text-muted)',
               }}>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Milestone</th>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Target Action</th>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>AUC-ROC</th>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Precision</th>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Recall</th>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>F1-Score</th>
-                <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Brier</th>
+                <th style={{ padding: '12px 16px', fontWeight: 700, fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Milestone Target</th>
+                <th style={{ padding: '12px 16px', fontWeight: 700, fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>AUC-ROC</th>
+                <th style={{ padding: '12px 16px', fontWeight: 700, fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Precision</th>
+                <th style={{ padding: '12px 16px', fontWeight: 700, fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Recall</th>
+                <th style={{ padding: '12px 16px', fontWeight: 700, fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>F1-Score</th>
+                <th style={{ padding: '12px 16px', fontWeight: 700, fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Brier</th>
               </tr>
             </thead>
             <tbody>
@@ -154,10 +153,9 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, lang }) => {
                     onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-subtle)')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
-                    <td style={{ padding: '12px 14px', fontWeight: 700 }}>
-                      <span className="badge badge-brand">{m}</span>
+                    <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.94rem' }}>
+                      {actions[m]}
                     </td>
-                    <td style={{ padding: '12px 14px', color: 'var(--text-secondary)' }}>{actions[m]}</td>
                     <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--color-success)' }}>
                       {data.auc_roc || data.test_auc_roc || '0.78'}
                     </td>
@@ -178,7 +176,6 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, lang }) => {
         className="glass-panel"
         style={{
           padding: '18px 24px',
-          borderLeft: '4px solid var(--upay-yellow)',
           display: 'flex',
           gap: '14px',
           alignItems: 'flex-start',
