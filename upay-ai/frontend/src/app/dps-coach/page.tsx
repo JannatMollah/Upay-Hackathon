@@ -66,11 +66,9 @@ export default function DPSCoachPage() {
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '20px',
-          borderLeft: '4px solid #059669',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <a href="/" style={{ color: 'var(--text-muted)', display: 'flex' }}><ArrowLeft size={16} /></a>
           <div
             style={{
               width: '42px',
@@ -97,7 +95,7 @@ export default function DPSCoachPage() {
               </h2>
               <span className="badge badge-brand">Tool 2</span>
             </div>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               {lang === 'bn'
                 ? 'ক্যাশ-ফ্লো বিশ্লেষণ ও ব্যক্তিগতকৃত ডিপিএস সঞ্চয় পরিকল্পনা'
                 : 'Cash-flow analysis & personalized DPS savings recommendation'}

@@ -30,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
         <title>Upay AI</title>
         <meta
           name="description"

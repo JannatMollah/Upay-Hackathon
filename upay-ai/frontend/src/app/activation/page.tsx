@@ -127,12 +127,11 @@ export default function ActivationPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }} className="animate-fade-in">
-      {/* Back + Title */}
-      <div className="glass-panel" style={{ padding: '24px 28px', borderLeft: '4px solid #2563eb' }}>
+      {/* Title */}
+      <div className="glass-panel" style={{ padding: '24px 28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
           <div style={{ maxWidth: '620px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <a href="/" style={{ color: 'var(--text-muted)', display: 'flex' }}><ArrowLeft size={16} /></a>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Target size={20} style={{ color: '#2563eb' }} />
                 <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>

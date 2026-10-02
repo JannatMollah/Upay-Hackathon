@@ -46,7 +46,6 @@ export default function PerformancePage() {
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '16px',
-          borderLeft: '4px solid var(--upay-blue)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>

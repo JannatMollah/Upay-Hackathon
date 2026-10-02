@@ -66,12 +66,12 @@ export const translations: Record<string, Record<Language, string>> = {
   'sanchay.free_cashout': { en: 'Zero Cash-Out Fee at UCB ATMs', bn: 'UCB এটিএম-এ সম্পূর্ণ ফ্রি ক্যাশ আউট' },
 
   // Milestones
-  'm.M1': { en: 'M1: PIN Setup', bn: 'M1: পিন সেট' },
-  'm.M2': { en: 'M2: First Mobile Recharge', bn: 'M2: প্রথম রিচার্জ' },
-  'm.M3': { en: 'M3: Cash-In / Add Money', bn: 'M3: ক্যাশ-ইন / অ্যাড মানি' },
-  'm.M4': { en: 'M4: Merchant QR Payment', bn: 'M4: মার্চেন্ট QR পেমেন্ট' },
-  'm.M5': { en: 'M5: Open DPS Account', bn: 'M5: ডিপিএস খোলা' },
-  'm.M6': { en: 'M6: Full Lifecycle Complete', bn: 'M6: সব সম্পন্ন' },
+  'm.M1': { en: 'PIN Setup', bn: 'পিন সেটআপ' },
+  'm.M2': { en: 'First Mobile Recharge', bn: 'প্রথম রিচার্জ' },
+  'm.M3': { en: 'Cash-In / Add Money', bn: 'ক্যাশ-ইন / অ্যাড মানি' },
+  'm.M4': { en: 'Merchant QR Payment', bn: 'মার্চেন্ট QR পেমেন্ট' },
+  'm.M5': { en: 'Open DPS Account', bn: 'ডিপিএস খোলা' },
+  'm.M6': { en: 'Full Lifecycle Complete', bn: 'সব ধাপ সম্পন্ন' },
 };
 
 export function t(key: string, lang: Language = 'en'): string {

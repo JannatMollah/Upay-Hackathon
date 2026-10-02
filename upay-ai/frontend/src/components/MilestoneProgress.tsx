@@ -57,20 +57,25 @@ export const MilestoneProgress: React.FC<MilestoneProgressProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{
                     fontWeight: 700,
-                    fontSize: '0.82rem',
+                    fontSize: '0.74rem',
+                    padding: '2px 7px',
+                    borderRadius: 'var(--radius-sm)',
+                    background: isPrimary ? 'rgba(220, 38, 38, 0.12)' : 'var(--upay-blue-soft)',
                     color: isPrimary ? 'var(--color-danger)' : 'var(--upay-blue)',
+                    fontFamily: 'var(--font-mono)',
+                    letterSpacing: '0.02em',
                   }}>
                     {m}
                   </span>
                   <span style={{
-                    fontSize: '0.85rem',
+                    fontSize: '0.88rem',
                     fontWeight: 600,
                     color: 'var(--text-primary)',
                   }}>
                     {t(`m.${m}`, lang)}
                   </span>
                   {isPrimary && (
-                    <span className="badge badge-risk" style={{ fontSize: '0.68rem' }}>
+                    <span className="badge badge-risk" style={{ fontSize: '0.74rem' }}>
                       <AlertCircle size={10} />
                       {lang === 'bn' ? 'প্রধান ঝুঁকি' : 'Primary Risk'}
                     </span>

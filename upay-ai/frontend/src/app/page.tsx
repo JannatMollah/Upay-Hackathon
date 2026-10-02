@@ -3,17 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useLanguage } from '../lib/LanguageContext';
-import {
-  Target,
-  PiggyBank,
-  Landmark,
-  BarChart3,
-  Sparkles,
-  ArrowRight,
-  Shield,
-  Brain,
-  Zap,
-} from 'lucide-react';
+import { Target, PiggyBank, Landmark } from 'lucide-react';
 
 const TOOLS = [
   {
@@ -22,8 +12,6 @@ const TOOLS = [
     icon: Target,
     color: '#2563eb',
     bg: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-    track: 'Track 04',
-    trackLabel: 'Campaign Intelligence',
     title_en: 'Activation Predictor',
     title_bn: 'অ্যাক্টিভেশন প্রেডিক্টর',
     desc_en: 'Predict which new users will drop off during the 6-step bonus onboarding campaign. XGBoost + SHAP explainability + personalized Bangla nudges.',
@@ -37,8 +25,6 @@ const TOOLS = [
     icon: PiggyBank,
     color: '#059669',
     bg: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-    track: 'Track 03',
-    trackLabel: 'Financial Independence',
     title_en: 'DPS Coach',
     title_bn: 'ডিপিএস কোচ',
     desc_en: 'Analyze monthly cash-flow surplus and recommend personalized DPS savings plans. Helps users build financial security through UCB deposit schemes.',
@@ -52,8 +38,6 @@ const TOOLS = [
     icon: Landmark,
     color: '#d97706',
     bg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
-    track: 'Track 05',
-    trackLabel: 'Agent Intelligence',
     title_en: 'Agent Liquidity Forecast',
     title_bn: 'এজেন্ট তারল্য পূর্বাভাস',
     desc_en: 'Predict cash-out demand at 500 agent points to prevent liquidity shortages. 7-day demand forecast with salary-day surge detection.',
@@ -70,24 +54,8 @@ export default function HubPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }} className="animate-fade-in">
       {/* Hero Section */}
       <div style={{ textAlign: 'center', padding: '16px 0 8px' }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '5px 14px',
-          borderRadius: '20px',
-          background: 'var(--upay-blue-soft)',
-          fontSize: '0.73rem',
-          fontWeight: 600,
-          color: 'var(--upay-blue)',
-          marginBottom: '14px',
-        }}>
-          <Brain size={13} />
-          {lang === 'bn' ? '৩টি AI টুল · ৩টি হ্যাকাথন ট্র্যাক' : '3 AI Tools · 3 Hackathon Tracks'}
-        </div>
-
         <h1 style={{
-          fontSize: '2.2rem',
+          fontSize: '2.4rem',
           fontWeight: 800,
           color: 'var(--text-primary)',
           letterSpacing: '-0.03em',
@@ -134,58 +102,43 @@ export default function HubPage() {
                 padding: '28px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '16px',
+                gap: '18px',
                 textDecoration: 'none',
                 color: 'inherit',
                 position: 'relative',
                 overflow: 'hidden',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
               }}
             >
-              {/* Track badge */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+              {/* Card top icon */}
+              <div>
                 <div style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '52px',
+                  height: '52px',
                   borderRadius: '14px',
                   background: tool.bg,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: `0 4px 12px ${tool.color}30`,
+                  boxShadow: `0 6px 16px ${tool.color}35`,
                 }}>
-                  <Icon size={24} style={{ color: '#fff' }} />
+                  <Icon size={26} style={{ color: '#fff' }} />
                 </div>
-                <span style={{
-                  padding: '3px 10px',
-                  borderRadius: '12px',
-                  fontSize: '0.68rem',
-                  fontWeight: 600,
-                  background: 'var(--bg-subtle)',
-                  color: 'var(--text-muted)',
-                  border: '1px solid var(--border-light)',
-                }}>
-                  {tool.track}
-                </span>
               </div>
 
               {/* Title & Description */}
-              <div>
+              <div style={{ flex: 1 }}>
                 <h3 style={{
-                  fontSize: '1.25rem',
+                  fontSize: '1.3rem',
                   fontWeight: 800,
                   color: 'var(--text-primary)',
                   letterSpacing: '-0.02em',
-                  marginBottom: '6px',
+                  marginBottom: '8px',
                 }}>
                   {title}
                 </h3>
                 <p style={{
-                  fontSize: '0.82rem',
+                  fontSize: '0.9rem',
                   color: 'var(--text-muted)',
                   lineHeight: 1.6,
                 }}>
@@ -193,7 +146,7 @@ export default function HubPage() {
                 </p>
               </div>
 
-              {/* Stats */}
+              {/* Stats pills */}
               <div style={{
                 display: 'flex',
                 gap: '8px',
@@ -201,9 +154,9 @@ export default function HubPage() {
               }}>
                 {stats.map((s, i) => (
                   <span key={i} style={{
-                    padding: '4px 10px',
+                    padding: '5px 12px',
                     borderRadius: '8px',
-                    fontSize: '0.72rem',
+                    fontSize: '0.8rem',
                     fontWeight: 600,
                     background: `${tool.color}12`,
                     color: tool.color,
@@ -214,63 +167,29 @@ export default function HubPage() {
                 ))}
               </div>
 
-              {/* Open arrow */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                color: tool.color,
-                marginTop: 'auto',
-                paddingTop: '4px',
-              }}>
+              {/* Open Tool Button */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '11px 20px',
+                  borderRadius: 'var(--radius-md)',
+                  background: tool.bg,
+                  color: '#ffffff',
+                  fontSize: '0.92rem',
+                  fontWeight: 700,
+                  marginTop: '4px',
+                  boxShadow: `0 4px 14px ${tool.color}30`,
+                  transition: 'all 0.2s ease',
+                  letterSpacing: '0.01em',
+                }}
+              >
                 {lang === 'bn' ? 'টুল খুলুন' : 'Open Tool'}
-                <ArrowRight size={14} />
               </div>
             </Link>
           );
         })}
-      </div>
-
-      {/* Platform Stats Bar */}
-      <div className="glass-panel" style={{
-        padding: '18px 28px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '16px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Shield size={16} style={{ color: 'var(--color-success)' }} />
-          <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-            {lang === 'bn'
-              ? 'সকল ডেটা সিনথেটিক · Responsible AI গার্ডরেইল সক্রিয় · Human-in-the-loop অনুমোদন'
-              : 'All data synthetic · Responsible AI guardrails active · Human-in-the-loop approval'}
-          </span>
-        </div>
-
-        <Link
-          href="/performance"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '6px 14px',
-            borderRadius: 'var(--radius-md)',
-            background: 'var(--bg-subtle)',
-            border: '1px solid var(--border-light)',
-            color: 'var(--text-muted)',
-            fontSize: '0.78rem',
-            fontWeight: 500,
-            textDecoration: 'none',
-            transition: 'all 0.15s',
-          }}
-        >
-          <BarChart3 size={13} />
-          {lang === 'bn' ? 'মডেল পারফরম্যান্স' : 'Model Performance'}
-        </Link>
       </div>
     </div>
   );
