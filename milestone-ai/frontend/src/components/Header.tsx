@@ -25,14 +25,14 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
     <header
       style={{
         borderBottom: '1px solid var(--border-light)',
-        background: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        background: 'rgba(255, 255, 255, 0.92)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
         position: 'sticky',
         top: 0,
         zIndex: 50,
         padding: '0 32px',
-        height: '64px',
+        height: '60px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -44,8 +44,8 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
           src="/upay-logo.webp"
           alt="upay logo"
           style={{
-            width: '40px',
-            height: '40px',
+            width: '36px',
+            height: '36px',
             borderRadius: '10px',
             objectFit: 'contain',
           }}
@@ -53,19 +53,19 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <h1 style={{
-              fontSize: '1.1rem',
+              fontSize: '1.05rem',
               fontWeight: 700,
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.025em',
               color: 'var(--text-primary)',
             }}>
               {t('brand.name', lang)}
             </h1>
           </div>
           <p style={{
-            fontSize: '0.7rem',
-            color: 'var(--text-muted)',
+            fontSize: '0.65rem',
+            color: 'var(--text-dim)',
             fontWeight: 500,
-            letterSpacing: '0.01em',
+            letterSpacing: '0.02em',
           }}>
             {t('brand.slogan', lang)}
           </p>
@@ -80,6 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
         background: 'var(--bg-subtle)',
         borderRadius: 'var(--radius-lg)',
         padding: '3px',
+        border: '1px solid var(--border-light)',
       }}>
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -98,8 +99,8 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
                 fontWeight: isActive ? 600 : 500,
                 color: isActive ? 'var(--upay-blue)' : 'var(--text-muted)',
                 background: isActive ? 'var(--bg-white)' : 'transparent',
-                boxShadow: isActive ? 'var(--shadow-xs)' : 'none',
-                transition: 'all 0.15s ease',
+                boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
+                transition: 'all 0.2s var(--ease-smooth)',
               }}
             >
               <Icon size={15} />
@@ -110,39 +111,28 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
       </nav>
 
       {/* Right controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <button
           onClick={() => onLanguageToggle(lang === 'en' ? 'bn' : 'en')}
+          className="btn-ghost"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '6px 14px',
-            borderRadius: 'var(--radius-md)',
-            background: 'var(--bg-subtle)',
-            border: '1px solid var(--border-light)',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-            fontSize: '0.82rem',
-            fontWeight: 600,
-            transition: 'all 0.15s ease',
+            padding: '6px 12px',
+            fontSize: '0.78rem',
           }}
         >
-          <Globe size={14} style={{ color: 'var(--upay-blue)' }} />
+          <Globe size={13} style={{ color: 'var(--upay-blue)' }} />
           <span>{lang === 'en' ? 'বাংলা' : 'English'}</span>
         </button>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '5px 12px',
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--color-success-bg)',
-            border: '1px solid var(--color-success-border)',
-          }}
-        >
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '5px 12px',
+          borderRadius: 'var(--radius-full)',
+          background: 'var(--color-success-bg)',
+          border: '1px solid var(--color-success-border)',
+        }}>
           <span
             style={{
               width: '7px',
