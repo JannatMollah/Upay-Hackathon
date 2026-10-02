@@ -52,38 +52,82 @@ export default function DashboardPage() {
     ? `${(funnel.milestones[5].rate * 100).toFixed(1)}%`
     : '19.3%';
 
+  const kpiCards = [
+    {
+      label: t('kpi.total_users', lang),
+      value: funnel ? funnel.total_users.toLocaleString() : '50,000',
+      sub: lang === 'bn' ? 'সিমুলেটেড MFS ইউজার বেস' : 'Simulated MFS User Base',
+      icon: Users,
+      color: 'var(--upay-blue)',
+      bg: 'var(--upay-blue-soft)',
+    },
+    {
+      label: t('kpi.overall_completion', lang),
+      value: activationRate,
+      sub: lang === 'bn' ? '৬টি মাইলস্টোন সম্পন্ন' : 'Completed All 6 Milestones',
+      icon: TrendingUp,
+      color: 'var(--color-success)',
+      bg: 'var(--color-success-bg)',
+    },
+    {
+      label: t('kpi.at_risk_users', lang),
+      value: totalAtRisk.toLocaleString(),
+      sub: lang === 'bn' ? 'AI নাজ ডেলিভারির জন্য চিহ্নিত' : 'Flagged for AI Nudge Delivery',
+      icon: AlertTriangle,
+      color: 'var(--color-danger)',
+      bg: 'var(--color-danger-bg)',
+    },
+    {
+      label: t('kpi.model_auc', lang),
+      value: '0.7659',
+      sub: 'XGBoost Multi-Output Model',
+      icon: Sparkles,
+      color: 'var(--upay-yellow)',
+      bg: 'var(--upay-yellow-soft)',
+    },
+  ];
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {/* Top Banner / Hero Bar */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }} className="animate-fade-in">
+      {/* Hero Bar */}
       <div
         className="glass-panel"
         style={{
           padding: '28px 32px',
-          background: 'linear-gradient(135deg, rgba(16, 28, 48, 0.9) 0%, rgba(13, 23, 40, 0.95) 100%)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '24px',
+          borderLeft: '4px solid var(--upay-blue)',
         }}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
             <span className="badge badge-brand">
-              <Sparkles size={12} />
+              <Sparkles size={11} />
               AI Lifecycle Intelligence
             </span>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-              Real-time upay customer activation tracking
-            </span>
           </div>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+          <h2 style={{
+            fontSize: '1.6rem',
+            fontWeight: 800,
+            color: 'var(--text-primary)',
+            letterSpacing: '-0.025em',
+            lineHeight: 1.2,
+          }}>
             {lang === 'bn' ? 'গ্রাহক অ্যাক্টিভেশন ও সঞ্চয় ড্যাশবোর্ড' : 'Activation & Growth Command Center'}
           </h2>
-          <p style={{ fontSize: '0.9rem', color: '#94a3b8', maxWidth: '650px' }}>
+          <p style={{
+            fontSize: '0.88rem',
+            color: 'var(--text-muted)',
+            maxWidth: '600px',
+            marginTop: '6px',
+            lineHeight: 1.5,
+          }}>
             {lang === 'bn'
-              ? 'মেশিন লার্নিং দ্বারা মাইলস্টোন ড্রপ-অফ পূর্বাভাস, SHAP ব্যাখ্যা ও স্বয়ংক্রিয় বাংলা নাজ বার্তা প্রেরণের সমন্বিত প্ল্যাটফর্ম।'
-              : 'Predict drop-offs across registration milestones, inspect SHAP drivers, and trigger hyper-personalized Bangla nudges before drop-off occurs.'}
+              ? 'মেশিন লার্নিং দ্বারা মাইলস্টোন ড্রপ-অফ পূর্বাভাস, SHAP ব্যাখ্যা ও স্বয়ংক্রিয় বাংলা নাজ বার্তা প্রেরণের সমন্বিত প্ল্যাটফর্ম।'
+              : 'Predict drop-offs across registration milestones, inspect SHAP drivers, and trigger hyper-personalized Bangla nudges.'}
           </p>
         </div>
 
@@ -93,109 +137,111 @@ export default function DashboardPage() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            borderRadius: '12px',
-            padding: '4px 6px',
+            background: 'var(--bg-subtle)',
+            border: '1px solid var(--border-light)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '4px 4px 4px 14px',
             maxWidth: '320px',
             width: '100%',
+            transition: 'border-color 0.15s ease',
           }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--upay-blue)')}
+          onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}
         >
-          <Search size={18} style={{ color: '#94a3b8', marginLeft: '10px' }} />
+          <Search size={16} style={{ color: 'var(--text-dim)', flexShrink: 0 }} />
           <input
             type="text"
-            placeholder={lang === 'bn' ? 'গ্রাহক আইডি খুঁজুন (উদা: U000013573)...' : 'Lookup user (e.g. U000013573)...'}
+            placeholder={lang === 'bn' ? 'গ্রাহক আইডি খুঁজুন...' : 'Lookup user (e.g. U000013573)...'}
             value={searchUserId}
             onChange={(e) => setSearchUserId(e.target.value)}
             style={{
               background: 'transparent',
               border: 'none',
               outline: 'none',
-              padding: '10px 12px',
-              color: '#f8fafc',
-              fontSize: '0.88rem',
+              padding: '8px 10px',
+              color: 'var(--text-primary)',
+              fontSize: '0.85rem',
               width: '100%',
+              fontFamily: 'inherit',
             }}
           />
           <button
             type="submit"
             style={{
-              background: 'linear-gradient(135deg, #2563eb, #00d2b4)',
+              background: 'var(--upay-blue)',
               border: 'none',
-              borderRadius: '8px',
-              padding: '8px 14px',
+              borderRadius: 'var(--radius-md)',
+              padding: '8px 12px',
               color: '#fff',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
+              transition: 'background 0.15s ease',
+              flexShrink: 0,
             }}
           >
-            <ArrowRight size={16} />
+            <ArrowRight size={15} />
           </button>
         </form>
       </div>
 
       {/* KPI Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
-              {t('kpi.total_users', lang)}
-            </span>
-            <Users size={18} style={{ color: '#38bdf8' }} />
-          </div>
-          <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#f8fafc' }}>
-            {funnel ? funnel.total_users.toLocaleString() : '50,000'}
-          </div>
-          <span style={{ fontSize: '0.75rem', color: '#38bdf8' }}>
-            Simulated MFS User Base
-          </span>
-        </div>
-
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
-              {t('kpi.overall_completion', lang)}
-            </span>
-            <TrendingUp size={18} style={{ color: '#00d2b4' }} />
-          </div>
-          <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#00d2b4' }}>
-            {activationRate}
-          </div>
-          <span style={{ fontSize: '0.75rem', color: '#34d399' }}>
-            Completed All 6 Milestones
-          </span>
-        </div>
-
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
-              {t('kpi.at_risk_users', lang)}
-            </span>
-            <AlertTriangle size={18} style={{ color: '#f43f5e' }} />
-          </div>
-          <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#f43f5e' }}>
-            {totalAtRisk.toLocaleString()}
-          </div>
-          <span style={{ fontSize: '0.75rem', color: '#fb7185' }}>
-            Flagged for AI Nudge Delivery
-          </span>
-        </div>
-
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
-              {t('kpi.model_auc', lang)}
-            </span>
-            <Sparkles size={18} style={{ color: '#fbbf24' }} />
-          </div>
-          <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#fbbf24' }}>
-            0.7659
-          </div>
-          <span style={{ fontSize: '0.75rem', color: '#34d399' }}>
-            XGBoost Multi-Output Model
-          </span>
-        </div>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: '16px',
+      }}>
+        {kpiCards.map((kpi, idx) => {
+          const Icon = kpi.icon;
+          return (
+            <div key={idx} className="glass-panel" style={{ padding: '20px 22px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '12px',
+              }}>
+                <span style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                }}>
+                  {kpi.label}
+                </span>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: 'var(--radius-md)',
+                  background: kpi.bg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Icon size={16} style={{ color: kpi.color }} />
+                </div>
+              </div>
+              <div style={{
+                fontSize: '1.75rem',
+                fontWeight: 800,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1,
+                marginBottom: '4px',
+              }}>
+                {kpi.value}
+              </div>
+              <span style={{
+                fontSize: '0.72rem',
+                color: 'var(--text-dim)',
+                fontWeight: 500,
+              }}>
+                {kpi.sub}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       {/* Funnel Chart */}

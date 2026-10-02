@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Language } from '../lib/i18n';
-import { User, Smartphone, MapPin, CreditCard, Briefcase, Bell } from 'lucide-react';
+import { User, Smartphone, MapPin, CreditCard, Briefcase } from 'lucide-react';
 
 interface UserProfileProps {
   userId: string;
@@ -10,29 +10,46 @@ interface UserProfileProps {
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ userId, lang }) => {
+  const profileItems = [
+    { icon: Smartphone, label: lang === 'bn' ? 'ডিভাইস' : 'Device', value: 'Android App', color: 'var(--text-primary)' },
+    { icon: MapPin, label: lang === 'bn' ? 'অঞ্চল' : 'Region', value: 'Dhaka (Urban)', color: 'var(--text-primary)' },
+    { icon: Briefcase, label: lang === 'bn' ? 'স্যালারি ওয়ালেট' : 'Salary Wallet', value: lang === 'bn' ? 'সক্রিয়' : 'Active', color: 'var(--color-success)' },
+    { icon: CreditCard, label: lang === 'bn' ? 'ব্যাংক সংযুক্ত' : 'Bank Linked', value: 'UCB Linked', color: 'var(--upay-blue)' },
+  ];
+
   return (
-    <div className="glass-panel" style={{ padding: '24px' }}>
+    <div className="glass-panel" style={{ padding: '24px 28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
         <div
           style={{
             width: '48px',
             height: '48px',
-            borderRadius: '14px',
-            background: 'linear-gradient(135deg, #2563eb, #3b82f6)',
+            borderRadius: 'var(--radius-lg)',
+            background: 'var(--upay-blue)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#fff',
           }}
         >
-          <User size={24} />
+          <User size={22} />
         </div>
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', fontFamily: 'monospace' }}>
+          <h2 style={{
+            fontSize: '1.15rem',
+            fontWeight: 800,
+            color: 'var(--text-primary)',
+            fontFamily: "'SF Mono', 'Fira Code', monospace",
+            letterSpacing: '0.02em',
+          }}>
             {userId}
           </h2>
-          <span style={{ fontSize: '0.78rem', color: '#00d2b4', fontWeight: 600 }}>
-            Active upay Subscriber
+          <span style={{
+            fontSize: '0.78rem',
+            color: 'var(--color-success)',
+            fontWeight: 600,
+          }}>
+            {lang === 'bn' ? 'সক্রিয় উপায় গ্রাহক' : 'Active upay Subscriber'}
           </span>
         </div>
       </div>
@@ -41,40 +58,40 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, lang }) => {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-          gap: '12px',
+          gap: '10px',
         }}
       >
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.75rem', marginBottom: '4px' }}>
-            <Smartphone size={13} />
-            <span>Device</span>
-          </div>
-          <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>Android App</p>
-        </div>
-
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.75rem', marginBottom: '4px' }}>
-            <MapPin size={13} />
-            <span>Region</span>
-          </div>
-          <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>Dhaka (Urban)</p>
-        </div>
-
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.75rem', marginBottom: '4px' }}>
-            <Briefcase size={13} />
-            <span>Salary Wallet</span>
-          </div>
-          <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#34d399' }}>Active</p>
-        </div>
-
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.75rem', marginBottom: '4px' }}>
-            <CreditCard size={13} />
-            <span>Bank Linked</span>
-          </div>
-          <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#38bdf8' }}>UCB Linked</p>
-        </div>
+        {profileItems.map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div key={idx} style={{
+              background: 'var(--bg-subtle)',
+              padding: '12px 14px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-light)',
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                color: 'var(--text-muted)',
+                fontSize: '0.73rem',
+                marginBottom: '4px',
+                fontWeight: 500,
+              }}>
+                <Icon size={12} />
+                <span>{item.label}</span>
+              </div>
+              <p style={{
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: item.color,
+              }}>
+                {item.value}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

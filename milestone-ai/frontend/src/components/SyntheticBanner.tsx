@@ -12,18 +12,19 @@ export const SyntheticBanner: React.FC<SyntheticBannerProps> = ({ lang }) => {
   return (
     <div
       style={{
-        background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(37, 99, 235, 0.12) 100%)',
-        borderBottom: '1px solid rgba(245, 158, 11, 0.3)',
-        padding: '10px 24px',
+        background: 'var(--color-warning-bg)',
+        borderBottom: '1px solid var(--color-warning-border)',
+        padding: '8px 32px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        fontSize: '0.85rem',
-        color: '#fbbf24',
+        fontSize: '0.8rem',
+        color: 'var(--color-warning)',
+        gap: '16px',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <AlertTriangle size={18} style={{ color: '#f59e0b', flexShrink: 0 }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <AlertTriangle size={15} style={{ flexShrink: 0 }} />
         <span>
           <strong>{lang === 'bn' ? 'সতর্কবার্তা:' : 'NOTE:'}</strong>{' '}
           {t('banner.synthetic', lang)}
@@ -33,17 +34,14 @@ export const SyntheticBanner: React.FC<SyntheticBannerProps> = ({ lang }) => {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
-          color: '#34d399',
-          fontSize: '0.78rem',
+          gap: '5px',
+          fontSize: '0.72rem',
           fontWeight: 600,
-          background: 'rgba(16, 185, 129, 0.1)',
-          padding: '3px 10px',
-          borderRadius: '999px',
-          border: '1px solid rgba(16, 185, 129, 0.25)',
+          flexShrink: 0,
         }}
+        className="badge badge-success"
       >
-        <ShieldCheck size={14} />
+        <ShieldCheck size={13} />
         <span>{lang === 'bn' ? 'গার্ডরেইল সক্রিয়' : 'Guardrails Active'}</span>
       </div>
     </div>

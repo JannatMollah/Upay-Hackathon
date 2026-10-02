@@ -13,7 +13,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <SyntheticBanner lang={lang} />
       <Header lang={lang} onLanguageToggle={setLang} />
-      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '32px 24px' }}>
+      <main style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: '28px 24px 48px',
+      }}>
         {children}
       </main>
     </>
@@ -34,6 +38,7 @@ export default function RootLayout({
           content="Hybrid Activation & Savings Intelligence Platform for upay mobile financial services"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/upay-logo.webp" type="image/webp" />
       </head>
       <body>
         <LanguageProvider>

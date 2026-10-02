@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Nudge } from '../types';
 import { Language, t } from '../lib/i18n';
-import { Sparkles, ShieldCheck, Send, CheckCircle2, XCircle, Edit3, MessageSquare } from 'lucide-react';
+import { Sparkles, ShieldCheck, Send, CheckCircle2, XCircle, Edit3 } from 'lucide-react';
 
 interface NudgeCardProps {
   nudge: Nudge | null;
@@ -20,11 +20,11 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
 
   if (!nudge) {
     return (
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc', marginBottom: '8px' }}>
+      <div className="glass-panel" style={{ padding: '24px 28px' }}>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
           {t('nudge.title', lang)}
         </h3>
-        <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
           {lang === 'bn' ? 'কোনো ইন্টারভেনশন প্রয়োজন নেই।' : 'No active nudge recommended for this user.'}
         </p>
       </div>
@@ -34,11 +34,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
   const handleAction = async (action: 'approved' | 'rejected') => {
     setLoading(true);
     try {
-      await onApprove(
-        nudge.nudge_id,
-        action,
-        isEditing ? editedText : undefined
-      );
+      await onApprove(nudge.nudge_id, action, isEditing ? editedText : undefined);
       setApprovedState(action);
       setIsEditing(false);
     } catch (err) {
@@ -52,93 +48,87 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
     <div
       className="glass-panel"
       style={{
-        padding: '24px',
-        border: '1px solid rgba(0, 210, 180, 0.3)',
-        boxShadow: '0 8px 32px rgba(0, 210, 180, 0.1)',
+        padding: '24px 28px',
+        borderLeft: '4px solid var(--upay-blue)',
       }}
     >
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Sparkles size={18} style={{ color: '#00d2b4' }} />
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>
+          <Sparkles size={16} style={{ color: 'var(--upay-blue)' }} />
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {t('nudge.title', lang)}
           </h3>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '6px' }}>
           <span className="badge badge-brand">
-            <Sparkles size={11} />
+            <Sparkles size={10} />
             {nudge.ai_generated ? 'Gemini 1.5' : 'Smart Template'}
           </span>
           {nudge.guardrail_passed && (
             <span className="badge badge-success">
-              <ShieldCheck size={12} />
-              Guardrail Verified
+              <ShieldCheck size={11} />
+              Verified
             </span>
           )}
         </div>
       </div>
 
-      {/* Meta Specs */}
+      {/* Meta Specs Grid */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
           gap: '12px',
           marginBottom: '16px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          padding: '12px',
-          borderRadius: '10px',
         }}
       >
-        <div>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>
-            {t('nudge.channel', lang)}
-          </span>
-          <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#38bdf8' }}>
-            {nudge.channel_recommendation.toUpperCase()}
-          </p>
-        </div>
-
-        <div>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>
-            {t('nudge.bonus', lang)}
-          </span>
-          <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fbbf24' }}>
-            ৳{nudge.bonus_amount_bdt} BDT
-          </p>
-        </div>
-
-        <div>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>
-            Target Milestone
-          </span>
-          <p style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f8fafc' }}>
-            {nudge.target_milestone}
-          </p>
-        </div>
-
-        <div>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>
-            Status
-          </span>
-          <p
-            style={{
-              fontSize: '0.9rem',
-              fontWeight: 700,
-              color: approvedState === 'approved' ? '#34d399' : approvedState === 'rejected' ? '#f87171' : '#facc15',
-            }}
-          >
-            {approvedState ? approvedState.toUpperCase() : 'PENDING'}
-          </p>
-        </div>
+        {[
+          { label: t('nudge.channel', lang), value: nudge.channel_recommendation.toUpperCase(), color: 'var(--upay-blue)' },
+          { label: t('nudge.bonus', lang), value: `৳${nudge.bonus_amount_bdt} BDT`, color: 'var(--color-warning)' },
+          { label: 'Target Milestone', value: nudge.target_milestone, color: 'var(--text-primary)' },
+          {
+            label: 'Status',
+            value: approvedState ? approvedState.toUpperCase() : 'PENDING',
+            color: approvedState === 'approved' ? 'var(--color-success)' : approvedState === 'rejected' ? 'var(--color-danger)' : 'var(--color-warning)',
+          },
+        ].map((item, idx) => (
+          <div key={idx} style={{
+            background: 'var(--bg-subtle)',
+            padding: '10px 14px',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--border-light)',
+          }}>
+            <span style={{
+              fontSize: '0.7rem',
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              letterSpacing: '0.03em',
+            }}>
+              {item.label}
+            </span>
+            <p style={{ fontSize: '0.88rem', fontWeight: 700, color: item.color, marginTop: '2px' }}>
+              {item.value}
+            </p>
+          </div>
+        ))}
       </div>
 
-      {/* Bangla Nudge Content Box */}
+      {/* Bangla Nudge Content */}
       <div style={{ marginBottom: '16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '8px',
+        }}>
+          <span style={{
+            fontSize: '0.8rem',
+            color: 'var(--text-secondary)',
+            fontWeight: 600,
+          }}>
             {lang === 'bn' ? 'প্রস্তাবিত বার্তা (বাংলা):' : 'Proposed Nudge Copy (Bangla):'}
           </span>
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -147,13 +137,15 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#38bdf8',
+                color: 'var(--upay-blue)',
                 cursor: 'pointer',
                 fontSize: '0.78rem',
+                fontWeight: 500,
                 textDecoration: 'underline',
+                fontFamily: 'inherit',
               }}
             >
-              {showEnglish ? 'Hide English' : 'Show English Translation'}
+              {showEnglish ? 'Hide English' : 'Show English'}
             </button>
             {!isEditing && approvedState === 'pending_approval' && (
               <button
@@ -161,12 +153,13 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#00d2b4',
+                  color: 'var(--color-success)',
                   cursor: 'pointer',
                   fontSize: '0.78rem',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px',
+                  fontFamily: 'inherit',
                 }}
               >
                 <Edit3 size={12} />
@@ -183,26 +176,28 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
             rows={3}
             style={{
               width: '100%',
-              padding: '12px',
-              borderRadius: '10px',
-              background: 'rgba(0, 0, 0, 0.4)',
-              border: '1px solid #00d2b4',
-              color: '#f8fafc',
+              padding: '14px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--bg-white)',
+              border: '2px solid var(--upay-blue)',
+              color: 'var(--text-primary)',
               fontSize: '0.95rem',
-              fontFamily: 'inherit',
+              fontFamily: "'Hind Siliguri', sans-serif",
               lineHeight: 1.6,
+              outline: 'none',
+              resize: 'vertical',
             }}
           />
         ) : (
           <div
             style={{
               padding: '14px 18px',
-              borderRadius: '10px',
-              background: 'rgba(0, 210, 180, 0.05)',
-              border: '1px solid rgba(0, 210, 180, 0.2)',
-              fontSize: '1rem',
-              lineHeight: 1.6,
-              color: '#f1f5f9',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--upay-blue-soft)',
+              border: '1px solid rgba(30, 77, 140, 0.12)',
+              fontSize: '0.95rem',
+              lineHeight: 1.7,
+              color: 'var(--text-primary)',
               fontFamily: "'Hind Siliguri', sans-serif",
             }}
           >
@@ -214,13 +209,14 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
           <div
             style={{
               marginTop: '8px',
-              padding: '10px 14px',
-              borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              padding: '12px 16px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-subtle)',
+              border: '1px solid var(--border-light)',
               fontSize: '0.85rem',
-              color: '#94a3b8',
+              color: 'var(--text-muted)',
               fontStyle: 'italic',
+              lineHeight: 1.6,
             }}
           >
             "{nudge.text_en}"
@@ -235,15 +231,15 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#34d399',
-            background: 'rgba(16, 185, 129, 0.1)',
-            padding: '10px 16px',
-            borderRadius: '10px',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            color: 'var(--color-success)',
+            background: 'var(--color-success-bg)',
+            padding: '12px 16px',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-success-border)',
           }}
         >
-          <CheckCircle2 size={18} />
-          <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>
+          <CheckCircle2 size={16} />
+          <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>
             {t('nudge.approved_success', lang)}
           </span>
         </div>
@@ -253,33 +249,34 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#f87171',
-            background: 'rgba(244, 63, 94, 0.1)',
-            padding: '10px 16px',
-            borderRadius: '10px',
-            border: '1px solid rgba(244, 63, 94, 0.3)',
+            color: 'var(--color-danger)',
+            background: 'var(--color-danger-bg)',
+            padding: '12px 16px',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-danger-border)',
           }}
         >
-          <XCircle size={18} />
-          <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>
+          <XCircle size={16} />
+          <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>
             {lang === 'bn' ? 'নাজ বার্তাটি বাতিল করা হয়েছে।' : 'Nudge was rejected.'}
           </span>
         </div>
       ) : (
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <button
             disabled={loading}
             onClick={() => handleAction('rejected')}
             style={{
-              padding: '8px 18px',
-              borderRadius: '8px',
-              background: 'rgba(244, 63, 94, 0.12)',
-              border: '1px solid rgba(244, 63, 94, 0.3)',
-              color: '#fda4af',
+              padding: '9px 20px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-white)',
+              border: '1px solid var(--color-danger-border)',
+              color: 'var(--color-danger)',
               fontSize: '0.85rem',
               fontWeight: 600,
               cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.15s',
+              fontFamily: 'inherit',
             }}
           >
             {t('nudge.reject', lang)}
@@ -292,19 +289,20 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onApprove, lang }) 
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '8px 22px',
-              borderRadius: '8px',
-              background: 'linear-gradient(135deg, #00d2b4 0%, #059669 100%)',
+              padding: '9px 24px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--upay-blue)',
               border: 'none',
-              color: '#070d18',
+              color: '#fff',
               fontSize: '0.85rem',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: loading ? 'not-allowed' : 'pointer',
-              boxShadow: '0 4px 14px rgba(0, 210, 180, 0.35)',
-              transition: 'all 0.2s',
+              boxShadow: 'var(--shadow-sm)',
+              transition: 'all 0.15s',
+              fontFamily: 'inherit',
             }}
           >
-            <Send size={15} />
+            <Send size={14} />
             <span>{loading ? 'Processing...' : t('nudge.approve', lang)}</span>
           </button>
         </div>

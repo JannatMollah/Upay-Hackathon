@@ -6,7 +6,7 @@ import { SavingsPlanResponse, AtRiskUser } from '../../types';
 import { Language, t } from '../../lib/i18n';
 import { useLanguage } from '../../lib/LanguageContext';
 import { SanchayBotPanel } from '../../components/SanchayBotPanel';
-import { PiggyBank, Search, Sparkles, Users } from 'lucide-react';
+import { PiggyBank, Search, Sparkles } from 'lucide-react';
 
 export default function SavingsCoachPage() {
   const { lang } = useLanguage();
@@ -55,43 +55,48 @@ export default function SavingsCoachPage() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }} className="animate-fade-in">
       {/* Top Banner */}
       <div
         className="glass-panel"
         style={{
           padding: '24px 28px',
-          background: 'linear-gradient(135deg, rgba(0, 210, 180, 0.12) 0%, rgba(16, 28, 48, 0.95) 100%)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '20px',
+          borderLeft: '4px solid var(--color-success)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div
             style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '12px',
-              background: 'rgba(0, 210, 180, 0.2)',
+              width: '42px',
+              height: '42px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-success-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#00d2b4',
+              color: 'var(--color-success)',
             }}
           >
-            <PiggyBank size={26} />
+            <PiggyBank size={22} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>
+              <h2 style={{
+                fontSize: '1.25rem',
+                fontWeight: 800,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.02em',
+              }}>
                 {t('sanchay.title', lang)}
               </h2>
               <span className="badge badge-brand">Module B</span>
             </div>
-            <p style={{ fontSize: '0.88rem', color: '#94a3b8' }}>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               {t('sanchay.subtitle', lang)}
             </p>
           </div>
@@ -105,25 +110,32 @@ export default function SavingsCoachPage() {
             value={inputUserId}
             onChange={(e) => setInputUserId(e.target.value)}
             style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '8px',
+              background: 'var(--bg-subtle)',
+              border: '1px solid var(--border-light)',
+              borderRadius: 'var(--radius-md)',
               padding: '8px 14px',
-              color: '#f8fafc',
+              color: 'var(--text-primary)',
               fontSize: '0.85rem',
+              fontFamily: 'inherit',
+              outline: 'none',
+              transition: 'border-color 0.15s',
             }}
+            onFocus={(e) => (e.target.style.borderColor = 'var(--upay-blue)')}
+            onBlur={(e) => (e.target.style.borderColor = 'var(--border-light)')}
           />
           <button
             type="submit"
             style={{
-              background: 'linear-gradient(135deg, #00d2b4, #059669)',
+              background: 'var(--color-success)',
               border: 'none',
-              borderRadius: '8px',
-              padding: '8px 16px',
-              color: '#070d18',
-              fontWeight: 700,
+              borderRadius: 'var(--radius-md)',
+              padding: '8px 18px',
+              color: '#fff',
+              fontWeight: 600,
               fontSize: '0.85rem',
               cursor: 'pointer',
+              transition: 'background 0.15s',
+              fontFamily: 'inherit',
             }}
           >
             Analyze
@@ -133,8 +145,19 @@ export default function SavingsCoachPage() {
 
       {/* Suggested Users Row */}
       {atRiskList.length > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8', whiteSpace: 'nowrap' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          overflowX: 'auto',
+          paddingBottom: '4px',
+        }}>
+          <span style={{
+            fontSize: '0.78rem',
+            color: 'var(--text-muted)',
+            whiteSpace: 'nowrap',
+            fontWeight: 500,
+          }}>
             {lang === 'bn' ? 'নমুনা গ্রাহকগণ:' : 'Sample Users:'}
           </span>
           {atRiskList.map((u) => {
@@ -145,15 +168,18 @@ export default function SavingsCoachPage() {
                 onClick={() => setSelectedUserId(u.user_id)}
                 style={{
                   padding: '5px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.78rem',
-                  fontFamily: 'monospace',
-                  fontWeight: isSelected ? 700 : 500,
-                  background: isSelected ? 'rgba(0, 210, 180, 0.2)' : 'rgba(255, 255, 255, 0.04)',
-                  border: isSelected ? '1px solid rgba(0, 210, 180, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)',
-                  color: isSelected ? '#00d2b4' : '#cbd5e1',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: '0.76rem',
+                  fontFamily: "'SF Mono', 'Fira Code', monospace",
+                  fontWeight: isSelected ? 600 : 500,
+                  background: isSelected ? 'var(--upay-blue)' : 'var(--bg-subtle)',
+                  border: isSelected
+                    ? '1px solid var(--upay-blue)'
+                    : '1px solid var(--border-light)',
+                  color: isSelected ? '#fff' : 'var(--text-muted)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  transition: 'all 0.15s',
                 }}
               >
                 {u.user_id}

@@ -1,26 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #070d18;
-  --bg-secondary: #0d1728;
-  --bg-card: rgba(16, 28, 48, 0.7);
-  --bg-card-hover: rgba(22, 38, 64, 0.85);
-  --border-card: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(0, 210, 180, 0.3);
+  /* UPAY Official Brand Colors */
+  --upay-yellow: #EDBC1B;
+  --upay-yellow-light: #F7D54A;
+  --upay-yellow-soft: rgba(237, 188, 27, 0.08);
+  --upay-yellow-hover: rgba(237, 188, 27, 0.12);
+  --upay-blue: #1E4D8C;
+  --upay-blue-light: #2A5FAA;
+  --upay-blue-soft: rgba(30, 77, 140, 0.06);
+  --upay-blue-hover: rgba(30, 77, 140, 0.10);
 
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  /* Neutral Palette */
+  --bg-primary: #FAFBFC;
+  --bg-white: #FFFFFF;
+  --bg-subtle: #F3F4F6;
+  --bg-muted: #E5E7EB;
 
-  --upay-blue: #2563eb;
-  --upay-blue-glow: rgba(37, 99, 235, 0.35);
-  --upay-cyan: #00d2b4;
-  --upay-cyan-glow: rgba(0, 210, 180, 0.3);
-  --upay-amber: #f59e0b;
-  --upay-rose: #f43f5e;
-  --upay-emerald: #10b981;
+  /* Borders */
+  --border-light: #E5E7EB;
+  --border-default: #D1D5DB;
+  --border-focus: #1E4D8C;
 
-  --font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Text Colors */
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6B7280;
+  --text-dim: #9CA3AF;
+
+  /* Semantic Colors */
+  --color-success: #059669;
+  --color-success-bg: rgba(5, 150, 105, 0.08);
+  --color-success-border: rgba(5, 150, 105, 0.2);
+  --color-danger: #DC2626;
+  --color-danger-bg: rgba(220, 38, 38, 0.06);
+  --color-danger-border: rgba(220, 38, 38, 0.15);
+  --color-warning: #D97706;
+  --color-warning-bg: rgba(217, 119, 6, 0.06);
+  --color-warning-border: rgba(217, 119, 6, 0.15);
+  --color-info: #2563EB;
+  --color-info-bg: rgba(37, 99, 235, 0.06);
+  --color-info-border: rgba(37, 99, 235, 0.15);
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+
+  /* Typography */
+  --font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
 }
 
 * {
@@ -31,16 +68,13 @@
 
 body {
   background-color: var(--bg-primary);
-  color: var(--text-main);
+  color: var(--text-primary);
   font-family: var(--font-family);
   min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  background-image: 
-    radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 85% 65%, rgba(0, 210, 180, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 50% 90%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
-  background-attachment: fixed;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 a {
@@ -48,85 +82,144 @@ a {
   text-decoration: none;
 }
 
-/* Glassmorphism Containers */
+/* ========================
+   CARD SYSTEM
+   ======================== */
 .glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-card);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  transition: all 0.25s ease;
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .glass-panel:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-default);
 }
 
 .glass-panel-interactive:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--upay-blue);
 }
 
-/* Badges */
+/* ========================
+   BADGE SYSTEM
+   ======================== */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
 }
 
 .badge-risk {
-  background: rgba(244, 63, 94, 0.15);
-  color: #fda4af;
-  border: 1px solid rgba(244, 63, 94, 0.3);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger-border);
 }
 
 .badge-success {
-  background: rgba(16, 185, 129, 0.15);
-  color: #6ee7b7;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fcd34d;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
 }
 
 .badge-brand {
-  background: rgba(0, 210, 180, 0.15);
-  color: var(--upay-cyan);
-  border: 1px solid var(--border-highlight);
+  background: var(--upay-blue-soft);
+  color: var(--upay-blue);
+  border: 1px solid rgba(30, 77, 140, 0.15);
 }
 
-/* Custom Scrollbar */
+.badge-info {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  border: 1px solid var(--color-info-border);
+}
+
+/* ========================
+   SCROLLBAR
+   ======================== */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
+  background: var(--bg-muted);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--border-default);
 }
 
-/* Animations */
+/* ========================
+   ANIMATIONS
+   ======================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.6; }
+  0%, 100% { opacity: 0.7; }
   50% { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .animate-glow {
   animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ========================
+   TABLE STYLES
+   ======================== */
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========================
+   FOCUS STYLES
+   ======================== */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--upay-blue);
+  outline-offset: 2px;
+}
+
+/* ========================
+   SELECTION
+   ======================== */
+::selection {
+  background: var(--upay-yellow);
+  color: var(--text-primary);
 }

@@ -23,23 +23,51 @@ export const SavingsGrowthChart: React.FC<SavingsGrowthChartProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>
-          {lang === 'bn' ? 'মেয়াদভিত্তিক সঞ্চয় প্রবৃদ্ধি (ডিপিএস প্রজেকশন):' : 'Projected Wealth Growth by Tenure:'}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '12px',
+      }}>
+        <span style={{
+          fontSize: '0.88rem',
+          fontWeight: 600,
+          color: 'var(--text-primary)',
+        }}>
+          {lang === 'bn' ? 'মেয়াদভিত্তিক সঞ্চয় প্রবৃদ্ধি:' : 'Projected Wealth Growth by Tenure:'}
         </span>
-        <div style={{ display: 'flex', gap: '12px', fontSize: '0.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#94a3b8' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: '#3b82f6' }} />
-            <span>{lang === 'bn' ? 'জমা আসল' : 'Deposits'}</span>
+        <div style={{ display: 'flex', gap: '14px', fontSize: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '2px',
+              background: 'var(--upay-blue)',
+            }} />
+            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>
+              {lang === 'bn' ? 'জমা আসল' : 'Deposits'}
+            </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#00d2b4' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: '#00d2b4' }} />
-            <span>{lang === 'bn' ? 'মুনাফাসহ প্রাপ্তি' : 'Total Maturity'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '2px',
+              background: 'var(--color-success)',
+            }} />
+            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>
+              {lang === 'bn' ? 'মুনাফাসহ প্রাপ্তি' : 'Total Maturity'}
+            </span>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${plans.length}, 1fr)`, gap: '10px' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${plans.length}, 1fr)`,
+        gap: '10px',
+      }}>
         {plans.map((p) => {
           const isSelected = p.tenure_months === selectedTenure;
           const depositHeight = Math.round((p.total_deposits / maxVal) * 90);
@@ -51,18 +79,20 @@ export const SavingsGrowthChart: React.FC<SavingsGrowthChartProps> = ({
               onClick={() => onSelectTenure(p.tenure_months)}
               style={{
                 cursor: 'pointer',
-                padding: '12px 8px',
-                borderRadius: '10px',
-                background: isSelected ? 'rgba(0, 210, 180, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                border: isSelected ? '1px solid rgba(0, 210, 180, 0.4)' : '1px solid rgba(255, 255, 255, 0.06)',
+                padding: '14px 8px',
+                borderRadius: 'var(--radius-lg)',
+                background: isSelected ? 'var(--upay-blue-soft)' : 'var(--bg-subtle)',
+                border: isSelected
+                  ? '2px solid var(--upay-blue)'
+                  : '1px solid var(--border-light)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '8px',
-                transition: 'all 0.2s ease',
+                transition: 'all 0.15s ease',
               }}
             >
-              {/* Bar visualization */}
+              {/* Bars */}
               <div
                 style={{
                   height: '100px',
@@ -77,8 +107,9 @@ export const SavingsGrowthChart: React.FC<SavingsGrowthChartProps> = ({
                     width: '14px',
                     height: `${depositHeight}%`,
                     borderRadius: '4px 4px 0 0',
-                    background: '#3b82f6',
+                    background: 'var(--upay-blue)',
                     transition: 'height 0.3s ease',
+                    opacity: isSelected ? 1 : 0.6,
                   }}
                   title={`Deposit: ৳${p.total_deposits.toLocaleString()}`}
                 />
@@ -87,18 +118,27 @@ export const SavingsGrowthChart: React.FC<SavingsGrowthChartProps> = ({
                     width: '14px',
                     height: `${maturityHeight}%`,
                     borderRadius: '4px 4px 0 0',
-                    background: 'linear-gradient(180deg, #00d2b4 0%, #059669 100%)',
+                    background: 'var(--color-success)',
                     transition: 'height 0.3s ease',
+                    opacity: isSelected ? 1 : 0.6,
                   }}
                   title={`Maturity: ৳${p.projected_maturity.toLocaleString()}`}
                 />
               </div>
 
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: isSelected ? '#00d2b4' : '#cbd5e1' }}>
-                {p.tenure_months}m
+              <span style={{
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                color: isSelected ? 'var(--upay-blue)' : 'var(--text-secondary)',
+              }}>
+                {p.tenure_months}{lang === 'bn' ? 'মাস' : 'm'}
               </span>
 
-              <span style={{ fontSize: '0.72rem', color: '#34d399', fontWeight: 600 }}>
+              <span style={{
+                fontSize: '0.72rem',
+                color: 'var(--color-success)',
+                fontWeight: 600,
+              }}>
                 ৳{Math.round(p.projected_maturity).toLocaleString()}
               </span>
             </div>

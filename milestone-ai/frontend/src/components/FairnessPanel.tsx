@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Language } from '../lib/i18n';
-import { ShieldAlert, CheckCircle2, XCircle, Info, Scale } from 'lucide-react';
+import { ShieldAlert, CheckCircle2, XCircle, Scale } from 'lucide-react';
 
 interface FairnessPanelProps {
   fairnessData: any;
@@ -15,31 +15,40 @@ export const FairnessPanel: React.FC<FairnessPanelProps> = ({ fairnessData, lang
   const milestones = ['M2', 'M3', 'M4', 'M5'];
 
   return (
-    <div className="glass-panel" style={{ padding: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div className="glass-panel" style={{ padding: '24px 28px' }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '16px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '10px',
-              background: 'rgba(56, 189, 248, 0.15)',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-info-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#38bdf8',
+              color: 'var(--color-info)',
             }}
           >
-            <Scale size={20} />
+            <Scale size={18} />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#f8fafc' }}>
-              {lang === 'bn' ? 'ডেমোগ্রাফিক ন্যায্যতা অডিট (Fairness Audit)' : 'Demographic Fairness & Equalized Odds Audit'}
+            <h3 style={{
+              fontSize: '1.05rem',
+              fontWeight: 700,
+              color: 'var(--text-primary)',
+            }}>
+              {lang === 'bn' ? 'ডেমোগ্রাফিক ন্যায্যতা অডিট' : 'Demographic Fairness & Equalized Odds Audit'}
             </h3>
-            <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
               {lang === 'bn'
                 ? 'ন্যায্যতা থ্রেশহোল্ড: অনুপাত >= ০.৮০ (৮০% রুল)'
-                : 'Fairness standard: Equalized Odds Ratio ≥ 0.80 (80% Disparate Impact rule)'}
+                : 'Fairness standard: EO Ratio ≥ 0.80 (80% Disparate Impact rule)'}
             </p>
           </div>
         </div>
@@ -49,14 +58,22 @@ export const FairnessPanel: React.FC<FairnessPanelProps> = ({ fairnessData, lang
 
       {/* Audit Table */}
       <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
+        <table style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          textAlign: 'left',
+          fontSize: '0.85rem',
+        }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#64748b' }}>
-              <th style={{ padding: '12px 16px', fontWeight: 600 }}>Milestone</th>
-              <th style={{ padding: '12px 16px', fontWeight: 600 }}>Urban vs Rural EO</th>
-              <th style={{ padding: '12px 16px', fontWeight: 600 }}>Urban / Rural Status</th>
-              <th style={{ padding: '12px 16px', fontWeight: 600 }}>Male vs Female EO</th>
-              <th style={{ padding: '12px 16px', fontWeight: 600 }}>Gender Status</th>
+            <tr style={{
+              borderBottom: '2px solid var(--border-light)',
+              color: 'var(--text-muted)',
+            }}>
+              <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Milestone</th>
+              <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Urban vs Rural EO</th>
+              <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</th>
+              <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Male vs Female EO</th>
+              <th style={{ padding: '10px 14px', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -72,38 +89,49 @@ export const FairnessPanel: React.FC<FairnessPanelProps> = ({ fairnessData, lang
               const mfPass = mf.passed !== undefined ? mf.passed : mfRatio >= 0.8;
 
               return (
-                <tr key={m} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: '#f8fafc' }}>
+                <tr key={m} style={{ borderBottom: '1px solid var(--border-light)' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-subtle)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <td style={{ padding: '12px 14px', fontWeight: 700 }}>
                     <span className="badge badge-brand">{m}</span>
                   </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 600, color: uvPass ? '#34d399' : '#f87171' }}>
+                  <td style={{
+                    padding: '12px 14px',
+                    fontWeight: 600,
+                    color: uvPass ? 'var(--color-success)' : 'var(--color-danger)',
+                  }}>
                     {uvRatio.toFixed(3)}
                   </td>
-                  <td style={{ padding: '14px 16px' }}>
+                  <td style={{ padding: '12px 14px' }}>
                     {uvPass ? (
                       <span className="badge badge-success">
-                        <CheckCircle2 size={12} />
+                        <CheckCircle2 size={11} />
                         PASS
                       </span>
                     ) : (
                       <span className="badge badge-risk">
-                        <XCircle size={12} />
-                        DISPARITY FLAGGED
+                        <XCircle size={11} />
+                        FLAGGED
                       </span>
                     )}
                   </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 600, color: mfPass ? '#34d399' : '#f87171' }}>
+                  <td style={{
+                    padding: '12px 14px',
+                    fontWeight: 600,
+                    color: mfPass ? 'var(--color-success)' : 'var(--color-danger)',
+                  }}>
                     {mfRatio.toFixed(3)}
                   </td>
-                  <td style={{ padding: '14px 16px' }}>
+                  <td style={{ padding: '12px 14px' }}>
                     {mfPass ? (
                       <span className="badge badge-success">
-                        <CheckCircle2 size={12} />
+                        <CheckCircle2 size={11} />
                         PASS
                       </span>
                     ) : (
                       <span className="badge badge-risk">
-                        <XCircle size={12} />
+                        <XCircle size={11} />
                         FLAGGED
                       </span>
                     )}
@@ -115,27 +143,27 @@ export const FairnessPanel: React.FC<FairnessPanelProps> = ({ fairnessData, lang
         </table>
       </div>
 
-      {/* Critical Insight Alert (Explaining M4 Disparity) */}
+      {/* M4 Disparity Alert */}
       <div
         style={{
-          background: 'rgba(244, 63, 94, 0.08)',
-          border: '1px solid rgba(244, 63, 94, 0.25)',
-          borderRadius: '10px',
+          background: 'var(--color-danger-bg)',
+          border: '1px solid var(--color-danger-border)',
+          borderRadius: 'var(--radius-lg)',
           padding: '14px 18px',
           display: 'flex',
           gap: '12px',
           alignItems: 'flex-start',
         }}
       >
-        <ShieldAlert size={20} style={{ color: '#f43f5e', flexShrink: 0, marginTop: '2px' }} />
-        <div style={{ fontSize: '0.85rem', lineHeight: 1.6, color: '#fda4af' }}>
-          <strong>
+        <ShieldAlert size={18} style={{ color: 'var(--color-danger)', flexShrink: 0, marginTop: '2px' }} />
+        <div style={{ fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+          <strong style={{ color: 'var(--color-danger)' }}>
             {lang === 'bn'
               ? 'ন্যায্যতা বিশ্লেষণ ও ব্যবসায়িক সিদ্ধান্ত (M4 Disparity Insight):'
               : 'Fairness Discovery & Strategic Recommendation (M4 Disparity):'}
           </strong>{' '}
           {lang === 'bn'
-            ? 'মাইলস্টোন M4 (মার্চেন্ট পেমেন্ট)-এ শহরাঞ্চল ও গ্রামাঞ্চলের মধ্যে বৈষম্য শনাক্ত হয়েছে (EO ratio: 0.433)। এর মূল কারণ গ্রামাঞ্চলে QR মার্চেন্ট পয়েন্টের সংখ্যা সীমিত (Pattern P3)। মডেলটি যথাযথভাবে এই সত্যকে উন্মোচন করেছে। প্রস্তাবনা: গ্রামীণ ব্যবহারকারীদের জন্য QR মার্চেন্টের বদলে বিকল্প পেমেন্ট বা এজেন্ট নেটওয়ার্ক ইন্টারভেনশন অফার করা।'
+            ? 'মাইলস্টোন M4 (মার্চেন্ট পেমেন্ট)-এ শহরাঞ্চল ও গ্রামাঞ্চলের মধ্যে বৈষম্য শনাক্ত হয়েছে (EO ratio: 0.433)। এর মূল কারণ গ্রামাঞ্চলে QR মার্চেন্ট পয়েন্টের সংখ্যা সীমিত (Pattern P3)। প্রস্তাবনা: গ্রামীণ ব্যবহারকারীদের জন্য QR মার্চেন্টের বদলে বিকল্প পেমেন্ট বা এজেন্ট নেটওয়ার্ক ইন্টারভেনশন অফার করা।'
             : 'Milestone M4 (Merchant QR Payment) triggered a fairness alert between urban and rural cohorts (EO ratio: 0.433 vs 0.80 threshold). This reflects real ground reality: rural regions have fewer onboarded QR merchants (Pattern P3). Rather than suppressing this, upay can target merchant onboarding or offer alternative rural digital utility incentives!'}
         </div>
       </div>

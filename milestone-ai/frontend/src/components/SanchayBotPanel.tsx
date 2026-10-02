@@ -5,7 +5,7 @@ import { SavingsPlanResponse } from '../types';
 import { Language, t } from '../lib/i18n';
 import { SpendingDonut } from './SpendingDonut';
 import { SavingsGrowthChart } from './SavingsGrowthChart';
-import { PiggyBank, ArrowDownRight, Wallet, ShieldAlert, Award, Sparkles, Check } from 'lucide-react';
+import { PiggyBank, ShieldAlert, Award, Sparkles, Check } from 'lucide-react';
 
 interface SanchayBotPanelProps {
   savingsData: SavingsPlanResponse | null;
@@ -17,11 +17,11 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
 
   if (!savingsData || !savingsData.cashflow) {
     return (
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#f8fafc', marginBottom: '8px' }}>
+      <div className="glass-panel" style={{ padding: '24px 28px' }}>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
           {t('sanchay.title', lang)}
         </h3>
-        <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
           {lang === 'bn' ? 'ক্যাশ-ফ্লো ডেটা লোড হচ্ছে...' : 'Loading cash-flow and savings analysis...'}
         </p>
       </div>
@@ -39,39 +39,39 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
     <div
       className="glass-panel"
       style={{
-        padding: '24px',
-        border: '1px solid rgba(0, 210, 180, 0.25)',
+        padding: '24px 28px',
+        borderLeft: '4px solid var(--color-success)',
       }}
     >
       {/* Title */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div
             style={{
               width: '36px',
               height: '36px',
-              borderRadius: '10px',
-              background: 'rgba(0, 210, 180, 0.15)',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-success-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#00d2b4',
+              color: 'var(--color-success)',
             }}
           >
-            <PiggyBank size={20} />
+            <PiggyBank size={18} />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               {t('sanchay.title', lang)}
             </h3>
-            <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
               {t('sanchay.subtitle', lang)}
             </p>
           </div>
         </div>
 
         <span className="badge badge-brand">
-          <Sparkles size={11} />
+          <Sparkles size={10} />
           AI Savings Coach
         </span>
       </div>
@@ -85,42 +85,41 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
           marginBottom: '20px',
         }}
       >
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>{t('sanchay.income', lang)}</span>
-          <p style={{ fontSize: '1.1rem', fontWeight: 700, color: '#38bdf8' }}>
-            ৳{cashflow.monthly_income.toLocaleString()}
-          </p>
-        </div>
-
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>{t('sanchay.expenses', lang)}</span>
-          <p style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f43f5e' }}>
-            ৳{cashflow.monthly_expenses.toLocaleString()}
-          </p>
-        </div>
-
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>{t('sanchay.surplus', lang)}</span>
-          <p style={{ fontSize: '1.1rem', fontWeight: 700, color: cashflow.monthly_surplus >= 0 ? '#34d399' : '#fb7185' }}>
-            ৳{cashflow.monthly_surplus.toLocaleString()}
-          </p>
-        </div>
-
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase' }}>{t('sanchay.cashout_ratio', lang)}</span>
-          <p style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>
-            {(cashflow.cash_out_ratio * 100).toFixed(0)}%
-          </p>
-        </div>
+        {[
+          { label: t('sanchay.income', lang), value: `৳${cashflow.monthly_income.toLocaleString()}`, color: 'var(--upay-blue)' },
+          { label: t('sanchay.expenses', lang), value: `৳${cashflow.monthly_expenses.toLocaleString()}`, color: 'var(--color-danger)' },
+          { label: t('sanchay.surplus', lang), value: `৳${cashflow.monthly_surplus.toLocaleString()}`, color: cashflow.monthly_surplus >= 0 ? 'var(--color-success)' : 'var(--color-danger)' },
+          { label: t('sanchay.cashout_ratio', lang), value: `${(cashflow.cash_out_ratio * 100).toFixed(0)}%`, color: 'var(--color-warning)' },
+        ].map((item, idx) => (
+          <div key={idx} style={{
+            background: 'var(--bg-subtle)',
+            padding: '14px 16px',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--border-light)',
+          }}>
+            <span style={{
+              fontSize: '0.72rem',
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              letterSpacing: '0.03em',
+            }}>
+              {item.label}
+            </span>
+            <p style={{ fontSize: '1.15rem', fontWeight: 700, color: item.color, marginTop: '4px' }}>
+              {item.value}
+            </p>
+          </div>
+        ))}
       </div>
 
-      {/* High Cash-Out Warning / Financial Opportunity Banner */}
+      {/* High Cash-Out Warning */}
       {isHighCashOut && (
         <div
           style={{
-            background: 'rgba(245, 158, 11, 0.08)',
-            border: '1px solid rgba(245, 158, 11, 0.25)',
-            borderRadius: '10px',
+            background: 'var(--color-warning-bg)',
+            border: '1px solid var(--color-warning-border)',
+            borderRadius: 'var(--radius-lg)',
             padding: '12px 16px',
             marginBottom: '20px',
             display: 'flex',
@@ -128,9 +127,11 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
             gap: '12px',
           }}
         >
-          <ShieldAlert size={20} style={{ color: '#f59e0b', flexShrink: 0 }} />
-          <div style={{ fontSize: '0.84rem', color: '#fbbf24', lineHeight: 1.5 }}>
-            <strong>{lang === 'bn' ? 'সঞ্চয় সুযোগ শনাক্ত:' : 'High Cash-Out Pattern Detected:'}</strong>{' '}
+          <ShieldAlert size={18} style={{ color: 'var(--color-warning)', flexShrink: 0 }} />
+          <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            <strong style={{ color: 'var(--color-warning)' }}>
+              {lang === 'bn' ? 'সঞ্চয় সুযোগ শনাক্ত:' : 'High Cash-Out Pattern Detected:'}
+            </strong>{' '}
             {lang === 'bn'
               ? `এই গ্রাহক খরচের ${(cashflow.cash_out_ratio * 100).toFixed(0)}% ক্যাশ আউট করেন। ডিপিএস ও মার্চেন্ট পেমেন্টে ক্যাশ-আউট চার্জ বেঁচে যাবে এবং সঞ্চয় বাড়বে!`
               : `User cashes out ${(cashflow.cash_out_ratio * 100).toFixed(0)}% of expenses. Transitioning surplus to upay DPS avoids cash-out fees and builds compound returns!`}
@@ -138,47 +139,78 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
         </div>
       )}
 
-      {/* Main Breakdown: Spending Donut + DPS Plan recommendation */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      {/* Spending Donut + DPS Plan */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '20px',
+        marginBottom: '24px',
+      }}>
         {/* Spending Donut */}
-        <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: '#f8fafc', marginBottom: '14px' }}>
-            {lang === 'bn' ? 'ব্যয়ের বিভাজন (Expense Breakdown)' : 'Monthly Spending Distribution'}
+        <div style={{
+          background: 'var(--bg-subtle)',
+          padding: '18px',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--border-light)',
+        }}>
+          <h4 style={{
+            fontSize: '0.88rem',
+            fontWeight: 600,
+            color: 'var(--text-primary)',
+            marginBottom: '14px',
+          }}>
+            {lang === 'bn' ? 'ব্যয়ের বিভাজন' : 'Monthly Spending Distribution'}
           </h4>
           <SpendingDonut cashflow={cashflow} lang={lang} />
         </div>
 
-        {/* Recommended DPS Plan Card */}
+        {/* DPS Plan Card */}
         {dps_recommendation.eligible && currentPlan ? (
           <div
             style={{
-              background: 'linear-gradient(135deg, rgba(16, 28, 48, 0.9) 0%, rgba(12, 36, 44, 0.9) 100%)',
-              padding: '18px',
-              borderRadius: '12px',
-              border: '1px solid rgba(0, 210, 180, 0.35)',
+              background: 'var(--bg-white)',
+              padding: '20px',
+              borderRadius: 'var(--radius-lg)',
+              border: '2px solid var(--color-success-border)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
             }}
           >
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span className="badge badge-brand">
-                  <Award size={12} />
-                  {lang === 'bn' ? 'উপযুক্ত ডিপিএস স্কিম' : 'Personalized DPS Recommendation'}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '14px',
+              }}>
+                <span className="badge badge-success">
+                  <Award size={11} />
+                  {lang === 'bn' ? 'উপযুক্ত ডিপিএস স্কিম' : 'Recommended DPS'}
                 </span>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
-                  {currentPlan.tenure_months} Months Plan
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                  {currentPlan.tenure_months} {lang === 'bn' ? 'মাস' : 'Months'}
                 </span>
               </div>
 
               <div style={{ marginBottom: '14px' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{t('sanchay.recommended_dps', lang)}</span>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                  <span style={{ fontSize: '1.8rem', fontWeight: 800, color: '#f8fafc' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                  {t('sanchay.recommended_dps', lang)}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginTop: '2px' }}>
+                  <span style={{
+                    fontSize: '1.8rem',
+                    fontWeight: 800,
+                    color: 'var(--text-primary)',
+                    letterSpacing: '-0.02em',
+                  }}>
                     ৳{currentPlan.monthly_amount.toLocaleString()}
                   </span>
-                  <span style={{ fontSize: '0.85rem', color: '#00d2b4', fontWeight: 600 }}>
+                  <span style={{
+                    fontSize: '0.82rem',
+                    color: 'var(--color-success)',
+                    fontWeight: 600,
+                  }}>
                     {t('sanchay.per_month', lang)}
                   </span>
                 </div>
@@ -186,38 +218,68 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
 
               <div
                 style={{
-                  background: 'rgba(0, 0, 0, 0.3)',
-                  padding: '10px 14px',
-                  borderRadius: '8px',
+                  background: 'var(--bg-subtle)',
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-md)',
                   marginBottom: '12px',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '4px' }}>
-                  <span style={{ color: '#94a3b8' }}>{lang === 'bn' ? 'মোট সঞ্চয় আসল:' : 'Total Principal:'}</span>
-                  <span style={{ fontWeight: 600, color: '#f1f5f9' }}>৳{currentPlan.total_deposits.toLocaleString()}</span>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '0.82rem',
+                  marginBottom: '6px',
+                }}>
+                  <span style={{ color: 'var(--text-muted)' }}>
+                    {lang === 'bn' ? 'মোট সঞ্চয় আসল:' : 'Total Principal:'}
+                  </span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                    ৳{currentPlan.total_deposits.toLocaleString()}
+                  </span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '4px' }}>
-                  <span style={{ color: '#94a3b8' }}>{lang === 'bn' ? 'প্রত্যাশিত মুনাফা:' : 'Est. Interest (5% p.a.):'}</span>
-                  <span style={{ fontWeight: 600, color: '#34d399' }}>+৳{Math.round(currentPlan.projected_interest).toLocaleString()}</span>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '0.82rem',
+                  marginBottom: '6px',
+                }}>
+                  <span style={{ color: 'var(--text-muted)' }}>
+                    {lang === 'bn' ? 'প্রত্যাশিত মুনাফা:' : 'Est. Interest (5% p.a.):'}
+                  </span>
+                  <span style={{ fontWeight: 600, color: 'var(--color-success)' }}>
+                    +৳{Math.round(currentPlan.projected_interest).toLocaleString()}
+                  </span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '6px' }}>
-                  <span style={{ fontWeight: 600, color: '#f8fafc' }}>{t('sanchay.maturity_value', lang)}:</span>
-                  <span style={{ fontWeight: 800, color: '#00d2b4' }}>৳{Math.round(currentPlan.projected_maturity).toLocaleString()}</span>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '0.88rem',
+                  borderTop: '1px solid var(--border-light)',
+                  paddingTop: '8px',
+                  marginTop: '4px',
+                }}>
+                  <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {t('sanchay.maturity_value', lang)}:
+                  </span>
+                  <span style={{ fontWeight: 800, color: 'var(--color-success)' }}>
+                    ৳{Math.round(currentPlan.projected_maturity).toLocaleString()}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Free cashout highlight from upay PRD */}
+            {/* Free cashout */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '0.78rem',
-                color: '#38bdf8',
-                background: 'rgba(56, 189, 248, 0.1)',
-                padding: '6px 10px',
-                borderRadius: '6px',
+                color: 'var(--upay-blue)',
+                background: 'var(--upay-blue-soft)',
+                padding: '8px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontWeight: 500,
               }}
             >
               <Check size={14} />
@@ -225,15 +287,23 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
             </div>
           </div>
         ) : (
-          <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '20px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+          <div style={{
+            background: 'var(--bg-subtle)',
+            padding: '20px',
+            borderRadius: 'var(--radius-lg)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid var(--border-light)',
+          }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
               {dps_recommendation.reason || 'Surplus insufficient for DPS.'}
             </p>
           </div>
         )}
       </div>
 
-      {/* Wealth Growth Interactive Chart */}
+      {/* Growth Chart */}
       {dps_recommendation.eligible && dps_recommendation.all_plans && (
         <SavingsGrowthChart
           plans={dps_recommendation.all_plans}
