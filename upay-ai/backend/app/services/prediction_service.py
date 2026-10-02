@@ -128,7 +128,7 @@ def predict_user(user_id: str) -> Optional[dict]:
     if primary_drop_off:
         explanation = _get_shap_explanation(user_id, primary_drop_off, X, feature_names)
 
-    return {
+    result = {
         "user_id": user_id,
         "prediction_id": prediction_id,
         "timestamp": datetime.utcnow().isoformat() + "Z",
@@ -137,6 +137,34 @@ def predict_user(user_id: str) -> Optional[dict]:
         "explanation": explanation,
         "data_is_synthetic": True,
     }
+
+    # Persist prediction to Supabase
+    try:
+        from ..database import get_db
+        db = get_db()
+        cursor = db.cursor()
+        shap_str = json.dumps(explanation) if explanation else None
+        cursor.execute(
+            """INSERT INTO predictions
+               (prediction_id, user_id, timestamp, milestone_probabilities, primary_drop_off, shap_values)
+               VALUES (%s, %s, %s, %s, %s, %s)
+               ON CONFLICT (prediction_id) DO NOTHING""",
+            (
+                prediction_id,
+                user_id,
+                result["timestamp"],
+                json.dumps(milestone_probs),
+                primary_drop_off,
+                shap_str,
+            ),
+        )
+        db.commit()
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print(f"Warning: Failed to save prediction to Supabase: {e}")
+
+    return result
 
 
 def _get_shap_explanation(user_id: str, milestone: str, X: np.ndarray, feature_names: list) -> dict:

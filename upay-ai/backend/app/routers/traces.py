@@ -21,16 +21,17 @@ async def get_traces(
 
     if user_id:
         cursor.execute(
-            "SELECT * FROM traces WHERE user_id = ? ORDER BY timestamp DESC LIMIT ?",
+            "SELECT * FROM traces WHERE user_id = %s ORDER BY timestamp DESC LIMIT %s",
             (user_id, limit),
         )
     else:
         cursor.execute(
-            "SELECT * FROM traces ORDER BY timestamp DESC LIMIT ?",
+            "SELECT * FROM traces ORDER BY timestamp DESC LIMIT %s",
             (limit,),
         )
 
     rows = cursor.fetchall()
-    traces = [dict(row) for row in rows]
+    traces = list(rows)  # Already dicts via dict_row factory
+    cursor.close()
     db.close()
     return {"traces": traces, "total": len(traces), "data_is_synthetic": True}

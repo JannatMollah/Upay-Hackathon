@@ -28,26 +28,27 @@ async def approve_nudge(nudge_id: str, payload: NudgeApproveRequest):
         status = "approved"
         if payload.modified_text_bn:
             cursor.execute(
-                "UPDATE nudges SET text_bn = ? WHERE nudge_id = ?",
+                "UPDATE nudges SET text_bn = %s WHERE nudge_id = %s",
                 (payload.modified_text_bn, nudge_id),
             )
     else:
         raise HTTPException(status_code=400, detail=f"Invalid action: {payload.action}")
 
-    cursor.execute("SELECT user_id FROM nudges WHERE nudge_id = ?", (nudge_id,))
+    cursor.execute("SELECT user_id FROM nudges WHERE nudge_id = %s", (nudge_id,))
     row = cursor.fetchone()
     if row:
         cursor.execute(
-            "UPDATE nudges SET status = ?, approved_by = ?, approved_at = ? WHERE nudge_id = ?",
+            "UPDATE nudges SET status = %s, approved_by = %s, approved_at = %s WHERE nudge_id = %s",
             (status, payload.approver_id, now, nudge_id),
         )
     else:
         cursor.execute(
             """INSERT INTO nudges (nudge_id, user_id, target_milestone, status, approved_by, approved_at)
-               VALUES (?, 'DEMO_USER', 'M4', ?, ?, ?)""",
+               VALUES (%s, 'DEMO_USER', 'M4', %s, %s, %s)""",
             (nudge_id, status, payload.approver_id, now),
         )
     db.commit()
+    cursor.close()
     db.close()
 
     # Log trace

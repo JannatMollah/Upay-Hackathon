@@ -15,9 +15,9 @@ services:
     environment:
       - API_HOST=0.0.0.0
       - API_PORT=8000
-      - DB_PATH=/app/data/milestone_ai.db
       - MODELS_DIR=/app/models
       - DATA_DIR=/app/data
+
 
   frontend:
     build:

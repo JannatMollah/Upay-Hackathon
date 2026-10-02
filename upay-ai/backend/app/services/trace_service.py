@@ -17,14 +17,14 @@ def log_trace(
     details: Optional[dict] = None,
     actor: Optional[str] = "system",
 ):
-    """Log an action to the audit trail."""
+    """Log an action to the audit trail (PostgreSQL / Supabase)."""
     try:
         db = get_db()
         cursor = db.cursor()
 
         cursor.execute(
             """INSERT INTO traces (prediction_id, nudge_id, user_id, action, details, actor, timestamp)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (%s, %s, %s, %s, %s, %s, %s)""",
             (
                 prediction_id,
                 nudge_id,
@@ -36,6 +36,7 @@ def log_trace(
             ),
         )
         db.commit()
+        cursor.close()
         db.close()
     except Exception as e:
         print(f"Warning: Failed to log trace: {e}")

@@ -51,8 +51,9 @@ app.include_router(liquidity.router, prefix="/api/v1", dependencies=[Depends(ver
 
 @app.on_event("startup")
 async def startup():
-    """Initialize SQLite database tables on startup."""
+    """Initialize Supabase (PostgreSQL) database tables on startup."""
     init_db()
+
 
 
 @app.get("/health")

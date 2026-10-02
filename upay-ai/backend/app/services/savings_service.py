@@ -141,7 +141,7 @@ def get_user_savings_plan(user_id: str) -> Optional[dict]:
     # DPS recommendation
     dps_plan = recommend_dps_plan(float(row["monthly_surplus"]))
 
-    return {
+    result = {
         "user_id": user_id,
         "cashflow": cashflow_summary,
         "dps_recommendation": dps_plan,
@@ -150,3 +150,36 @@ def get_user_savings_plan(user_id: str) -> Optional[dict]:
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "data_is_synthetic": True,
     }
+
+    # Persist savings plan to Supabase
+    try:
+        import uuid
+        from ..database import get_db
+        plan_id = f"SP_{user_id}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
+        rec_plan = dps_plan.get("recommended_plan") or {}
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute(
+            """INSERT INTO savings_plans
+               (plan_id, user_id, predicted_surplus, recommended_amount, recommended_tenure,
+                projected_maturity, surplus_pct_used, cashflow_summary)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+               ON CONFLICT (plan_id) DO NOTHING""",
+            (
+                plan_id,
+                user_id,
+                dps_plan.get("predicted_surplus"),
+                rec_plan.get("monthly_amount"),
+                rec_plan.get("tenure_months"),
+                rec_plan.get("projected_maturity"),
+                dps_plan.get("surplus_percentage_used"),
+                json.dumps(cashflow_summary),
+            ),
+        )
+        db.commit()
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print(f"Warning: Failed to save savings plan to Supabase: {e}")
+
+    return result

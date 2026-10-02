@@ -43,12 +43,14 @@ class Config:
         else os.path.abspath(os.path.join(BASE_DIR, _raw_models_dir.lstrip("./")))
     )
 
-    _raw_db_path = os.getenv("DB_PATH", os.path.join("data", "milestone_ai.db"))
-    DB_PATH = (
-        _raw_db_path
-        if os.path.isabs(_raw_db_path)
-        else os.path.abspath(os.path.join(BASE_DIR, _raw_db_path.lstrip("./")))
+    # Supabase / PostgreSQL connection (Session Mode Pooler)
+    DATABASE_URL = os.getenv(
+        "DATABASE_URL",
+        "postgresql://postgres.dqkkdxlicrmtamxicmms:R7Y2jvgA41cN8O3S@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres"
     )
+
+    SUPABASE_URL = os.getenv("SUPABASE_URL", "https://dqkkdxlicrmtamxicmms.supabase.co")
+    SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
 
     API_HOST = os.getenv("API_HOST", "0.0.0.0")
     API_PORT = int(os.getenv("API_PORT", "8000"))

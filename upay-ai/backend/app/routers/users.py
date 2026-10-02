@@ -53,9 +53,14 @@ async def user_prediction(user_id: str):
             db = get_db()
             cursor = db.cursor()
             cursor.execute(
-                """INSERT OR REPLACE INTO nudges 
-                   (nudge_id, prediction_id, user_id, target_milestone, bonus_amount_bdt, text_bn, text_en, channel_recommendation, status, ai_generated, guardrail_passed, generation_method)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                """INSERT INTO nudges
+                   (nudge_id, prediction_id, user_id, target_milestone, bonus_amount_bdt, text_bn, text_en,
+                    channel_recommendation, status, ai_generated, guardrail_passed, generation_method)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                   ON CONFLICT (nudge_id) DO UPDATE SET
+                       text_bn = EXCLUDED.text_bn,
+                       text_en = EXCLUDED.text_en,
+                       status = EXCLUDED.status""",
                 (
                     nudge["nudge_id"],
                     prediction.get("prediction_id"),
@@ -72,6 +77,7 @@ async def user_prediction(user_id: str):
                 ),
             )
             db.commit()
+            cursor.close()
             db.close()
         except Exception as e:
             print(f"Warning: Failed to save nudge: {e}")
