@@ -11,12 +11,12 @@
   --upay-blue-soft: rgba(30, 77, 140, 0.06);
   --upay-blue-hover: rgba(30, 77, 140, 0.10);
 
-  /* Premium Accent Gradient */
-  --gradient-brand: linear-gradient(135deg, #1E4D8C 0%, #2A5FAA 50%, #3B82F6 100%);
-  --gradient-brand-soft: linear-gradient(135deg, rgba(30, 77, 140, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%);
-  --gradient-gold: linear-gradient(135deg, #EDBC1B 0%, #F7D54A 100%);
-  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1E4D8C 100%);
-  --gradient-card-hover: linear-gradient(180deg, rgba(30, 77, 140, 0.02) 0%, rgba(30, 77, 140, 0.06) 100%);
+  /* Minimal Brand Color Accents */
+  --gradient-brand: #1E4D8C;
+  --gradient-brand-soft: rgba(30, 77, 140, 0.06);
+  --gradient-gold: #EDBC1B;
+  --gradient-hero: #FFFFFF;
+  --gradient-card-hover: rgba(30, 77, 140, 0.02);
 
   /* Neutral Palette */
   --bg-primary: #F8FAFC;
@@ -118,15 +118,7 @@ a {
 }
 
 .glass-panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .glass-panel:hover {
@@ -169,10 +161,10 @@ a {
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--gradient-brand);
+  background: var(--upay-blue);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s var(--ease-out);
+  transition: transform 0.3s var(--ease-out);
 }
 
 .kpi-card:hover {
@@ -338,36 +330,23 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 20px;
-  border-radius: var(--radius-lg);
-  font-size: 0.85rem;
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.84rem;
   font-weight: 600;
-  background: var(--gradient-brand);
+  background: var(--upay-blue);
   color: #fff;
-  border: none;
+  border: 1px solid var(--upay-blue);
   cursor: pointer;
-  transition: all 0.25s var(--ease-smooth);
-  box-shadow: var(--shadow-brand);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: all 0.18s var(--ease-smooth);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-primary:hover {
+  background: var(--upay-blue-light);
+  border-color: var(--upay-blue-light);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-brand-lg);
-}
-
-.btn-primary:hover::before {
-  opacity: 1;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:active {

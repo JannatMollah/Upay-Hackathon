@@ -161,9 +161,7 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
                             height: '100%',
                             width: `${riskPct}%`,
                             borderRadius: 'var(--radius-full)',
-                            background: isHighRisk
-                              ? 'linear-gradient(90deg, var(--color-danger), #ef4444)'
-                              : 'linear-gradient(90deg, var(--color-warning), #f59e0b)',
+                            background: isHighRisk ? 'var(--color-danger)' : 'var(--color-warning)',
                             transition: 'width 0.4s var(--ease-out)',
                           }} />
                         </div>

@@ -11,8 +11,8 @@ export const translations: Record<string, Record<Language, string>> = {
 
   // Banner
   'banner.synthetic': {
-    en: '⚠️ SYNTHETIC DATA MODE: All users, transactions, and milestone signals are simulated for hackathon evaluation.',
-    bn: '⚠️ সিমুলেটেড ডেটা মোড: হ্যাকাথন মূল্যায়নের জন্য সকল গ্রাহক, লেনদেন ও সিগন্যাল কৃত্রিমভাবে তৈরি।',
+    en: 'Evaluation Mode: Platform running on simulated MFS cohort (50,000 accounts) with live ML inference.',
+    bn: 'মূল্যায়ন মোড: লাইভ এমএল ইনফারেন্স সহ সিমুলেটেড এমএফএস ডেটাসেটে (৫০,০০০ অ্যাকাউন্ট) প্ল্যাটফর্মটি পরিচালিত হচ্ছে।',
   },
 
   // KPI Cards

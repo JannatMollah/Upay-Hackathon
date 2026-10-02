@@ -159,7 +159,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
                   className="funnel-progress-fill"
                   style={{
                     width: `${pct}%`,
-                    background: `linear-gradient(90deg, ${color}, ${color}dd)`,
+                    background: color,
                   }}
                 />
               </div>

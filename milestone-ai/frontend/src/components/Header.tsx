@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Activity, PiggyBank, BarChart3, Globe, Menu, X } from 'lucide-react';
+import { Activity, PiggyBank, BarChart3, Globe } from 'lucide-react';
 import { Language, t } from '../lib/i18n';
 
 interface HeaderProps {
@@ -13,7 +13,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems = [
     { href: '/', labelKey: 'nav.dashboard', icon: Activity },
@@ -51,16 +50,14 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
           }}
         />
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h1 style={{
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              letterSpacing: '-0.025em',
-              color: 'var(--text-primary)',
-            }}>
-              {t('brand.name', lang)}
-            </h1>
-          </div>
+          <h1 style={{
+            fontSize: '1.05rem',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: 'var(--text-primary)',
+          }}>
+            {t('brand.name', lang)}
+          </h1>
           <p style={{
             fontSize: '0.65rem',
             color: 'var(--text-dim)',
@@ -110,48 +107,15 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
         })}
       </nav>
 
-      {/* Right controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <button
-          onClick={() => onLanguageToggle(lang === 'en' ? 'bn' : 'en')}
-          className="btn-ghost"
-          style={{
-            padding: '6px 12px',
-            fontSize: '0.78rem',
-          }}
-        >
-          <Globe size={13} style={{ color: 'var(--upay-blue)' }} />
-          <span>{lang === 'en' ? 'বাংলা' : 'English'}</span>
-        </button>
-
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '5px 12px',
-          borderRadius: 'var(--radius-full)',
-          background: 'var(--color-success-bg)',
-          border: '1px solid var(--color-success-border)',
-        }}>
-          <span
-            style={{
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--color-success)',
-              boxShadow: '0 0 6px rgba(5, 150, 105, 0.5)',
-              animation: 'pulseGlow 2s infinite ease-in-out',
-            }}
-          />
-          <span style={{
-            fontSize: '0.72rem',
-            fontWeight: 600,
-            color: 'var(--color-success)',
-          }}>
-            {lang === 'bn' ? 'API লাইভ' : 'API Live'}
-          </span>
-        </div>
-      </div>
+      {/* Right: Language toggle only */}
+      <button
+        onClick={() => onLanguageToggle(lang === 'en' ? 'bn' : 'en')}
+        className="btn-ghost"
+        style={{ padding: '6px 12px', fontSize: '0.78rem' }}
+      >
+        <Globe size={13} style={{ color: 'var(--upay-blue)' }} />
+        <span>{lang === 'en' ? 'বাংলা' : 'English'}</span>
+      </button>
     </header>
   );
 };
