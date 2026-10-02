@@ -5,8 +5,12 @@ import {
   SavingsPlanResponse,
 } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+// On Vercel: frontend is served on the same domain; /api/* rewrites route to the backend service.
+// For local dev: set NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 in .env.local
+// NEXT_PUBLIC_API_URL is also used if you want to point to an explicit backend URL.
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY || 'milestone-ai-dev-key-2026';
+
 
 async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;

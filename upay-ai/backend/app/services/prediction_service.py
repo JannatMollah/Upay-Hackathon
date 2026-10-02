@@ -47,13 +47,28 @@ def _load_feature_names():
 
 
 def _load_test_data():
-    """Load test data for lookups (cached)."""
+    """Load test data for lookups (cached). Falls back to Supabase if CSV not found."""
     if "test_data" not in _data_cache:
         path = os.path.join(DATA_DIR, "features_test.csv")
         if os.path.exists(path):
             _data_cache["test_data"] = pd.read_csv(path)
         else:
-            _data_cache["test_data"] = None
+            # Fallback: load from Supabase
+            try:
+                from ..database import get_db
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT * FROM features_test")
+                rows = cursor.fetchall()
+                cursor.close()
+                db.close()
+                if rows:
+                    _data_cache["test_data"] = pd.DataFrame(rows)
+                else:
+                    _data_cache["test_data"] = None
+            except Exception as e:
+                print(f"Warning: Could not load features_test from Supabase: {e}")
+                _data_cache["test_data"] = None
     return _data_cache["test_data"]
 
 
@@ -294,12 +309,30 @@ def get_at_risk_users(milestone_filter: Optional[str] = None, limit: int = 100, 
 
 
 def get_funnel_stats() -> dict:
-    """Get milestone completion funnel statistics."""
+    """Get milestone completion funnel statistics. Falls back to Supabase if CSV not found."""
     milestones_path = os.path.join(DATA_DIR, "milestone_events.csv")
-    if not os.path.exists(milestones_path):
-        return {"total_users": 0, "milestones": [], "data_is_synthetic": True}
 
-    milestones_df = pd.read_csv(milestones_path)
+    if os.path.exists(milestones_path):
+        milestones_df = pd.read_csv(milestones_path)
+    else:
+        # Fallback: load from Supabase milestone_events table
+        try:
+            from ..database import get_db
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute("SELECT user_id, milestone, completed FROM milestone_events")
+            rows = cursor.fetchall()
+            cursor.close()
+            db.close()
+            if rows:
+                milestones_df = pd.DataFrame(rows)
+            else:
+                return {"total_users": 0, "milestones": [], "data_is_synthetic": True}
+        except Exception as e:
+            print(f"Warning: Could not load milestone_events from Supabase: {e}")
+            return {"total_users": 0, "milestones": [], "data_is_synthetic": True}
+
+
     total = int(len(milestones_df[milestones_df["milestone"] == "M1"]))
 
     names = {

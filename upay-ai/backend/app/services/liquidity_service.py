@@ -31,24 +31,46 @@ def _load_liquidity_model():
 
 
 def _load_agents():
-    """Load agent data (cached)."""
+    """Load agent data (cached). Falls back to Supabase if CSV not found."""
     if "agents" not in _liquidity_cache:
         path = os.path.join(DATA_DIR, "agents.csv")
         if os.path.exists(path):
             _liquidity_cache["agents"] = pd.read_csv(path)
         else:
-            _liquidity_cache["agents"] = pd.DataFrame()
+            try:
+                from ..database import get_db
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT * FROM agents")
+                rows = cursor.fetchall()
+                cursor.close()
+                db.close()
+                _liquidity_cache["agents"] = pd.DataFrame(rows) if rows else pd.DataFrame()
+            except Exception as e:
+                print(f"Warning: Could not load agents from Supabase: {e}")
+                _liquidity_cache["agents"] = pd.DataFrame()
     return _liquidity_cache["agents"]
 
 
 def _load_daily_data():
-    """Load agent daily transaction data (cached)."""
+    """Load agent daily transaction data (cached). Falls back to Supabase if CSV not found."""
     if "daily" not in _liquidity_cache:
         path = os.path.join(DATA_DIR, "agent_daily.csv")
         if os.path.exists(path):
             _liquidity_cache["daily"] = pd.read_csv(path)
         else:
-            _liquidity_cache["daily"] = pd.DataFrame()
+            try:
+                from ..database import get_db
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT * FROM agent_daily")
+                rows = cursor.fetchall()
+                cursor.close()
+                db.close()
+                _liquidity_cache["daily"] = pd.DataFrame(rows) if rows else pd.DataFrame()
+            except Exception as e:
+                print(f"Warning: Could not load agent_daily from Supabase: {e}")
+                _liquidity_cache["daily"] = pd.DataFrame()
     return _liquidity_cache["daily"]
 
 

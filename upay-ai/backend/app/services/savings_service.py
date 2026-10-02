@@ -42,13 +42,28 @@ def _load_surplus_model():
 
 
 def _load_cashflow_data():
-    """Load cashflow summary data (cached)."""
+    """Load cashflow summary data (cached). Falls back to Supabase if CSV not found."""
     if "cashflow" not in _savings_cache:
         path = os.path.join(DATA_DIR, "cashflow_summary.csv")
         if os.path.exists(path):
             _savings_cache["cashflow"] = pd.read_csv(path)
         else:
-            _savings_cache["cashflow"] = None
+            # Fallback: load from Supabase cashflow_summary table
+            try:
+                from ..database import get_db
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT * FROM cashflow_summary")
+                rows = cursor.fetchall()
+                cursor.close()
+                db.close()
+                if rows:
+                    _savings_cache["cashflow"] = pd.DataFrame(rows)
+                else:
+                    _savings_cache["cashflow"] = None
+            except Exception as e:
+                print(f"Warning: Could not load cashflow_summary from Supabase: {e}")
+                _savings_cache["cashflow"] = None
     return _savings_cache["cashflow"]
 
 
