@@ -1,5 +1,5 @@
-# upay MilestoneAI + SanchayBot 🚀
-### Next-Gen User Lifecycle Acceleration & AI-Powered Savings Engine for MFS
+# Upay AI 🚀
+### Multi-Tool AI Intelligence Platform for Mobile Financial Services
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg)](https://fastapi.tiangolo.com/)
@@ -12,10 +12,11 @@
 
 ## 🌟 Executive Summary
 
-**upay MilestoneAI + SanchayBot** is an end-to-end, enterprise-grade AI intelligence platform designed specifically for **upay (UCB Fintech Company Limited)**. It tackles two fundamental challenges in Mobile Financial Services (MFS):
+**Upay AI** is a multi-tool AI intelligence platform designed for **upay (UCB Fintech Company Limited)**. It provides **3 specialized AI-powered tools** covering **3 hackathon tracks**:
 
-1. **Milestone Drop-offs (MilestoneAI):** Over 68% of newly registered MFS users stall between KYC verification and regular transaction habituation. MilestoneAI uses **Multi-Output XGBoost** and **SHAP TreeExplainer** to predict drop-off risks across 6 critical lifecycle milestones (M1–M6) and dispatches explainable, guardrailed, hyper-personalized Bangla nudges via Google Gemini.
-2. **Savings Deficit & Retention (SanchayBot):** Millions of MFS users maintain dormant balances without productive financial growth. SanchayBot computes monthly cash-flow surplus using an **XGBoost Regressor** ($R^2 = 0.9986$), identifies non-essential spending leaks, recommends optimal Deposit Pension Schemes (DPS) with United Commercial Bank (UCB), and leverages upay's unique competitive advantage: **UCB ATM Zero-Charge Cash-Out (0.8% vs competitors' 1.49%-1.85%)**.
+1. **🎯 Activation Predictor (Track 04: Campaign Intelligence):** Over 68% of newly registered MFS users stall between KYC and regular habituation. The Activation Predictor uses **Multi-Output XGBoost** and **SHAP TreeExplainer** to predict drop-off risks across 6 campaign steps and dispatches explainable, guardrailed, hyper-personalized Bangla nudges via Google Gemini.
+2. **💰 DPS Coach (Track 03: Financial Independence):** Millions of MFS users maintain dormant balances. DPS Coach computes monthly cash-flow surplus using an **XGBoost Regressor** ($R^2 = 0.9986$), identifies non-essential spending, recommends optimal DPS with UCB, and leverages upay's unique advantage: **UCB ATM Zero-Charge Cash-Out (0.8% vs competitors' 1.49%-1.85%)**.
+3. **📊 Agent Liquidity Forecast (Track 05: Agent Intelligence):** Agents frequently run out of cash during peak hours. This tool predicts next-day cash-out demand at **500 agent points** across Bangladesh using an **XGBoost Regressor** ($R^2 = 0.673$), detects salary-day surges and RMG-district spikes, and alerts before liquidity shortages occur.
 
 ---
 

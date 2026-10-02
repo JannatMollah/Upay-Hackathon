@@ -71,4 +71,17 @@ export const api = {
     if (userId) params.set('user_id', userId);
     return apiFetch<{ traces: any[]; total: number }>(`/traces?${params}`);
   },
+
+  // === Agent Liquidity Forecast ===
+  getAgentsOverview: (area?: string, status?: string, limit = 50) => {
+    const params = new URLSearchParams({ limit: String(limit) });
+    if (area) params.set('area', area);
+    if (status) params.set('status', status);
+    return apiFetch<any>(`/liquidity/agents?${params}`);
+  },
+
+  getAgentForecast: (agentId: string) =>
+    apiFetch<any>(`/liquidity/agents/${agentId}/forecast`),
+
+  getLiquidityMetrics: () => apiFetch<any>('/liquidity/model/metrics'),
 };

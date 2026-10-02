@@ -1,10 +1,10 @@
-# PRD: MilestoneAI + SanchayBot — Hybrid Activation & Savings Intelligence
+# PRD: Upay AI — Multi-Tool AI Intelligence Platform for MFS
 
-**Version:** 2.0 (Hybrid)  
-**Date:** 2026-10-01  
+**Version:** 3.0 (Multi-Tool Platform)  
+**Date:** 2026-10-02  
 **Team Size:** 3 students  
 **Build Time:** 50 hours  
-**Track:** 04 — Growth & Campaign Intelligence × Track 03 — Customer Innovation & Financial Independence
+**Tracks:** Track 04 (Campaign Intelligence) × Track 03 (Financial Independence) × Track 05 (Agent Intelligence)
 
 ---
 
@@ -12,18 +12,20 @@
 
 ### Vision Statement
 
-MilestoneAI + SanchayBot is a **hybrid activation and financial independence platform** for upay. It combines two synergistic AI modules:
+**Upay AI** is a multi-tool AI intelligence platform for upay's mobile financial services. Rather than a single model, it provides **three specialized AI-powered tools** — each targeting a different hackathon track and solving a distinct MFS challenge:
 
-- **Module A — MilestoneAI (Activation Engine):** Predicts which of upay's 6 onboarding milestones each new user will abandon, explains why, and delivers personalized Bangla nudges — turning acquisition spend into retained customers.
-- **Module B — SanchayBot (সঞ্চয়বট — DPS Savings Coach):** Analyzes a user's simulated cash-flow patterns, predicts monthly surplus, recommends a personalized DPS savings plan, and explains trade-offs in simple Bangla — helping users become financially independent, not merely active.
+- **Tool 1 — Activation Predictor (Track 04: Campaign Intelligence):** Predicts which of upay's 6 onboarding campaign steps each new user will abandon, explains why with SHAP, and delivers personalized Bangla nudges — turning acquisition spend into retained customers.
+- **Tool 2 — DPS Coach (Track 03: Financial Independence):** Analyzes a user's cash-flow patterns, predicts monthly surplus, recommends personalized DPS savings plans with UCB, and explains trade-offs — helping users become financially independent, not merely active.
+- **Tool 3 — Agent Liquidity Forecast (Track 05: Agent Intelligence):** Predicts next-day cash-out demand at 500 agent points across Bangladesh, detects salary-day surges and RMG-district spikes, and alerts agents before liquidity shortages occur — strengthening the MFS ecosystem.
 
-The two modules are tightly integrated: **SanchayBot powers the M5 milestone nudge** ("Open a DPS account" — the hardest milestone at 25% base completion) with a concrete, personalized savings plan instead of a generic "open DPS" message. This synergy makes the M5 nudge dramatically more compelling and differentiates the project from both a pure campaign optimizer and a pure savings chatbot.
+
+The three tools are integrated: **DPS Coach powers the Step 5 nudge** ("Open a DPS account" — the hardest step at 25% base completion) with a concrete, personalized savings plan instead of a generic message. **Agent Liquidity Forecast** ensures agents have enough float to serve the cash-in/cash-out transactions that the Activation Predictor nudges are driving. This synergy across all 3 tracks differentiates the project from single-model solutions.
 
 ### Product Overview
 
-#### Module A: MilestoneAI — Milestone Activation Engine
+#### Tool 1: Activation Predictor — Campaign Drop-off Engine
 
-upay runs a 6-step milestone bonus campaign for self-registered users, offering up to ৳200 in staged rewards:
+upay runs a 6-step bonus campaign for self-registered users, offering up to ৳200 in staged rewards:
 
 | Milestone | Action | Bonus |
 |-----------|--------|-------|
@@ -36,49 +38,60 @@ upay runs a 6-step milestone bonus campaign for self-registered users, offering 
 
 **The problem:** Many users complete M1–M2 (low-effort) but drop off before M3–M5 (higher-effort, higher-value). upay pays ৳30–50 in early bonuses to users who never become active, wasting acquisition budget.
 
-**MilestoneAI** is a prediction + explanation + nudge-generation system that:
-1. **Predicts** which milestone(s) a user will fail to complete (multi-output ML classifier)
+**Activation Predictor** is a prediction + explanation + nudge-generation system that:
+1. **Predicts** which campaign step(s) a user will fail to complete (multi-output ML classifier)
 2. **Explains** the top risk factors driving the prediction (SHAP feature attribution)
 3. **Generates** a personalized Bangla nudge message grounded in the prediction context (LLM)
 4. **Recommends** optimal timing and channel for the nudge (business rules + ML)
 5. **Tracks** the outcome for feedback and simulated A/B testing
 
-#### Module B: SanchayBot (সঞ্চয়বট) — DPS Savings Coach
+#### Tool 2: DPS Coach — Savings Recommendation Engine
 
 upay offers DPS (Deposit Pension Scheme) accounts through banking partners (MTB, NRB Bank, UCB) starting from just ৳200/month. DPS maturity funds can be cashed out free via UCB ATM. Yet only ~25% of new users open a DPS — because they don't understand it, don't know how much they can afford, or don't see the benefit.
 
-**SanchayBot** is a cash-flow intelligence + savings recommendation system that:
+**DPS Coach** is a cash-flow intelligence + savings recommendation system that:
 1. **Analyzes** a user's simulated transaction history to detect income patterns, recurring expenses, and spending categories
 2. **Predicts** monthly surplus available for savings (regression model)
 3. **Recommends** a personalized DPS plan: monthly amount (৳200–৳5,000), tenure (6–36 months), and projected maturity value
 4. **Explains** the recommendation in simple Bangla: "আপনি প্রতি মাসে গড়ে ৳1,200 খরচের পর ৳2,800 বাঁচাতে পারেন — এর মধ্যে ৳500 ডিপিএসে রাখলে ১ বছরে ৳6,300+ পাবেন"
 5. **Shows** spending breakdown and cash-flow visualizations
-6. **Feeds** a personalized M5 nudge into the MilestoneAI engine — "open DPS with your recommended ৳500/month plan"
+6. **Feeds** a personalized Step 5 nudge into the Activation Predictor — "open DPS with your recommended ৳500/month plan"
 
-#### How the Two Modules Connect
+#### Tool 3: Agent Liquidity Forecast — Cash Demand Predictor
+
+upay has a nationwide network of agents who handle physical cash-in and cash-out transactions. Agents frequently face two problems: running out of cash during peak hours (unable to serve cash-out requests) and holding too much idle cash during off-peak hours. There is currently no prediction system — agents rely on intuition.
+
+**Agent Liquidity Forecast** is a demand prediction system that:
+1. **Generates** synthetic data for 500 agent points across urban/peri-urban/rural Bangladesh
+2. **Models** daily cash-out demand using historical patterns, day-of-week, salary-day cycles, and RMG-district effects
+3. **Predicts** next-day and 7-day cash-out demand per agent (XGBoost regressor, R²=0.673)
+4. **Classifies** agent float status: healthy / adequate / low / critical
+5. **Alerts** agents and operations teams when predicted demand exceeds current float capacity
+6. **Detects** salary-day surges (1st, 5th, 10th, 15th) and RMG zone spikes (1.4–2x multiplier)
+
+#### How the Three Tools Connect
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│              MilestoneAI (Module A)                          │
-│  Predicts drop-off at M1→M6, generates nudges for M2-M4    │
+│          Tool 1: Activation Predictor (Track 04)            │
+│  Predicts drop-off at Steps 1→6, generates nudges           │
 │                                                             │
-│  For M5 (DPS):  ──────────► calls SanchayBot ──────────►   │
+│  For Step 5 (DPS): ────► calls DPS Coach ──────────►        │
 │                  "User at risk"    "Here's their savings    │
 │                                     plan: ৳500/month for    │
 │                                     12 months = ৳6,300+"    │
-│                                                             │
-│  M5 Nudge = Generic nudge + Personalized savings plan       │
-│           = MUCH higher conversion than generic "open DPS"  │
-└─────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────┐
-│              SanchayBot (Module B)                           │
-│  Also accessible as standalone Savings Coach page            │
+├─────────────────────────────────────────────────────────────┤
+│          Tool 2: DPS Coach (Track 03)                       │
+│  Standalone savings advisor + powers Step 5 nudge           │
 │  - Cash-flow analysis + spending breakdown                  │
 │  - DPS recommendation with maturity projection              │
 │  - Bangla explanation of spending patterns                   │
-│  - Goal-based savings planning (education, emergency, Eid)  │
+├─────────────────────────────────────────────────────────────┤
+│          Tool 3: Agent Liquidity Forecast (Track 05)        │
+│  Ensures agents can serve the transactions nudges drive     │
+│  - 500 agent points with daily demand prediction            │
+│  - Salary-day surge detection + RMG-zone alerts             │
+│  - 7-day forecast with float status monitoring              │
 └─────────────────────────────────────────────────────────────┘
 ```
 

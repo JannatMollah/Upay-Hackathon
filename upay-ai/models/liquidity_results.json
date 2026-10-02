@@ -1,0 +1,27 @@
+{
+  "test_mae": 23753.88,
+  "test_rmse": 34344.65,
+  "test_r2": 0.6733,
+  "n_train": 33200,
+  "n_test": 8300,
+  "n_features": 17,
+  "feature_importance": {
+    "cashout_rolling_14d": 0.2385,
+    "is_salary_day": 0.1695,
+    "is_rmg_int": 0.1214,
+    "cashout_rolling_7d": 0.1052,
+    "area_encoded": 0.0965,
+    "tier_encoded": 0.0578,
+    "day_of_week": 0.0534,
+    "is_month_end": 0.0448,
+    "float_capacity_bdt": 0.023,
+    "day_of_month": 0.0146,
+    "cashout_lag_7": 0.0125,
+    "cashout_rolling_3d": 0.0117,
+    "cashin_lag_1": 0.0116,
+    "cashout_std_7d": 0.011,
+    "cashout_lag_2": 0.0103,
+    "cashout_lag_3": 0.0095,
+    "cashout_lag_1": 0.0087
+  }
+}

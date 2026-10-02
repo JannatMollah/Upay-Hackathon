@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Activity, PiggyBank, BarChart3, Globe } from 'lucide-react';
+import { Home, Target, PiggyBank, Landmark, BarChart3, Globe } from 'lucide-react';
 import { Language, t } from '../lib/i18n';
 
 interface HeaderProps {
@@ -15,9 +15,11 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/', labelKey: 'nav.dashboard', icon: Activity },
-    { href: '/savings', labelKey: 'nav.savings', icon: PiggyBank },
-    { href: '/performance', labelKey: 'nav.performance', icon: BarChart3 },
+    { href: '/', labelEn: 'Hub', labelBn: 'হাব', icon: Home, exact: true },
+    { href: '/activation', labelEn: 'Activation', labelBn: 'অ্যাক্টিভেশন', icon: Target },
+    { href: '/dps-coach', labelEn: 'DPS Coach', labelBn: 'ডিপিএস কোচ', icon: PiggyBank },
+    { href: '/liquidity', labelEn: 'Liquidity', labelBn: 'তারল্য', icon: Landmark },
+    { href: '/performance', labelEn: 'Performance', labelBn: 'পারফরম্যান্স', icon: BarChart3 },
   ];
 
   return (
@@ -40,7 +42,9 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
         <nav className="navbar-nav-group">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = pathname === item.href;
+            const isActive = item.exact
+              ? pathname === item.href
+              : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
@@ -48,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onLanguageToggle }) => {
                 className={`navbar-nav-item ${isActive ? 'active' : ''}`}
               >
                 <Icon size={15} />
-                <span>{t(item.labelKey, lang)}</span>
+                <span>{lang === 'bn' ? item.labelBn : item.labelEn}</span>
               </Link>
             );
           })}

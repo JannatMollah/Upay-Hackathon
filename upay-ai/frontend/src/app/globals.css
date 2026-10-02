@@ -518,6 +518,15 @@ a {
   animation: slideInRight 0.4s var(--ease-out);
 }
 
+/* Tool card hover (hub page) */
+.tool-card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.tool-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
 /* ========================
    TABLE STYLES
    ======================== */

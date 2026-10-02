@@ -183,7 +183,7 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
                     </td>
                     <td style={{ padding: '14px 14px', textAlign: 'right' }}>
                       <Link
-                        href={`/users/${u.user_id}`}
+                        href={`/activation/${u.user_id}`}
                         className="btn-primary"
                         style={{
                           padding: '7px 14px',

@@ -1,0 +1,1 @@
+["day_of_week", "day_of_month", "is_salary_day", "is_month_end", "cashout_lag_1", "cashout_lag_2", "cashout_lag_3", "cashout_lag_7", "cashout_rolling_3d", "cashout_rolling_7d", "cashout_rolling_14d", "cashout_std_7d", "cashin_lag_1", "area_encoded", "tier_encoded", "is_rmg_int", "float_capacity_bdt"]

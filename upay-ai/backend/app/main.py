@@ -1,6 +1,7 @@
 """
-MilestoneAI + SanchayBot — FastAPI Application
-Main entry point for the backend API.
+Upay AI — FastAPI Application
+Multi-tool AI intelligence platform for upay MFS.
+Tools: Activation Predictor, DPS Coach, Agent Liquidity Forecast
 """
 
 from fastapi import FastAPI, Depends, HTTPException, Header
@@ -10,13 +11,13 @@ import os
 
 load_dotenv()
 
-from .routers import funnel, users, nudges, savings, metrics, traces
+from .routers import funnel, users, nudges, savings, metrics, traces, liquidity
 from .database import init_db
 
 app = FastAPI(
-    title="MilestoneAI + SanchayBot API",
-    description="Hybrid Activation & Savings Intelligence for upay",
-    version="2.0.0",
+    title="Upay AI — Intelligent MFS Platform",
+    description="Multi-tool AI platform: Activation Predictor, DPS Coach, Agent Liquidity Forecast",
+    version="3.0.0",
 )
 
 # CORS configuration
@@ -45,6 +46,7 @@ app.include_router(nudges.router, prefix="/api/v1", dependencies=[Depends(verify
 app.include_router(savings.router, prefix="/api/v1", dependencies=[Depends(verify_api_key)])
 app.include_router(metrics.router, prefix="/api/v1", dependencies=[Depends(verify_api_key)])
 app.include_router(traces.router, prefix="/api/v1", dependencies=[Depends(verify_api_key)])
+app.include_router(liquidity.router, prefix="/api/v1", dependencies=[Depends(verify_api_key)])
 
 
 @app.on_event("startup")
@@ -57,7 +59,8 @@ async def startup():
 async def health():
     return {
         "status": "ok",
-        "service": "MilestoneAI + SanchayBot",
-        "version": "2.0.0",
+        "service": "Upay AI",
+        "version": "3.0.0",
+        "tools": ["Activation Predictor", "DPS Coach", "Agent Liquidity Forecast"],
         "data_is_synthetic": True,
     }
