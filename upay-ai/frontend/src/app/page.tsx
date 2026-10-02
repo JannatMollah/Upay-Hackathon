@@ -5,45 +5,71 @@ import Link from 'next/link';
 import { useLanguage } from '../lib/LanguageContext';
 import { Target, PiggyBank, Landmark } from 'lucide-react';
 
-const TOOLS = [
+interface ToolItem {
+  id: string;
+  href: string;
+  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
+  color: string;
+  glow: string;
+  bg: string;
+  tag_en: string;
+  tag_bn: string;
+  title_en: string;
+  title_bn: string;
+  desc_en: string;
+  desc_bn: string;
+  stats_en: string[];
+  stats_bn: string[];
+}
+
+const TOOLS: ToolItem[] = [
   {
     id: 'activation',
     href: '/activation',
     icon: Target,
     color: '#2563eb',
+    glow: 'rgba(37, 99, 235, 0.22)',
     bg: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+    tag_en: 'Campaign AI',
+    tag_bn: 'ক্যাম্পেইন এআই',
     title_en: 'Activation Predictor',
     title_bn: 'অ্যাক্টিভেশন প্রেডিক্টর',
-    desc_en: 'Predict which new users will drop off during the 6-step bonus onboarding campaign. XGBoost + SHAP explainability + personalized Bangla nudges.',
-    desc_bn: '৬-ধাপ বোনাস ক্যাম্পেইনে কোন নতুন গ্রাহক ড্রপ-অফ করবে তা পূর্বাভাস করুন। XGBoost + SHAP ব্যাখ্যাযোগ্যতা + ব্যক্তিগতকৃত বাংলা নাজ।',
-    stats_en: ['AUC: 0.766', '50K Users', '6 Steps'],
-    stats_bn: ['AUC: 0.766', '৫০K গ্রাহক', '৬ ধাপ'],
+    desc_en: 'Predict new user drop-off across the 6-stage bonus funnel with XGBoost scoring, SHAP explainability, and personalized Bangla nudges.',
+    desc_bn: '৬-ধাপ বোনাস ফানেলে গ্রাহকের ড্রপ-অফ পূর্বাভাস। XGBoost মডেল, SHAP বিশ্লেষণ এবং ব্যক্তিগতকৃত বাংলা নাজ।',
+    stats_en: ['AUC 0.766', '50K Users', '6 Funnel Steps'],
+    stats_bn: ['AUC ০.৭৬৬', '৫০K গ্রাহক', '৬ ধাপ ফানেল'],
   },
   {
     id: 'dps-coach',
     href: '/dps-coach',
     icon: PiggyBank,
     color: '#059669',
+    glow: 'rgba(5, 150, 105, 0.22)',
     bg: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-    title_en: 'DPS Coach',
-    title_bn: 'ডিপিএস কোচ',
-    desc_en: 'Analyze monthly cash-flow surplus and recommend personalized DPS savings plans. Helps users build financial security through UCB deposit schemes.',
-    desc_bn: 'মাসিক ক্যাশ-ফ্লো বিশ্লেষণ করে ব্যক্তিগতকৃত ডিপিএস সঞ্চয় পরিকল্পনা প্রস্তাব করুন। UCB আমানত স্কিমের মাধ্যমে আর্থিক নিরাপত্তা গড়ুন।',
-    stats_en: ['R²: 0.999', 'MAE: ৳279', '5 Tenures'],
-    stats_bn: ['R²: 0.999', 'MAE: ৳২৭৯', '৫ মেয়াদ'],
+    tag_en: 'Savings AI',
+    tag_bn: 'সঞ্চয় এআই',
+    title_en: 'DPS Savings Coach',
+    title_bn: 'ডিপিএস সঞ্চয় কোচ',
+    desc_en: 'Analyze monthly cash-flow surplus to generate personalized DPS savings plans. Empower users to build wealth via UCB deposit schemes.',
+    desc_bn: 'মাসিক উদ্বৃত্ত ক্যাশ বিশ্লেষণ করে মানানসই ডিপিএস সঞ্চয় পরিকল্পনা। UCB আমানত স্কিমের মাধ্যমে আর্থিক সুরক্ষা।',
+    stats_en: ['R² 0.999', 'MAE ৳279', '5 Tenure Schemes'],
+    stats_bn: ['R² ০.৯৯৯', 'MAE ৳২৭৯', '৫ মেয়াদি স্কিম'],
   },
   {
     id: 'liquidity',
     href: '/liquidity',
     icon: Landmark,
     color: '#d97706',
+    glow: 'rgba(217, 119, 6, 0.22)',
     bg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
+    tag_en: 'Liquidity AI',
+    tag_bn: 'তারল্য এআই',
     title_en: 'Agent Liquidity Forecast',
     title_bn: 'এজেন্ট তারল্য পূর্বাভাস',
-    desc_en: 'Predict cash-out demand at 500 agent points to prevent liquidity shortages. 7-day demand forecast with salary-day surge detection.',
-    desc_bn: '৫০০ এজেন্ট পয়েন্টে ক্যাশ-আউট চাহিদা পূর্বাভাস করুন। বেতন দিবসের চাহিদা বৃদ্ধি শনাক্তকরণ সহ ৭-দিনের পূর্বাভাস।',
-    stats_en: ['R²: 0.673', '500 Agents', '7-Day Forecast'],
-    stats_bn: ['R²: 0.673', '৫০০ এজেন্ট', '৭-দিন পূর্বাভাস'],
+    desc_en: 'Forecast daily cash-out volume across 500 agent points to prevent stockouts. 7-day demand projections with salary surge detection.',
+    desc_bn: '৫০০ এজেন্ট পয়েন্টে নগদ উত্তোলনের চাহিদা পূর্বাভাস। বেতন দিবসের চাপ শনাক্তকরণ সহ ৭-দিনের প্রোজেকশন।',
+    stats_en: ['R² 0.673', '500 Agents', '7-Day Horizon'],
+    stats_bn: ['R² ০.৬৭৩', '৫০০ এজেন্ট', '৭ দিন মেয়াদ'],
   },
 ];
 
@@ -51,138 +77,120 @@ export default function HubPage() {
   const { lang } = useLanguage();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }} className="animate-fade-in">
-      {/* Hero Section */}
-      <div style={{ textAlign: 'center', padding: '16px 0 8px' }}>
-        <h1 style={{
-          fontSize: '2.4rem',
-          fontWeight: 800,
-          color: 'var(--text-primary)',
-          letterSpacing: '-0.03em',
-          lineHeight: 1.2,
-          marginBottom: '10px',
-        }}>
+    <div className="hub-container animate-fade-in">
+      {/* Subtle Background Glow Orbs */}
+      <div className="hub-glow-bg" aria-hidden="true">
+        <div style={{
+          width: '320px',
+          height: '320px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }} />
+        <div style={{
+          width: '340px',
+          height: '340px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(5, 150, 105, 0.10) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }} />
+        <div style={{
+          width: '320px',
+          height: '320px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(217, 119, 6, 0.11) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }} />
+      </div>
+
+      {/* Centered Hero Header */}
+      <div className="hub-hero">
+        <h1 className="hub-title">
           {lang === 'bn' ? (
-            <>উপায় <span style={{ color: 'var(--upay-blue)' }}>AI</span></>
+            <>উপায় <span style={{ color: 'var(--upay-blue)' }}>AI</span> হাব</>
           ) : (
-            <>Upay <span style={{ color: 'var(--upay-blue)' }}>AI</span></>
+            <>Upay <span style={{ color: 'var(--upay-blue)' }}>AI</span> Hub</>
           )}
         </h1>
-        <p style={{
-          fontSize: '1rem',
-          color: 'var(--text-muted)',
-          maxWidth: '600px',
-          margin: '0 auto',
-          lineHeight: 1.6,
-        }}>
+
+        <p className="hub-subtitle">
           {lang === 'bn'
-            ? 'মোবাইল ফাইন্যান্সিয়াল সার্ভিসের জন্য AI-চালিত ইন্টেলিজেন্স প্ল্যাটফর্ম'
-            : 'AI-powered intelligence platform for smarter mobile financial services'}
+            ? 'মোবাইল ফাইন্যান্সিয়াল সার্ভিসে গ্রাহক বৃদ্ধি, ডিপিএস সঞ্চয় ও এজেন্ট তারল্য ব্যবস্থাপনার সমন্বিত এআই প্ল্যাটফর্ম।'
+            : 'AI-powered intelligence platform for user activation, personalized DPS savings, and agent network liquidity.'}
         </p>
       </div>
 
-      {/* Tool Cards Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-        gap: '20px',
-      }}>
+      {/* Centered Tool Cards Grid */}
+      <div className="hub-grid">
         {TOOLS.map((tool) => {
           const Icon = tool.icon;
           const title = lang === 'bn' ? tool.title_bn : tool.title_en;
           const desc = lang === 'bn' ? tool.desc_bn : tool.desc_en;
+          const tag = lang === 'bn' ? tool.tag_bn : tool.tag_en;
           const stats = lang === 'bn' ? tool.stats_bn : tool.stats_en;
 
           return (
             <Link
               key={tool.id}
               href={tool.href}
-              className="glass-panel tool-card-hover"
+              className="hub-card"
               style={{
-                padding: '28px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '18px',
-                textDecoration: 'none',
-                color: 'inherit',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                ['--card-glow' as any]: tool.glow,
               }}
             >
-              {/* Card top icon */}
-              <div>
-                <div style={{
-                  width: '52px',
-                  height: '52px',
-                  borderRadius: '14px',
+              {/* Centered Icon Container */}
+              <div
+                className="hub-card-icon"
+                style={{
                   background: tool.bg,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: `0 6px 16px ${tool.color}35`,
-                }}>
-                  <Icon size={26} style={{ color: '#fff' }} />
-                </div>
+                  boxShadow: `0 8px 22px ${tool.color}35`,
+                  border: '1px solid rgba(255, 255, 255, 0.35)',
+                }}
+              >
+                <Icon size={28} style={{ color: '#ffffff' }} />
               </div>
 
-              {/* Title & Description */}
-              <div style={{ flex: 1 }}>
-                <h3 style={{
-                  fontSize: '1.3rem',
-                  fontWeight: 800,
-                  color: 'var(--text-primary)',
-                  letterSpacing: '-0.02em',
-                  marginBottom: '8px',
-                }}>
-                  {title}
-                </h3>
-                <p style={{
-                  fontSize: '0.9rem',
-                  color: 'var(--text-muted)',
-                  lineHeight: 1.6,
-                }}>
-                  {desc}
-                </p>
+              {/* Centered Tag */}
+              <div
+                className="hub-card-tag"
+                style={{
+                  background: `${tool.color}14`,
+                  color: tool.color,
+                  border: `1px solid ${tool.color}25`,
+                }}
+              >
+                {tag}
               </div>
 
-              {/* Stats pills */}
-              <div style={{
-                display: 'flex',
-                gap: '8px',
-                flexWrap: 'wrap',
-              }}>
+              {/* Centered Title */}
+              <h2 className="hub-card-title">{title}</h2>
+
+              {/* Centered Description */}
+              <p className="hub-card-desc">{desc}</p>
+
+              {/* Centered Stats Badges */}
+              <div className="hub-card-stats">
                 {stats.map((s, i) => (
-                  <span key={i} style={{
-                    padding: '5px 12px',
-                    borderRadius: '8px',
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    background: `${tool.color}12`,
-                    color: tool.color,
-                    border: `1px solid ${tool.color}25`,
-                  }}>
+                  <span
+                    key={i}
+                    className="hub-card-pill"
+                    style={{
+                      background: `${tool.color}10`,
+                      color: tool.color,
+                      border: `1px solid ${tool.color}20`,
+                    }}
+                  >
                     {s}
                   </span>
                 ))}
               </div>
 
-              {/* Open Tool Button */}
+              {/* Centered CTA Button */}
               <div
+                className="hub-card-btn"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '11px 20px',
-                  borderRadius: 'var(--radius-md)',
                   background: tool.bg,
-                  color: '#ffffff',
-                  fontSize: '0.92rem',
-                  fontWeight: 700,
-                  marginTop: '4px',
-                  boxShadow: `0 4px 14px ${tool.color}30`,
-                  transition: 'all 0.2s ease',
-                  letterSpacing: '0.01em',
+                  boxShadow: `0 4px 14px ${tool.color}35`,
                 }}
               >
                 {lang === 'bn' ? 'টুল খুলুন' : 'Open Tool'}
