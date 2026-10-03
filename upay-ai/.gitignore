@@ -7,6 +7,8 @@ venv/
 *.db
 *.joblib
 *.npy
+!models/*.joblib
+!models/*.npy
 node_modules/
 .next/
 dist/

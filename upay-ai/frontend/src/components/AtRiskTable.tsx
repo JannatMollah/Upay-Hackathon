@@ -12,6 +12,7 @@ interface AtRiskTableProps {
   currentFilter: string | null;
   onFilterChange: (m: string | null) => void;
   lang: Language;
+  isLoading?: boolean;
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
 }
@@ -22,6 +23,7 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
   currentFilter,
   onFilterChange,
   lang,
+  isLoading = false,
   onLoadMore,
   isLoadingMore = false,
 }) => {
@@ -96,7 +98,23 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
             </tr>
           </thead>
           <tbody>
-            {users.length === 0 ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan={5} style={{
+                  padding: '52px 32px',
+                  textAlign: 'center',
+                  color: 'var(--text-dim)',
+                  fontSize: '0.94rem',
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <RefreshCw size={24} style={{ animation: 'spin 1s linear infinite', color: 'var(--upay-blue)' }} />
+                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                      {lang === 'bn' ? 'গ্রাহকদের তথ্য লোড হচ্ছে...' : 'Loading at-risk users...'}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ) : users.length === 0 ? (
               <tr>
                 <td colSpan={5} style={{
                   padding: '48px 32px',

@@ -74,8 +74,8 @@ export default function ActivationPage() {
           api.getAtRiskUsers(selectedMilestone || undefined, 10, 0),
         ]);
         setFunnel(funnelData);
-        setAtRiskUsers(riskData.users);
-        setTotalAtRisk(riskData.total_at_risk);
+        setAtRiskUsers(riskData?.users || []);
+        setTotalAtRisk(riskData?.total_at_risk || 0);
       } catch (err) {
         console.error('Failed to load data:', err);
       } finally {
@@ -554,6 +554,7 @@ export default function ActivationPage() {
         currentFilter={selectedMilestone}
         onFilterChange={setSelectedMilestone}
         lang={lang}
+        isLoading={loading}
         onLoadMore={handleLoadMore}
         isLoadingMore={isLoadingMore}
       />

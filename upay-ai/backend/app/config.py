@@ -6,10 +6,15 @@ import os
 import logging
 from dotenv import load_dotenv
 
-# Base directory is the milestone-ai directory
+# Base directory: handles both Docker (/app) and local dev (.../upay-ai)
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
-BACKEND_DIR = os.path.dirname(APP_DIR)
-BASE_DIR = os.path.dirname(BACKEND_DIR)
+_parent = os.path.dirname(APP_DIR)
+_grandparent = os.path.dirname(_parent)
+
+if os.path.exists(os.path.join(_parent, "data")) or os.path.exists(os.path.join(_parent, "models")):
+    BASE_DIR = _parent
+else:
+    BASE_DIR = _grandparent
 
 # Load .env from BASE_DIR if present, else fallback
 env_path = os.path.join(BASE_DIR, ".env")

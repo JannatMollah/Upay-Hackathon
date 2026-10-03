@@ -13,10 +13,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY backend/app/ app/
 
-# Copy models if available (joblib files are gitignored, but .npy and json are not)
+# Copy models
 COPY models/ models/
 
-# data/ is gitignored (large CSVs), backend falls back to Supabase automatically
+# Copy data CSVs
+COPY data/ data/
+
+# Set explicit path variables
+ENV DATA_DIR=/app/data
+ENV MODELS_DIR=/app/models
 
 EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
