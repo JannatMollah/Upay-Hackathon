@@ -6,7 +6,7 @@ Rules determine nudge eligibility, frequency, and constraints.
 
 from datetime import datetime, timedelta
 from typing import Optional
-import sqlite3
+
 
 
 class NudgeRules:
