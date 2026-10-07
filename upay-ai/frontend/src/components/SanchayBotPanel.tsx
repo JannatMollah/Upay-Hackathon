@@ -161,7 +161,16 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
           }}>
             {lang === 'bn' ? 'ব্যয়ের বিভাজন' : 'Monthly Spending Distribution'}
           </h4>
-          <SpendingDonut cashflow={cashflow} lang={lang} />
+          <SpendingDonut
+            categories={[
+              { category: cashflow.top_expense_category, amount: cashflow.monthly_expenses * 0.45, percentage: 45 },
+              { category: 'cash_withdrawal', amount: cashflow.cash_out_amount, percentage: Math.round(cashflow.cash_out_ratio * 100) },
+              { category: 'utilities', amount: cashflow.monthly_expenses * 0.15, percentage: 15 },
+              { category: 'other', amount: cashflow.monthly_expenses * (0.4 - cashflow.cash_out_ratio), percentage: Math.round((0.4 - cashflow.cash_out_ratio) * 100) },
+            ]}
+            totalExpense={cashflow.monthly_expenses}
+            lang={lang}
+          />
         </div>
 
         {/* DPS Plan Card */}
@@ -356,14 +365,83 @@ export const SanchayBotPanel: React.FC<SanchayBotPanelProps> = ({ savingsData, l
       </div>
 
       {/* Growth Chart */}
-      {dps_recommendation.eligible && dps_recommendation.all_plans && (
+      {dps_recommendation.eligible && dps_recommendation.all_plans && currentPlan && (
         <SavingsGrowthChart
-          plans={dps_recommendation.all_plans}
-          selectedTenure={selectedTenure}
-          onSelectTenure={setSelectedTenure}
+          monthlyAmount={currentPlan.monthly_amount}
+          tenureMonths={currentPlan.tenure_months}
+          maturityValue={currentPlan.projected_maturity}
           lang={lang}
         />
       )}
+
+      {/* UCB Zero-Charge ATM Fee Savings Calculator (Quantified Real-World Value) */}
+      <div className="fee-savings-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#EDBC1B', color: '#1E293B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem' }}>
+              ৳
+            </div>
+            <div>
+              <h4 style={{ fontSize: '0.98rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                {lang === 'bn' ? 'ইউসিবি এটিএম ও ডিপিএস ফি সাশ্রয় ক্যালকুলেটর' : 'UCB ATM & DPS Fee Savings Calculator'}
+              </h4>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                {lang === 'bn'
+                  ? 'প্রতিযোগীদের ১.৮৫% ফি বনাম উপায় ইউসিবি এটিএম প্রতি হাজারে মাত্র ৮ টাকা এবং ডিপিএস মেয়াদে ১০০% ফ্রি ক্যাশ-আউট।'
+                  : 'Competitor 1.85% fee vs Upay UCB ATM rate of ৳8/৳1,000 and 100% free cash-out on matured DPS.'}
+              </p>
+            </div>
+          </div>
+
+          <span className="badge badge-success" style={{ fontSize: '0.75rem', fontWeight: 700 }}>
+            {lang === 'bn' ? 'ইউসিবি পার্টনারশিপ বেনিফিট' : 'UCB Bank Advantage'}
+          </span>
+        </div>
+
+        {(() => {
+          const cashOutAmt = Math.max(2000, Math.round(cashflow.monthly_expenses * (cashflow.cash_out_ratio || 0.35)));
+          const competitorFee = Math.round(cashOutAmt * 0.0185);
+          const upayFee = Math.round(cashOutAmt * 0.008);
+          const monthlySaving = Math.max(0, competitorFee - upayFee);
+          const annualSaving = monthlySaving * 12;
+
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+              <div style={{ background: '#ffffff', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+                  {lang === 'bn' ? 'প্রতিযোগী ক্যাশ-আউট খরচ' : 'Competitor Fee (1.85%)'}
+                </span>
+                <p style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--color-danger)', marginTop: '2px' }}>
+                  ৳{competitorFee} <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-muted)' }}>/{lang === 'bn' ? 'মাস' : 'mo'}</span>
+                </p>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>৳{cashOutAmt.toLocaleString()} {lang === 'bn' ? 'ক্যাশ-আউটে' : 'volume'}</span>
+              </div>
+
+              <div style={{ background: '#ffffff', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+                  {lang === 'bn' ? 'উপায় + ইউসিবি এটিএম খরচ' : 'Upay UCB ATM Fee (0.8%)'}
+                </span>
+                <p style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--upay-blue)', marginTop: '2px' }}>
+                  ৳{upayFee} <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-muted)' }}>/{lang === 'bn' ? 'মাস' : 'mo'}</span>
+                </p>
+                <span style={{ fontSize: '0.7rem', color: 'var(--color-success)', fontWeight: 600 }}>{lang === 'bn' ? 'মাত্র ৮ টাকা প্রতি হাজারে' : 'Only ৳8 per ৳1,000'}</span>
+              </div>
+
+              <div style={{ background: 'linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(237, 188, 27, 0.15) 100%)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(5, 150, 105, 0.3)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--color-success)', textTransform: 'uppercase', fontWeight: 700 }}>
+                  {lang === 'bn' ? 'বার্ষিক প্রত্যক্ষ সাশ্রয়' : 'Annual Cash Savings'}
+                </span>
+                <p style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-success)', marginTop: '2px' }}>
+                  +৳{annualSaving.toLocaleString()} <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>/{lang === 'bn' ? 'বছর' : 'yr'}</span>
+                </p>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-primary)', fontWeight: 600 }}>
+                  {lang === 'bn' ? 'ডিপিএস মেয়াদের জিরো-ফি বোনাস সহ' : 'Plus 0% cash-out on DPS maturity'}
+                </span>
+              </div>
+            </div>
+          );
+        })()}
+      </div>
     </div>
   );
 };

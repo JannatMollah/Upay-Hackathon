@@ -56,6 +56,9 @@ export default function DPSCoachPage() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  const [customDeposit, setCustomDeposit] = useState<number>(1000);
+  const [customTenure, setCustomTenure] = useState<number>(12);
+
   const demoUsers = ['U000013573', 'U000041289', 'U000008421', 'U000029514', 'U000003781'];
 
   // Load sample at-risk users on initial render
@@ -201,8 +204,8 @@ export default function DPSCoachPage() {
     },
     {
       label: lang === 'bn' ? 'মডেল সঠিকতা (R²)' : 'Model Accuracy (R²)',
-      value: '0.9986',
-      sub: lang === 'bn' ? 'MAE ৳২৭৯ টেস্ট সেট' : 'MAE ৳279 on Cash-Flow Test Set',
+      value: '0.9401',
+      sub: lang === 'bn' ? 'MAE ৳২,৬৫৭ (লিক-মুক্ত টেস্ট সেট)' : 'MAE ৳2,657 (Leakage-Free Holdout)',
       icon: Sparkles,
       color: 'var(--text-secondary)',
       bg: 'var(--bg-subtle)',
@@ -564,7 +567,169 @@ export default function DPSCoachPage() {
           </p>
         </div>
       ) : (
-        <SanchayBotPanel savingsData={savingsData} lang={lang} />
+        <>
+          <SanchayBotPanel savingsData={savingsData} lang={lang} />
+
+          {/* Interactive Wealth Accumulator Slider & Strategy Allocator */}
+          <div className="wealth-slider-container">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <TrendingUp size={20} style={{ color: 'var(--color-success)' }} />
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                    {lang === 'bn' ? 'ইন্টারেক্টিভ ওয়েলথ অ্যাকুমুলেটর' : 'Interactive Wealth Accumulator'}
+                  </h3>
+                </div>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)' }}>
+                  {lang === 'bn'
+                    ? 'মাসিক সঞ্চয় ও মেয়াদের স্লাইডার টেনে চক্রবৃদ্ধি মুনাফা ও ভবিষ্যৎ মূলধন প্রক্ষেপণ দেখুন।'
+                    : 'Simulate custom monthly contributions and tenure horizons with compounded UCB interest.'}
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <span className="badge badge-brand">7.5% p.a. UCB Rate</span>
+                <span className="badge badge-success">Zero Maintenance Fee</span>
+              </div>
+            </div>
+
+            {/* Range Slider and Amount Display */}
+            <div style={{ background: 'var(--bg-subtle)', padding: '20px', borderRadius: '16px', marginBottom: '22px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                  {lang === 'bn' ? 'মাসিক জমা নির্ধারণ করুন:' : 'Monthly Contribution Amount:'}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                  <span style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--upay-blue)' }}>
+                    ৳{customDeposit.toLocaleString()}
+                  </span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ {lang === 'bn' ? 'মাস' : 'month'}</span>
+                </div>
+              </div>
+
+              <input
+                type="range"
+                min={200}
+                max={5000}
+                step={100}
+                value={customDeposit}
+                onChange={(e) => setCustomDeposit(Number(e.target.value))}
+                className="range-slider-input"
+              />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                <span>৳200</span>
+                <span>৳1,000</span>
+                <span>৳2,500</span>
+                <span>৳5,000</span>
+              </div>
+
+              {/* Tenure Pills */}
+              <div style={{ marginTop: '18px', display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                  {lang === 'bn' ? 'সঞ্চয় মেয়াদ:' : 'Tenure Horizon:'}
+                </span>
+                {[6, 12, 18, 24, 36].map((months) => (
+                  <button
+                    key={months}
+                    onClick={() => setCustomTenure(months)}
+                    style={{
+                      padding: '5px 14px',
+                      borderRadius: '8px',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      border: customTenure === months ? '1.5px solid var(--upay-blue)' : '1px solid var(--border-default)',
+                      background: customTenure === months ? 'var(--upay-blue)' : '#ffffff',
+                      color: customTenure === months ? '#ffffff' : 'var(--text-secondary)',
+                      transition: 'all 0.15s ease',
+                    }}
+                  >
+                    {months} {lang === 'bn' ? 'মাস' : 'Months'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Projection Cards */}
+            {(() => {
+              const totalPrincipal = customDeposit * customTenure;
+              const annualRate = 0.075;
+              const estInterest = Math.round(totalPrincipal * annualRate * (customTenure / 12) * 0.52);
+              const totalMaturity = totalPrincipal + estInterest;
+
+              return (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+                  <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid var(--border-light)' }}>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+                      {lang === 'bn' ? 'মোট আসল জমা' : 'Total Principal'}
+                    </span>
+                    <p style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
+                      ৳{totalPrincipal.toLocaleString()}
+                    </p>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                      ৳{customDeposit} × {customTenure} {lang === 'bn' ? 'মাস' : 'months'}
+                    </span>
+                  </div>
+
+                  <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid var(--border-light)' }}>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--color-success)', textTransform: 'uppercase', fontWeight: 700 }}>
+                      {lang === 'bn' ? 'ইউসিবি প্রদেয় মুনাফা (৭.৫%)' : 'Est. Interest (7.5%)'}
+                    </span>
+                    <p style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-success)', marginTop: '4px' }}>
+                      +৳{estInterest.toLocaleString()}
+                    </p>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--color-success)', fontWeight: 600 }}>
+                      {lang === 'bn' ? 'চক্রবৃদ্ধি মুনাফা লাভ' : 'Compound Gain'}
+                    </span>
+                  </div>
+
+                  <div style={{ background: 'linear-gradient(135deg, rgba(30, 77, 140, 0.08) 0%, rgba(237, 188, 27, 0.12) 100%)', padding: '16px', borderRadius: '14px', border: '1.5px solid rgba(30, 77, 140, 0.25)' }}>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--upay-blue)', textTransform: 'uppercase', fontWeight: 700 }}>
+                      {lang === 'bn' ? 'মেয়াদ শেষে মোট প্রাপ্তি' : 'Total Maturity Payout'}
+                    </span>
+                    <p style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--upay-blue)', marginTop: '4px' }}>
+                      ৳{totalMaturity.toLocaleString()}
+                    </p>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                      {lang === 'bn' ? 'ইউসিবি এটিএম ১০০% ফ্রি ক্যাশ-আউট' : '100% Free UCB ATM Withdrawal'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* 3-Tier Allocation Strategy Pills */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+              <div style={{ border: '1px solid var(--border-light)', borderRadius: '12px', padding: '14px', background: '#fafbfc' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0284c7' }}>
+                  {lang === 'bn' ? '🛡️ রক্ষণশীল (৩০% উদ্বৃত্ত)' : '🛡️ Conservative (30% Surplus)'}
+                </span>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.4 }}>
+                  {lang === 'bn' ? 'দৈনন্দিন খরচের পর ঝুঁকিহীন ন্যূনতম সঞ্চয় নিরাপত্তা।' : 'Guaranteed liquidity buffer with stress-free micro-deposits.'}
+                </p>
+              </div>
+
+              <div style={{ border: '1.5px solid var(--color-success)', borderRadius: '12px', padding: '14px', background: 'rgba(5, 150, 105, 0.04)' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-success)' }}>
+                  {lang === 'bn' ? '⭐ ভারসাম্যপূর্ণ (৫০% উদ্বৃত্ত - প্রস্তাবিত)' : '⭐ Balanced (50% Surplus - Recommended)'}
+                </span>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: 1.4 }}>
+                  {lang === 'bn' ? 'আর্থিক স্বচ্ছলতা বজায় রেখে সর্বোত্তম সম্পদ বৃদ্ধি।' : 'Optimal wealth growth while retaining cashflow flexibility.'}
+                </p>
+              </div>
+
+              <div style={{ border: '1px solid var(--border-light)', borderRadius: '12px', padding: '14px', background: '#fafbfc' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#d97706' }}>
+                  {lang === 'bn' ? '🚀 উচ্চ সঞ্চয় (৭০% উদ্বৃত্ত)' : '🚀 Aggressive (70% Surplus)'}
+                </span>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.4 }}>
+                  {lang === 'bn' ? 'সর্বোচ্চ মুনাফা অর্জন ও দ্রুত মূলধন সঞ্চয়ন লক্ষ্য।' : 'Maximum capital accumulation for disciplined savers.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

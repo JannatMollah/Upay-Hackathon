@@ -21,6 +21,9 @@ import {
   Zap,
   ChevronDown,
 } from 'lucide-react';
+import * as Recharts from 'recharts';
+import { AgentHeatGrid } from '../../components/AgentHeatGrid';
+import { ScrollReveal } from '../../components/ScrollReveal';
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; label_en: string; label_bn: string }> = {
   critical: { color: '#dc2626', bg: '#fef2f2', label_en: 'Critical', label_bn: 'জরুরি তারল্য' },
@@ -571,37 +574,88 @@ export default function LiquidityPage() {
 
       {/* Status Summary KPI Cards (Click to Filter) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
-        {kpiCards.map((kpi) => {
+        {kpiCards.map((kpi, idx) => {
           const Icon = kpi.icon;
           const isActive = statusFilter === kpi.key;
+          // Generate dummy sparkline data for demo
+          const sparkData = Array.from({ length: 7 }, (_, i) => ({ value: 50 + Math.random() * 50 + (i * 10) }));
+          
           return (
             <div
               key={kpi.key}
-              className="kpi-card"
+              className="kpi-card-premium"
               onClick={() => setStatusFilter(isActive ? 'all' : kpi.key)}
               style={{
                 cursor: 'pointer',
                 background: isActive ? `${kpi.bg}` : 'var(--bg-white)',
                 transition: 'all 0.25s ease',
+                ['--card-accent' as any]: kpi.color,
+                boxShadow: isActive ? `0 8px 24px ${kpi.color}30` : 'var(--shadow-sm)',
+                border: isActive ? `1px solid ${kpi.color}50` : '1px solid var(--border-light)',
               }}
               title={lang === 'bn' ? 'ফিল্টার করতে ক্লিক করুন' : 'Click to filter'}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span className="kpi-label">{kpi.label}</span>
-                <div className="kpi-icon-box" style={{ background: kpi.bg }}>
-                  <Icon size={19} style={{ color: kpi.color }} />
+                <span className="kpi-label" style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{kpi.label}</span>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: kpi.bg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: kpi.color,
+                }}>
+                  <Icon size={16} />
                 </div>
               </div>
-              <div className="kpi-value" style={{ color: kpi.color }}>
-                {kpi.value.toLocaleString()}
+
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: '8px' }}>
+                <div>
+                  <div style={{
+                    fontSize: '1.8rem',
+                    fontWeight: 800,
+                    color: kpi.color,
+                    fontFamily: 'var(--font-display)',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.1,
+                  }}>
+                    {kpi.value.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px', fontWeight: 500 }}>
+                    {isActive ? (lang === 'bn' ? '✓ ফিল্টার সক্রিয়' : '✓ Filter Active') : kpi.sub}
+                  </div>
+                </div>
+
+                {/* Sparkline mini-chart */}
+                <div style={{ width: '80px', height: '36px' }}>
+                  <Recharts.ResponsiveContainer width="100%" height="100%">
+                    <Recharts.AreaChart data={sparkData}>
+                      <defs>
+                        <linearGradient id={`spark-liq-${idx}`} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={kpi.color} stopOpacity={0.3} />
+                          <stop offset="100%" stopColor={kpi.color} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Recharts.Area type="monotone" dataKey="value" stroke={kpi.color} strokeWidth={2} fill={`url(#spark-liq-${idx})`} isAnimationActive={true} animationDuration={1500} />
+                    </Recharts.AreaChart>
+                  </Recharts.ResponsiveContainer>
+                </div>
               </div>
-              <span className="kpi-sub">
-                {isActive ? (lang === 'bn' ? '✓ ফিল্টার সক্রিয়' : '✓ Filter Active') : kpi.sub}
-              </span>
             </div>
           );
         })}
       </div>
+
+      {/* Agent Heatmap Grid */}
+      <ScrollReveal delay={100}>
+        <AgentHeatGrid 
+          summary={overview?.status_summary || { critical: 0, low: 0, adequate: 0, healthy: 0 }}
+          totalAgents={overview?.total_agents || 0}
+          lang={lang} 
+        />
+      </ScrollReveal>
 
       {/* Filter Tabs Header */}
       <div
@@ -630,6 +684,22 @@ export default function LiquidityPage() {
                 : area.charAt(0).toUpperCase() + area.slice(1)}
             </button>
           ))}
+          {/* RMG Garment Zone Quick Filter */}
+          <button
+            onClick={() => {
+              setSearchQuery('Gazipur');
+              loadOverview(true, 'Gazipur');
+            }}
+            className={`pill-filter ${searchQuery.toLowerCase() === 'gazipur' ? 'active' : ''}`}
+            style={{
+              border: '1px solid #d97706',
+              background: searchQuery.toLowerCase() === 'gazipur' ? '#d97706' : 'rgba(217, 119, 6, 0.08)',
+              color: searchQuery.toLowerCase() === 'gazipur' ? '#ffffff' : '#b45309',
+              fontWeight: 700,
+            }}
+          >
+            {lang === 'bn' ? '🧵 পোশাক শিল্প ক্লাস্টার (গাজীপুর)' : '🧵 RMG Garment Cluster (Gazipur)'}
+          </button>
         </div>
 
         {statusFilter !== 'all' && (
@@ -1101,8 +1171,9 @@ export default function LiquidityPage() {
                     {lang === 'bn' ? 'মডেল কনফিডেন্স' : 'Model Confidence'}
                   </span>
                   <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-success)', marginTop: '2px' }}>
-                    R² 0.673
+                    R² 0.6760
                   </div>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>MAE ৳22,359</span>
                 </div>
               </div>
             </div>
@@ -1158,6 +1229,36 @@ export default function LiquidityPage() {
           </div>
         )}
       </div>
+
+      {/* Floating Replenishment Toast Alert */}
+      {replenishSuccess && (
+        <div className="toast-alert-box">
+          <CheckCircle2 size={20} style={{ color: '#10B981', flexShrink: 0 }} />
+          <div>
+            <div style={{ fontWeight: 800, fontSize: '0.88rem' }}>
+              {lang === 'bn' ? 'জরুরি তারল্য রিকুইজিশন সফল!' : 'Emergency Liquidity Dispatched!'}
+            </div>
+            <div style={{ fontSize: '0.78rem', color: '#94A3B8' }}>
+              {lang === 'bn'
+                ? `এজেন্ট ${forecast?.agent_id || 'AG0001'} এর জন্য ৳১,৫০,০০০ ফ্লোট রিচার্জ ফিল্ড অফিসারের কাছে পাঠানো হয়েছে।`
+                : `Float replenishment of ৳150,000 dispatched to field officer for agent ${forecast?.agent_id || 'AG0001'}.`}
+            </div>
+          </div>
+          <button
+            onClick={() => setReplenishSuccess(false)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#ffffff',
+              cursor: 'pointer',
+              marginLeft: '10px',
+              padding: '4px',
+            }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

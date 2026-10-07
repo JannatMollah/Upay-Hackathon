@@ -3,6 +3,7 @@
 import React from 'react';
 import { Language } from '../lib/i18n';
 import { Target, Zap, Award, CheckCircle2 } from 'lucide-react';
+import * as Recharts from 'recharts';
 
 interface MetricsGridProps {
   metrics: any;
@@ -48,8 +49,8 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({
     },
     {
       label: 'Surplus Model R²',
-      value: '0.9986',
-      sub: 'MAE: ৳279 BDT on Test Set',
+      value: '0.9401',
+      sub: 'MAE: ৳2,657 BDT (Leak-Free Holdout)',
       icon: Award,
       color: 'var(--upay-yellow)',
       bg: 'var(--upay-yellow-soft)',
@@ -71,22 +72,66 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '18px',
           }}
         >
           {summaryCards.map((card, idx) => {
             const Icon = card.icon;
+            // Generate dummy sparkline data for demo
+            const sparkData = Array.from({ length: 7 }, (_, i) => ({ value: 50 + Math.random() * 50 + (i * 10) }));
+            const sparkColor = idx === 0 ? '#10B981' : (idx === 1 ? '#3B82F6' : '#F59E0B');
+
             return (
-              <div key={idx} className="kpi-card">
+              <div key={idx} className="kpi-card-premium" style={{ ['--card-accent' as any]: sparkColor }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <span className="kpi-label">{card.label}</span>
-                  <div className="kpi-icon-box" style={{ background: card.bg }}>
-                    <Icon size={19} style={{ color: card.color }} />
+                  <span className="kpi-label" style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{card.label}</span>
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    background: card.bg,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: card.color,
+                  }}>
+                    <Icon size={16} />
                   </div>
                 </div>
-                <div className="kpi-value">{card.value}</div>
-                <span className="kpi-sub">{card.sub}</span>
+                
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: '8px' }}>
+                  <div>
+                    <div style={{
+                      fontSize: '1.8rem',
+                      fontWeight: 800,
+                      color: 'var(--text-primary)',
+                      fontFamily: 'var(--font-display)',
+                      letterSpacing: '-0.02em',
+                      lineHeight: 1.1,
+                    }}>
+                      {card.value}
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: card.subColor, marginTop: '6px', fontWeight: 500 }}>
+                      {card.sub}
+                    </div>
+                  </div>
+                  
+                  {/* Sparkline mini-chart */}
+                  <div style={{ width: '80px', height: '36px' }}>
+                    <Recharts.ResponsiveContainer width="100%" height="100%">
+                      <Recharts.AreaChart data={sparkData}>
+                        <defs>
+                          <linearGradient id={`spark-${idx}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={sparkColor} stopOpacity={0.3} />
+                            <stop offset="100%" stopColor={sparkColor} stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <Recharts.Area type="monotone" dataKey="value" stroke={sparkColor} strokeWidth={2} fill={`url(#spark-${idx})`} isAnimationActive={true} animationDuration={1500} />
+                      </Recharts.AreaChart>
+                    </Recharts.ResponsiveContainer>
+                  </div>
+                </div>
               </div>
             );
           })}

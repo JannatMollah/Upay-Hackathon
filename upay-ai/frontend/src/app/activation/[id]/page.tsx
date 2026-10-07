@@ -25,11 +25,14 @@ import {
   User,
   ArrowRight,
 } from 'lucide-react';
+import * as Recharts from 'recharts';
+import { useToast } from '../../../components/Toast';
 
 export default function UserDetailPage() {
   const { lang } = useLanguage();
   const params = useParams();
   const router = useRouter();
+  const { showToast } = useToast();
   const userId = params?.id as string;
 
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
@@ -61,6 +64,7 @@ export default function UserDetailPage() {
       } else {
         setPrediction(predData);
         setSavingsPlan(savData);
+        showToast('info', lang === 'bn' ? 'ডাটা লোড হয়েছে' : 'Analysis Complete', lang === 'bn' ? 'এআই প্রেডিকশন প্রস্তুত' : 'User diagnostic data loaded successfully');
       }
     } catch (err: any) {
       setError(err?.message || 'Error loading user information.');
@@ -149,7 +153,16 @@ export default function UserDetailPage() {
   };
 
   const handleApproveNudge = async (nudgeId: string, action: string, modifiedTextBn?: string) => {
-    await api.approveNudge(nudgeId, action, 'CM001', modifiedTextBn);
+    try {
+      await api.approveNudge(nudgeId, action, 'CM001', modifiedTextBn);
+      if (action === 'approve') {
+        showToast('success', lang === 'bn' ? 'নাজ অনুমোদিত' : 'Nudge Approved', lang === 'bn' ? 'ক্যাম্পেইন সফলভাবে চালু করা হয়েছে' : 'Campaign triggered successfully');
+      } else {
+        showToast('error', lang === 'bn' ? 'নাজ বাতিল' : 'Nudge Rejected', lang === 'bn' ? 'ক্যাম্পেইন বাতিল করা হয়েছে' : 'Campaign has been rejected');
+      }
+    } catch (err) {
+      showToast('error', 'Error', 'Failed to update nudge status');
+    }
   };
 
   if (loading) {
@@ -617,27 +630,62 @@ export default function UserDetailPage() {
       </div>
 
       {/* 4 KPI Summary Cards for this User */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
         {kpiCards.map((kpi, idx) => {
           const Icon = kpi.icon;
+          // Dummy sparkline data
+          const sparkData = Array.from({ length: 7 }, (_, i) => ({ value: 50 + Math.random() * 50 + (i * 10) }));
+          
           return (
-            <div key={idx} className="kpi-card">
+            <div key={idx} className="kpi-card-premium" style={{ ['--card-accent' as any]: kpi.color }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span className="kpi-label">{kpi.label}</span>
-                <div className="kpi-icon-box" style={{ background: kpi.bg }}>
-                  <Icon size={19} style={{ color: kpi.color }} />
+                <span className="kpi-label" style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{kpi.label}</span>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: kpi.bg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: kpi.color,
+                }}>
+                  <Icon size={16} />
                 </div>
               </div>
-              <div
-                className="kpi-value"
-                style={{
-                  fontSize: kpi.value.length > 12 ? '1.5rem' : '1.85rem',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {kpi.value}
+
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: '8px' }}>
+                <div>
+                  <div style={{
+                    fontSize: kpi.value.length > 12 ? '1.5rem' : '1.8rem',
+                    fontWeight: 800,
+                    color: kpi.color,
+                    fontFamily: 'var(--font-display)',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.1,
+                  }}>
+                    {kpi.value}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px', fontWeight: 500 }}>
+                    {kpi.sub}
+                  </div>
+                </div>
+
+                {/* Sparkline mini-chart */}
+                <div style={{ width: '80px', height: '36px' }}>
+                  <Recharts.ResponsiveContainer width="100%" height="100%">
+                    <Recharts.AreaChart data={sparkData}>
+                      <defs>
+                        <linearGradient id={`spark-user-${idx}`} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={kpi.color} stopOpacity={0.3} />
+                          <stop offset="100%" stopColor={kpi.color} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Recharts.Area type="monotone" dataKey="value" stroke={kpi.color} strokeWidth={2} fill={`url(#spark-user-${idx})`} isAnimationActive={true} animationDuration={1500} />
+                    </Recharts.AreaChart>
+                  </Recharts.ResponsiveContainer>
+                </div>
               </div>
-              <span className="kpi-sub">{kpi.sub}</span>
             </div>
           );
         })}

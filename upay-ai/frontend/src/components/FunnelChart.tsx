@@ -4,6 +4,16 @@ import React from 'react';
 import { MilestoneStat } from '../types';
 import { Language, t } from '../lib/i18n';
 import { TrendingDown, Users, Check } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+  CartesianGrid,
+} from 'recharts';
 
 interface FunnelChartProps {
   milestones: MilestoneStat[];
@@ -13,6 +23,52 @@ interface FunnelChartProps {
   lang: Language;
 }
 
+const MILESTONE_COLORS = [
+  '#1E4D8C',
+  '#2563EB',
+  '#0EA5E9',
+  '#06B6D4',
+  '#059669',
+  '#10B981',
+];
+
+const MILESTONE_LABELS_EN: Record<string, string> = {
+  M1: 'App + PIN',
+  M2: 'Recharge',
+  M3: 'Cash-in',
+  M4: 'QR Pay',
+  M5: 'Open DPS',
+  M6: 'Complete',
+};
+
+const MILESTONE_LABELS_BN: Record<string, string> = {
+  M1: 'অ্যাপ + পিন',
+  M2: 'রিচার্জ',
+  M3: 'ক্যাশ-ইন',
+  M4: 'কিউআর পে',
+  M5: 'ডিপিএস',
+  M6: 'সম্পূর্ণ',
+};
+
+const CustomTooltip = ({ active, payload, lang }: any) => {
+  if (!active || !payload || !payload.length) return null;
+  const data = payload[0].payload;
+  return (
+    <div className="chart-tooltip-glass">
+      <div className="tooltip-label">{data.fullName}</div>
+      <div className="tooltip-value">{(data.rate * 100).toFixed(1)}%</div>
+      <div className="tooltip-sub">
+        {data.completed?.toLocaleString() || '—'} / {data.total?.toLocaleString() || '—'} {lang === 'bn' ? 'গ্রাহক' : 'users'}
+      </div>
+      {data.dropOff != null && (
+        <div className="tooltip-sub" style={{ color: '#EF4444', marginTop: '4px' }}>
+          ↓ {data.dropOff}% {lang === 'bn' ? 'ড্রপ' : 'drop from previous'}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const FunnelChart: React.FC<FunnelChartProps> = ({
   milestones,
   totalUsers,
@@ -20,27 +76,38 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
   onSelectMilestone,
   lang,
 }) => {
-  const colors = [
-    '#1E4D8C',
-    '#2563EB',
-    '#0EA5E9',
-    '#06B6D4',
-    '#059669',
-    '#10B981',
-  ];
+  const labels = lang === 'bn' ? MILESTONE_LABELS_BN : MILESTONE_LABELS_EN;
+
+  const chartData = milestones.map((m, i) => {
+    const prev = i > 0 ? milestones[i - 1].rate : 1;
+    const dropOff = i > 0 ? ((prev - m.rate) / prev * 100).toFixed(1) : null;
+    return {
+      name: labels[m.milestone] || m.milestone,
+      fullName: `${m.milestone} — ${labels[m.milestone] || m.milestone}`,
+      milestone: m.milestone,
+      rate: m.rate,
+      ratePercent: parseFloat((m.rate * 100).toFixed(1)),
+      completed: m.completed_count,
+      total: totalUsers,
+      dropOff,
+      fill: MILESTONE_COLORS[i] || '#64748B',
+    };
+  });
 
   return (
-    <div className="glass-panel" style={{ padding: '28px 28px 24px' }}>
+    <div className="glass-panel" style={{ padding: '28px 28px 20px' }}>
       {/* Section Header */}
       <div className="section-header">
         <div>
-          <h2 className="section-title">{t('funnel.title', lang)}</h2>
-          <p className="section-subtitle" style={{ fontSize: '0.94rem', marginTop: '4px' }}>
+          <h2 className="section-title" style={{ fontFamily: 'var(--font-display)' }}>
+            {t('funnel.title', lang)}
+          </h2>
+          <p className="section-subtitle" style={{ fontSize: '0.9rem', marginTop: '4px' }}>
             {t('funnel.subtitle', lang)} •{' '}
             <span style={{ color: 'var(--upay-blue)', fontWeight: 600 }}>
               {lang === 'bn'
-                ? 'যেকোনো ধাপে ক্লিক করলে নিচের টেবিলে সেই মাইলস্টোন সক্রিয় হবে'
-                : 'Click any step to activate its tab in the table below'}
+                ? 'চার্টের বারে ক্লিক করে ফিল্টার করুন'
+                : 'Click any bar to filter the table below'}
             </span>
           </p>
         </div>
@@ -48,7 +115,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          fontSize: '0.90rem',
+          fontSize: '0.88rem',
           color: 'var(--text-muted)',
           padding: '7px 16px',
           borderRadius: 'var(--radius-full)',
@@ -58,119 +125,124 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
           <Users size={15} />
           <span>
             {lang === 'bn' ? 'মোট গ্রাহক: ' : 'Total: '}
-            <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>
+            <strong style={{ color: 'var(--text-primary)' }}>
               {totalUsers.toLocaleString()}
             </strong>
           </span>
         </div>
       </div>
 
-      {/* Funnel Bars — 6 milestone interactive bars */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {milestones.map((m, idx) => {
-          const isSelected = selectedMilestone === m.milestone;
-          const prevRate = idx > 0 ? milestones[idx - 1].rate : 1.0;
-          const dropOffPct = idx > 0 ? ((prevRate - m.rate) * 100).toFixed(1) : null;
-          const pct = (m.rate * 100).toFixed(1);
-          const color = colors[idx % colors.length];
-
-          return (
-            <div
-              key={m.milestone}
-              onClick={() => onSelectMilestone(isSelected ? null : m.milestone)}
-              className={`funnel-bar ${isSelected ? 'active' : ''}`}
-              style={{
-                animationDelay: `${idx * 0.06}s`,
-                padding: '14px 18px',
-                cursor: 'pointer',
-                border: isSelected ? '1.5px solid var(--upay-blue)' : '1px solid transparent',
-                boxShadow: isSelected ? '0 3px 12px rgba(37, 99, 235, 0.12)' : 'none',
-                transition: 'all 0.2s ease',
+      {/* Recharts Bar Chart */}
+      <div style={{ width: '100%', height: 280, marginTop: '8px' }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            layout="vertical"
+            margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+            barCategoryGap="22%"
+          >
+            <CartesianGrid
+              horizontal={false}
+              strokeDasharray="3 3"
+              stroke="var(--border-light)"
+            />
+            <XAxis
+              type="number"
+              domain={[0, 100]}
+              tick={{ fill: 'var(--text-muted)', fontSize: 12, fontWeight: 500 }}
+              tickFormatter={(v) => `${v}%`}
+              axisLine={{ stroke: 'var(--border-light)' }}
+              tickLine={false}
+            />
+            <YAxis
+              type="category"
+              dataKey="name"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 13, fontWeight: 600 }}
+              axisLine={false}
+              tickLine={false}
+              width={75}
+            />
+            <Tooltip
+              content={<CustomTooltip lang={lang} />}
+              cursor={{ fill: 'var(--gradient-card-hover)', radius: 6 }}
+            />
+            <Bar
+              dataKey="ratePercent"
+              radius={[0, 8, 8, 0]}
+              onClick={(data: any) => {
+                if (data && data.milestone) {
+                  onSelectMilestone(
+                    selectedMilestone === data.milestone ? null : data.milestone
+                  );
+                }
               }}
-              title={
-                lang === 'bn'
-                  ? `ক্লিক করে নিচের টেবিলে '${m.name_bn}' সক্রিয় করুন`
-                  : `Click to activate '${m.name_en}' in the table below`
-              }
+              style={{ cursor: 'pointer' }}
+              animationDuration={1200}
+              animationEasing="ease-out"
             >
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '10px',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  {/* Step circle indicator */}
-                  <span
-                    style={{
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '50%',
-                      background: color,
-                      display: 'inline-block',
-                      flexShrink: 0,
-                    }}
-                  />
-                  <span style={{
-                    fontSize: '0.98rem',
-                    fontWeight: 700,
-                    color: isSelected ? 'var(--upay-blue)' : 'var(--text-primary)',
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {lang === 'bn' ? m.name_bn : m.name_en}
-                  </span>
-                  {isSelected && (
-                    <span
-                      className="badge badge-brand"
-                      style={{
-                        fontSize: '0.74rem',
-                        padding: '2px 8px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                      }}
-                    >
-                      <Check size={11} />
-                      {lang === 'bn' ? 'সক্রিয় ফিল্টার' : 'Active Filter'}
-                    </span>
-                  )}
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  {dropOffPct && parseFloat(dropOffPct) > 0 && (
-                    <div className="badge badge-risk" style={{ fontSize: '0.78rem', gap: '4px', padding: '3px 8px' }}>
-                      <TrendingDown size={12} />
-                      <span>-{dropOffPct}%</span>
-                    </div>
-                  )}
-                  <span style={{
-                    fontSize: '0.90rem',
-                    color: 'var(--text-muted)',
-                    fontWeight: 500,
-                    fontVariantNumeric: 'tabular-nums',
-                  }}>
-                    <strong style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.94rem' }}>
-                      {m.completed_count.toLocaleString()}
-                    </strong>
-                    {' '}
-                    <span style={{ color: 'var(--text-dim)', fontSize: '0.84rem' }}>({pct}%)</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Progress bar */}
-              <div className="funnel-progress" style={{ height: '8px' }}>
-                <div
-                  className="funnel-progress-fill"
-                  style={{
-                    width: `${pct}%`,
-                    background: color,
-                  }}
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={entry.milestone}
+                  fill={entry.fill}
+                  opacity={
+                    selectedMilestone
+                      ? entry.milestone === selectedMilestone
+                        ? 1
+                        : 0.35
+                      : 0.85
+                  }
+                  stroke={
+                    entry.milestone === selectedMilestone
+                      ? entry.fill
+                      : 'transparent'
+                  }
+                  strokeWidth={entry.milestone === selectedMilestone ? 2 : 0}
                 />
-              </div>
-            </div>
-          );
-        })}
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Milestone Pills (click to filter) */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '8px',
+        marginTop: '12px',
+        flexWrap: 'wrap',
+      }}>
+        <button
+          className={`pill-filter ${!selectedMilestone ? 'active' : ''}`}
+          onClick={() => onSelectMilestone(null)}
+          style={{ fontSize: '0.82rem' }}
+        >
+          {lang === 'bn' ? 'সব দেখুন' : 'All Steps'}
+        </button>
+        {milestones.map((m, i) => (
+          <button
+            key={m.milestone}
+            className={`pill-filter ${selectedMilestone === m.milestone ? 'active' : ''}`}
+            onClick={() =>
+              onSelectMilestone(
+                selectedMilestone === m.milestone ? null : m.milestone
+              )
+            }
+            style={{ fontSize: '0.82rem' }}
+          >
+            <span
+              style={{
+                display: 'inline-block',
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: MILESTONE_COLORS[i],
+                marginRight: 6,
+              }}
+            />
+            {m.milestone}
+          </button>
+        ))}
       </div>
     </div>
   );

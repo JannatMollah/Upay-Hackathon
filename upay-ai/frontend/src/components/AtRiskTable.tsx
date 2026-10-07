@@ -134,29 +134,48 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
               users.map((u, index) => {
                 const riskPct = (u.drop_off_probability * 100).toFixed(1);
                 const isHighRisk = u.drop_off_probability >= 0.70;
+                const rowRiskColor = isHighRisk ? '#EF4444' : (u.drop_off_probability >= 0.40 ? '#F59E0B' : '#10B981');
 
                 return (
                   <tr
                     key={`${u.user_id}-${index}`}
-                    className="table-row"
+                    className="table-row table-row-premium"
                     style={{
+                      ['--row-risk-color' as any]: rowRiskColor,
                       animation: `fadeInUp 0.3s var(--ease-out) ${Math.min(index * 0.02, 0.4)}s both`,
                     }}
                   >
-                    {/* User ID — Inter font, no background, enlarged size */}
+                    {/* User ID — Inter font, avatar + ID */}
                     <td style={{ padding: '16px 16px' }}>
-                      <span style={{
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: '0.98rem',
-                        fontWeight: 700,
-                        color: 'var(--text-primary)',
-                        letterSpacing: '-0.01em',
-                      }}>
-                        {u.user_id}
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: 'var(--bg-muted)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          color: 'var(--text-secondary)',
+                          border: '1px solid var(--border-light)'
+                        }}>
+                          {u.user_id.slice(-2)}
+                        </div>
+                        <span style={{
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: '0.98rem',
+                          fontWeight: 700,
+                          color: 'var(--text-primary)',
+                          letterSpacing: '0.02em',
+                        }}>
+                          {u.user_id}
+                        </span>
+                      </div>
                     </td>
 
-                    {/* Drop-off milestone — Full name instead of M1/M2/M3 */}
+                    {/* Milestone */}
                     <td style={{ padding: '16px 16px' }}>
                       <span className="badge badge-risk" style={{ fontSize: '0.82rem', padding: '5px 12px' }}>
                         <AlertCircle size={13} />
@@ -166,55 +185,59 @@ export const AtRiskTable: React.FC<AtRiskTableProps> = ({
 
                     {/* Risk Score */}
                     <td style={{ padding: '16px 16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{
-                          width: '78px',
-                          height: '6px',
-                          borderRadius: 'var(--radius-full)',
-                          background: 'var(--bg-muted)',
-                          overflow: 'hidden',
-                        }}>
-                          <div style={{
-                            height: '100%',
-                            width: `${riskPct}%`,
-                            borderRadius: 'var(--radius-full)',
-                            background: isHighRisk ? 'var(--color-danger)' : 'var(--color-warning)',
-                            transition: 'width 0.4s var(--ease-out)',
-                          }} />
-                        </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <span style={{
                           fontWeight: 700,
-                          fontSize: '0.92rem',
-                          color: isHighRisk ? 'var(--color-danger)' : 'var(--color-warning)',
+                          color: isHighRisk ? 'var(--color-danger)' : 'var(--text-primary)',
                           fontVariantNumeric: 'tabular-nums',
+                          width: '45px'
                         }}>
                           {riskPct}%
                         </span>
+                        <div className="risk-bar-inline">
+                          <div
+                            className="risk-bar-fill"
+                            style={{
+                              width: `${u.drop_off_probability * 100}%`,
+                              background: rowRiskColor
+                            }}
+                          />
+                        </div>
                       </div>
                     </td>
 
                     {/* Status */}
                     <td style={{ padding: '16px 16px' }}>
-                      <span className="badge badge-success" style={{ fontSize: '0.82rem', padding: '5px 12px' }}>
-                        <Sparkles size={12} />
-                        {lang === 'bn' ? 'নাজ প্রস্তুত' : 'Nudge Ready'}
+                      <span className={`badge ${u.nudge_eligible ? 'badge-brand' : 'badge-gold'}`}>
+                        {u.nudge_eligible ? (
+                          <>
+                            <Sparkles size={12} />
+                            {lang === 'bn' ? 'নাজ সুপারিশকৃত' : 'Nudge Recommended'}
+                          </>
+                        ) : (
+                          <>
+                            <AlertCircle size={12} />
+                            {lang === 'bn' ? 'ম্যানুয়াল রিভিও' : 'Needs Review'}
+                          </>
+                        )}
                       </span>
                     </td>
 
-                    {/* Action button without arrow icon */}
+                    {/* Action */}
                     <td style={{ padding: '16px 16px', textAlign: 'right' }}>
                       <Link
                         href={`/activation/${u.user_id}`}
                         className="btn-primary"
                         style={{
-                          padding: '8px 18px',
-                          fontSize: '0.88rem',
-                          fontWeight: 600,
-                          borderRadius: 'var(--radius-md)',
-                          boxShadow: 'var(--shadow-xs)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '7px 14px',
+                          fontSize: '0.82rem',
+                          borderRadius: 'var(--radius-full)',
                         }}
                       >
-                        <span>{t('table.view_detail', lang)}</span>
+                        {lang === 'bn' ? 'বিস্তারিত' : 'View Details'}
                       </Link>
                     </td>
                   </tr>
