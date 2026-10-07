@@ -155,13 +155,13 @@ class TestEndToEndHybridFlow:
                 headers=HEADERS,
                 json={
                     "action": "approve",
-                    "approver_id": "CM_TEST",
+                    "approver_id": "CM001",
                 },
             )
             assert approve_res.status_code == 200
             result = approve_res.json()
             assert result["status"] == "approved"
-            assert result["approved_by"] == "CM_TEST"
+            assert result["approved_by"] == "CM001"
 
     def test_audit_trail(self):
         """Traces endpoint should return audit entries."""

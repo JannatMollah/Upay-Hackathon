@@ -1,0 +1,194 @@
+{
+  "study": "4-Stage Ablation Study",
+  "purpose": "Prove incremental value of each component in the ML pipeline",
+  "methodology": "Policy replay on held-out test data",
+  "stages": [
+    "Stage 1: Random targeting + generic nudge (baseline)",
+    "Stage 2: XGBoost ML targeting + generic nudge",
+    "Stage 3: XGBoost + SHAP-personalized nudge",
+    "Stage 4: XGBoost + SHAP + DPS surplus personalization (full stack)"
+  ],
+  "disclaimer": "Offline simulation on synthetic data. Live A/B test required to measure actual conversion impact.",
+  "results": {
+    "M2": {
+      "total_users": 7500,
+      "actual_dropoffs": 1417,
+      "budget_fraction": 0.3,
+      "n_targeted": 2250,
+      "stages": {
+        "stage_1_random": {
+          "description": "Random targeting + generic nudge",
+          "targeting_precision": 0.1951,
+          "targeting_recall": 0.3098,
+          "dropoffs_caught": 439,
+          "nudge_type": "generic",
+          "personalization_score": 0.0
+        },
+        "stage_2_ml_generic": {
+          "description": "XGBoost ML targeting + generic nudge",
+          "targeting_precision": 0.3738,
+          "targeting_recall": 0.5935,
+          "dropoffs_caught": 841,
+          "nudge_type": "generic",
+          "personalization_score": 0.0,
+          "lift_over_random": 1.916
+        },
+        "stage_3_ml_shap": {
+          "description": "XGBoost targeting + SHAP-personalized nudge",
+          "targeting_precision": 0.3738,
+          "targeting_recall": 0.5935,
+          "dropoffs_caught": 841,
+          "nudge_type": "shap_personalized",
+          "personalization_score": "0.7243",
+          "shap_top3_concentration": "0.7243",
+          "note": "Same targeting as Stage 2; improvement is in nudge relevance, not targeting. Measured via SHAP feature concentration."
+        },
+        "stage_4_full_stack": {
+          "description": "XGBoost + SHAP + DPS surplus personalization",
+          "targeting_precision": 0.3738,
+          "targeting_recall": 0.5935,
+          "dropoffs_caught": 841,
+          "nudge_type": "full_personalized_with_dps",
+          "personalization_score": "0.7243",
+          "dps_eligible_fraction": 0.0,
+          "note": "Full pipeline: ML targeting + SHAP explanation + surplus-aware DPS recommendation for eligible users."
+        }
+      }
+    },
+    "M3": {
+      "total_users": 7500,
+      "actual_dropoffs": 2113,
+      "budget_fraction": 0.3,
+      "n_targeted": 2250,
+      "stages": {
+        "stage_1_random": {
+          "description": "Random targeting + generic nudge",
+          "targeting_precision": 0.2987,
+          "targeting_recall": 0.318,
+          "dropoffs_caught": 672,
+          "nudge_type": "generic",
+          "personalization_score": 0.0
+        },
+        "stage_2_ml_generic": {
+          "description": "XGBoost ML targeting + generic nudge",
+          "targeting_precision": 0.5142,
+          "targeting_recall": 0.5476,
+          "dropoffs_caught": 1157,
+          "nudge_type": "generic",
+          "personalization_score": 0.0,
+          "lift_over_random": 1.722
+        },
+        "stage_3_ml_shap": {
+          "description": "XGBoost targeting + SHAP-personalized nudge",
+          "targeting_precision": 0.5142,
+          "targeting_recall": 0.5476,
+          "dropoffs_caught": 1157,
+          "nudge_type": "shap_personalized",
+          "personalization_score": "0.7187",
+          "shap_top3_concentration": "0.7187",
+          "note": "Same targeting as Stage 2; improvement is in nudge relevance, not targeting. Measured via SHAP feature concentration."
+        },
+        "stage_4_full_stack": {
+          "description": "XGBoost + SHAP + DPS surplus personalization",
+          "targeting_precision": 0.5142,
+          "targeting_recall": 0.5476,
+          "dropoffs_caught": 1157,
+          "nudge_type": "full_personalized_with_dps",
+          "personalization_score": "0.7187",
+          "dps_eligible_fraction": 0.0,
+          "note": "Full pipeline: ML targeting + SHAP explanation + surplus-aware DPS recommendation for eligible users."
+        }
+      }
+    },
+    "M4": {
+      "total_users": 7500,
+      "actual_dropoffs": 4055,
+      "budget_fraction": 0.3,
+      "n_targeted": 2250,
+      "stages": {
+        "stage_1_random": {
+          "description": "Random targeting + generic nudge",
+          "targeting_precision": 0.5524,
+          "targeting_recall": 0.3065,
+          "dropoffs_caught": 1243,
+          "nudge_type": "generic",
+          "personalization_score": 0.0
+        },
+        "stage_2_ml_generic": {
+          "description": "XGBoost ML targeting + generic nudge",
+          "targeting_precision": 0.8613,
+          "targeting_recall": 0.4779,
+          "dropoffs_caught": 1938,
+          "nudge_type": "generic",
+          "personalization_score": 0.0,
+          "lift_over_random": 1.559
+        },
+        "stage_3_ml_shap": {
+          "description": "XGBoost targeting + SHAP-personalized nudge",
+          "targeting_precision": 0.8613,
+          "targeting_recall": 0.4779,
+          "dropoffs_caught": 1938,
+          "nudge_type": "shap_personalized",
+          "personalization_score": "0.6737",
+          "shap_top3_concentration": "0.6737",
+          "note": "Same targeting as Stage 2; improvement is in nudge relevance, not targeting. Measured via SHAP feature concentration."
+        },
+        "stage_4_full_stack": {
+          "description": "XGBoost + SHAP + DPS surplus personalization",
+          "targeting_precision": 0.8613,
+          "targeting_recall": 0.4779,
+          "dropoffs_caught": 1938,
+          "nudge_type": "full_personalized_with_dps",
+          "personalization_score": "0.6737",
+          "dps_eligible_fraction": 0.0,
+          "note": "Full pipeline: ML targeting + SHAP explanation + surplus-aware DPS recommendation for eligible users."
+        }
+      }
+    },
+    "M5": {
+      "total_users": 7500,
+      "actual_dropoffs": 4720,
+      "budget_fraction": 0.3,
+      "n_targeted": 2250,
+      "stages": {
+        "stage_1_random": {
+          "description": "Random targeting + generic nudge",
+          "targeting_precision": 0.6444,
+          "targeting_recall": 0.3072,
+          "dropoffs_caught": 1450,
+          "nudge_type": "generic",
+          "personalization_score": 0.0
+        },
+        "stage_2_ml_generic": {
+          "description": "XGBoost ML targeting + generic nudge",
+          "targeting_precision": 0.9378,
+          "targeting_recall": 0.447,
+          "dropoffs_caught": 2110,
+          "nudge_type": "generic",
+          "personalization_score": 0.0,
+          "lift_over_random": 1.455
+        },
+        "stage_3_ml_shap": {
+          "description": "XGBoost targeting + SHAP-personalized nudge",
+          "targeting_precision": 0.9378,
+          "targeting_recall": 0.447,
+          "dropoffs_caught": 2110,
+          "nudge_type": "shap_personalized",
+          "personalization_score": "0.7811",
+          "shap_top3_concentration": "0.7811",
+          "note": "Same targeting as Stage 2; improvement is in nudge relevance, not targeting. Measured via SHAP feature concentration."
+        },
+        "stage_4_full_stack": {
+          "description": "XGBoost + SHAP + DPS surplus personalization",
+          "targeting_precision": 0.9378,
+          "targeting_recall": 0.447,
+          "dropoffs_caught": 2110,
+          "nudge_type": "full_personalized_with_dps",
+          "personalization_score": "0.7811",
+          "dps_eligible_fraction": 0.3267,
+          "note": "Full pipeline: ML targeting + SHAP explanation + surplus-aware DPS recommendation for eligible users."
+        }
+      }
+    }
+  }
+}

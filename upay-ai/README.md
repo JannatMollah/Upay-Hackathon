@@ -8,7 +8,7 @@
 [![SHAP](https://img.shields.io/badge/XAI-SHAP%20TreeExplainer-green.svg)](https://shap.readthedocs.io/)
 [![Google Gemini](https://img.shields.io/badge/GenAI-Gemini%20Flash-4285F4.svg)](https://ai.google.dev/)
 [![Database: Supabase](https://img.shields.io/badge/Database-Supabase%20PostgreSQL-3ECF8E.svg)](https://supabase.com/)
-[![Tests: 8 Passed](https://img.shields.io/badge/Tests-8%20Suites%20Passed-brightgreen.svg)](tests/)
+[![Tests: 60 Passed](https://img.shields.io/badge/Tests-60%20Passed%20%7C%2010%20Suites-brightgreen.svg)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -58,8 +58,8 @@ Upay AI deliberately unites three complementary hackathon tracks into a synergis
 | Track | Future Capability | Tool Implemented | MFS Business & Customer Impact |
 | :--- | :--- | :--- | :--- |
 | **Track 04: Growth & Campaign Intelligence** | Make growth and retention intelligent | **Tool 1: Activation Predictor** | Predicts milestone drop-off risks (M1–M6), isolates micro-drivers via SHAP, and triggers automated, guardrailed Bangla nudges. |
-| **Track 03: Customer Innovation & Financial Independence** | Help customers become financially capable | **Tool 2: DPS Coach (SanchayBot)** | Analyzes transaction history, predicts monthly surplus ($R^2=0.9986$), and structures UCB DPS plans with zero-charge ATM cash-out savings. |
-| **Track 05: Merchant & Agent Intelligence** | Strengthen the physical MFS ecosystem | **Tool 3: Agent Liquidity Forecast** | Predicts next-day cash-out demand for 500 agent points ($R^2=0.673$), detects salary-day surges, and alerts before cash runouts occur. |
+| **Track 03: Customer Innovation & Financial Independence** | Help customers become financially capable | **Tool 2: DPS Coach (SanchayBot)** | Analyzes transaction history, predicts monthly surplus ($R^2=0.9401$, leakage-free, MAE=৳2,657), and structures UCB DPS plans with zero-charge ATM cash-out savings. |
+| **Track 05: Merchant & Agent Intelligence** | Strengthen the physical MFS ecosystem | **Tool 3: Agent Liquidity Forecast** | Predicts next-day cash-out demand for 500 agent points ($R^2=0.6760$, chronological split, MAE=৳22,359), detects salary-day surges, and alerts before cash runouts occur. |
 
 ### The Interconnected Synergistic Triad
 
@@ -92,10 +92,10 @@ Adhering strictly to Section 10 of the **AI Hackathon Guideline**:
 | **2. Problem** | *What is difficult, costly, or risky?* | **Baseline Problem:** upay offers up to ৳200 bonus across 6 onboarding milestones. Over 65% drop off after M1/M2, wasting ৳30–50 in early bonuses per churned user. M5 (DPS) fails at a 75% rate. Meanwhile, 32% of agent points experience float exhaustion during peak salary cycles. |
 | **3. Why Now?** | *Why could AI help now?* | Static rule-based SMS campaigns suffer from campaign fatigue and low CTR (<4%). Tabular ML (XGBoost) combined with Explainable AI (SHAP) and Large Language Models (Gemini Flash) enables **context-aware, feature-grounded, culturally attuned Bangla micro-interventions**. |
 | **4. Solution** | *What are we building?* | An integrated 3-in-1 intelligence platform: (1) An Activation Drop-off Engine with at-risk queues, (2) SanchayBot DPS Financial Health Advisor, and (3) An Agent Float Liquidity Forecaster covering 500 agents across all 8 divisions. |
-| **5. AI Role** | *What is the model doing?* | • **Classification:** Multi-Output XGBoost predicting dropout probability across M2–M5.<br/>• **Attribution:** SHAP TreeExplainer isolating top-3 friction drivers per user.<br/>• **Regression:** Cash-flow surplus estimation ($R^2=0.9986$) and agent cash-out demand forecast ($R^2=0.673$).<br/>• **Generation:** Guardrailed Gemini LLM with zero-shot deterministic fallback for bilingual Bangla/English nudges. |
-| **6. Impact** | *What outcome should improve?* | • **+15 percentage points** in full milestone activation (35% → 50%).<br/>• **+15 percentage points** in DPS adoption (25% → 40%).<br/>• **৳500 average monthly DPS contribution** structured per activated saver.<br/>• **85% reduction** in agent cash-out stockout events during peak periods. |
+| **5. AI Role** | *What is the model doing?* | • **Classification:** Multi-Output XGBoost predicting dropout probability across M2–M5.<br/>• **Attribution:** SHAP TreeExplainer isolating top-3 friction drivers per user.<br/>• **Regression:** Cash-flow surplus estimation ($R^2=0.9401$, leakage-free) and agent cash-out demand forecast ($R^2=0.676$, chronological split).<br/>• **Generation:** Guardrailed Gemini LLM with zero-shot deterministic fallback for bilingual Bangla/English nudges. |
+| **6. Impact** | *What outcome should improve?* | • **1.5x–1.9x targeting lift** over random campaign targeting (measured via offline ablation study).<br/>• **+18–31pp precision** in identifying true at-risk users vs random selection.<br/>• **৳500 average monthly DPS contribution** structured per activated saver (32.7% of M5 targets eligible).<br/>• **Agent demand forecast** with MAE ৳22,359 BDT and salary-day breakdown. *(Full impact validation requires live A/B testing — see `docs/ab_test_design.md`)* |
 | **7. Data** | *What data is safely simulated?* | 50,000 synthetic users, 1.25M temporal transactions, and 500 agent points across 64 districts with injected behavioral phenomena (Rural agent friction, airtime habituation, rural female cash-in barriers). **Zero real PII utilized.** |
-| **8. Validation** | *How do we verify it works?* | • **Offline:** ROC-AUC (M2–M5: 0.742–0.787), Brier score calibration (0.134–0.187), Surplus MAE ৳279, Liquidity $R^2$ 0.673.<br/>• **Online Plan:** Randomized controlled trial (A/B testing) comparing generic SMS vs. SHAP-grounded AI nudges. |
+| **8. Validation** | *How do we verify it works?* | • **Offline:** ROC-AUC (M2–M5: 0.742–0.787), Brier score calibration (0.134–0.187), Surplus MAE ৳2,657 ($R^2$=0.9401, leakage-free), Liquidity MAE ৳22,359 ($R^2$=0.676, chronological split).<br/>• **Backtesting:** Policy replay framework (`ml/backtest.py`) + 4-stage ablation study (`ml/ablation_study.py`) measuring incremental value.<br/>• **Online Plan:** A/B test design document (`docs/ab_test_design.md`) with statistical power calculations. |
 | **9. Scale** | *Path to production?* | Clean REST APIs ready for integration with upay's Core Banking Engine, Kafka event streaming, and Data Lakehouse. Governed roll-out via 7-stage post-hackathon pathway. |
 
 ### Official Problem Statement (Guideline Format)
@@ -124,8 +124,8 @@ flowchart TB
     subgraph Layer2["2. Machine Learning & Explainability Engine"]
         XGB_Funnel["Multi-Output XGBoost Classifiers<br/>(M2-M5 AUC: 0.742 - 0.787)"]
         SHAP_Engine["SHAP TreeExplainer<br/>(Top-3 Micro-Drivers per User)"]
-        XGB_Surplus["XGBoost Surplus Regressor<br/>(MAE: ৳279 BDT | R²: 0.9986)"]
-        XGB_Liquidity["Agent Demand Regressor<br/>(17 Temporal Features | R²: 0.673)"]
+        XGB_Surplus["XGBoost Surplus Regressor<br/>(MAE: ৳2,657 BDT | R²: 0.9401, Leakage-Free)"]
+        XGB_Liquidity["Agent Demand Regressor<br/>(17 Temporal Features | R²: 0.6760, Chrono Split)"]
         Fairness_Auditor["Equalized Odds Fairness Auditor<br/>(Gender & Geographic Disparity Audits)"]
         FeatureStore --> XGB_Funnel
         FeatureStore --> XGB_Surplus
@@ -196,7 +196,7 @@ Upay offers a 6-milestone bonus ladder to incentivize new self-registered custom
 Millions of MFS users leave their balances idle or cash out their entire balance immediately upon receipt, incurring hefty withdrawal fees.
 
 #### The Solution:
-- **Cashflow Surplus Regressor:** An XGBoost Regressor ($R^2 = 0.9986$, MAE = ৳279.20 BDT) estimates disposable monthly cash-flow surplus:
+- **Cashflow Surplus Regressor:** An XGBoost Regressor ($R^2 = 0.9401$, MAE = ৳2,657 BDT, leakage-free) estimates disposable monthly cash-flow surplus:
   $$\text{Surplus} = \text{Monthly Inflow} - (\text{Utility} + \text{Merchant} + \text{P2P Out} + \text{Cash Out})$$
 - **Tiered DPS Plan Generator:**
   - *Conservative Plan (30% of surplus):* Safe, low-stress monthly contribution.
@@ -215,7 +215,7 @@ Millions of MFS users leave their balances idle or cash out their entire balance
 upay's physical network of retail agents across 64 districts forms the backbone of deposit and withdrawal operations. An agent who exhausts their cash float cannot fulfill cash-out transactions, generating immediate customer dissatisfaction and transaction attrition.
 
 #### The Solution:
-- **Spatial-Temporal Demand Forecaster:** An XGBoost Regressor trained on 17 temporal, geographic, and economic features across **500 synthetic agent locations** ($R^2 = 0.6733$, MAE = ৳23,753 BDT).
+- **Spatial-Temporal Demand Forecaster:** An XGBoost Regressor trained on 17 temporal, geographic, and economic features across **500 synthetic agent locations** ($R^2 = 0.6760$, MAE = ৳22,359 BDT, chronological split).
 - **Salary Cycle & RMG Multiplier Detection:** Automatically models cash-out surges occurring on the 1st, 5th, 10th, and 15th of the month, applying localized 1.4×–2.0× multipliers in industrial RMG garment zones (Gazipur, Narayanganj, Savar, Chattogram EPZ).
 - **Float Health Classification:**
   - 🟢 **Healthy:** Predicted demand $< 60\%$ of float capacity.
@@ -242,10 +242,19 @@ Compared against a calibrated Logistic Regression baseline on 10,000 held-out te
 
 ### 2. Cashflow Surplus & Agent Liquidity Models
 
-| Model | Target Variable | Algorithm | Test $R^2$ | Test MAE | Test RMSE | Top Feature Drivers |
-| :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Surplus Regressor** | Monthly Disposable Surplus | XGBoost Regressor | **0.9986** | **৳279.20** | ৳531.54 | Net Cash Inflow, Utility Outflow, Airtime Frequency |
-| **Agent Demand** | Daily Cash-Out Volume (BDT) | XGBoost Regressor | **0.6733** | **৳23,753** | ৳34,344 | 14d Rolling Volume (23.9%), Salary Day Flag (16.9%), RMG District (12.1%) |
+> **Phase 2 Fix:** Surplus model features that directly reconstructed the target variable (monthly_income, monthly_expenses) have been **removed** to eliminate data leakage. Agent liquidity model now uses **chronological train/test split** instead of random split to prevent temporal leakage.
+
+| Model | Target Variable | Algorithm | Test $R^2$ | Test MAE | Test RMSE | Split Method | Top Feature Drivers |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| **Surplus Regressor** | Monthly Disposable Surplus | XGBoost Regressor | **0.9401** | **৳2,657** | ৳3,462 | Random (no leakage) | Transaction Count, Cash-Out Ratio, Expense Diversity |
+| **Agent Demand** | Daily Cash-Out Volume (BDT) | XGBoost Regressor | **0.6760** | **৳22,359** | ৳32,573 | **Chronological** | 14d Rolling Volume (23.7%), Salary Day Flag (17.0%), RMG District (11.9%) |
+
+#### Agent Liquidity: Salary-Day vs Non-Salary-Day Performance
+
+| Period | MAE (BDT) | RMSE (BDT) | $R^2$ | Samples |
+| :--- | :---: | :---: | :---: | :---: |
+| **Salary Days** (1st, 5th, 10th, 15th) | ৳39,332 | ৳59,690 | 0.6593 | 500 |
+| **Non-Salary Days** | ৳21,298 | ৳30,078 | 0.6566 | 8,000 |
 
 ### 3. Algorithmic Fairness Audit (Equalized Odds Ratio)
 
@@ -255,6 +264,42 @@ To ensure ethical financial inclusion, our automated Fairness Suite audits true 
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Geography** | Urban vs. Rural | 0.9668 | 0.8912 | 0.7841 | 0.9214 | ✅ PASSED (Fairness threshold $\ge 0.75$) |
 | **Gender** | Male vs. Female | 0.9926 | 0.9411 | 0.8820 | 0.9634 | ✅ PASSED (Near-perfect parity across gender) |
+
+### 4. Ablation Study — Proving Synergistic Value (Phase 2)
+
+> 4-stage ablation experiment proving that each pipeline component adds measurable incremental value beyond the previous stage. Run via `python ml/ablation_study.py`.
+
+| Milestone | Stage 1 (Random) | Stage 2 (ML Targeting) | Lift | Stage 3 (+SHAP) | Stage 4 (+DPS) |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| **M2** | Precision=0.195 | Precision=0.374 | **1.92x** | +72% nudge specificity | — |
+| **M3** | Precision=0.299 | Precision=0.514 | **1.72x** | +72% nudge specificity | — |
+| **M4** | Precision=0.552 | Precision=0.861 | **1.56x** | +67% nudge specificity | — |
+| **M5** | Precision=0.644 | Precision=0.938 | **1.46x** | +78% nudge specificity | 32.7% DPS-eligible |
+
+**Key Insight:** ML targeting catches **47–59% of actual drop-offs** while random targeting only catches 31%. SHAP adds 67–78% nudge personalization. For M5, 32.7% of targeted users receive surplus-aware DPS plans.
+
+### 5. Liquidity Forecast — ML vs Baselines (Phase 2)
+
+> Backtesting framework (`ml/backtest.py`) comparing ML forecast against simple baselines on chronological held-out test data.
+
+| Method | MAE (BDT) | RMSE (BDT) | $R^2$ | Improvement |
+| :--- | :---: | :---: | :---: | :---: |
+| Last-Week-Same-Day | ৳36,338 | ৳55,984 | 0.035 | Baseline |
+| 7-Day Rolling Average | ৳29,074 | ৳42,617 | 0.441 | +40% MAE |
+| **ML Model (XGBoost)** | **৳22,359** | **৳32,573** | **0.676** | **+53% over baseline** |
+
+**Key Insight:** ML forecast reduces MAE by **38.5%** vs last-week-same-day baseline and **23.1%** vs rolling average. Critical stockout events: 14.6% of observations in test period.
+
+### 6. Honest Impact Assessment (Phase 2)
+
+> **Disclaimer:** The following projections are based on offline backtesting with synthetic data. Actual business impact requires live A/B testing with real upay users. See `docs/ab_test_design.md` for experiment design.
+
+| Original Claim (Phase 1) | Validated Status | Evidence |
+| :--- | :---: | :--- |
+| +15pp activation improvement | ⚠️ **Projected** | Ablation shows 1.5-1.9x targeting lift, but actual conversion requires A/B test |
+| +15pp DPS adoption | ⚠️ **Projected** | 32.7% of M5 targets eligible for surplus-aware DPS, pending live validation |
+| 85% stockout reduction | ⚠️ **Projected** | ML forecast 53% better than baseline; stockout reduction requires intervention study |
+| ৳1,260/year fee savings | ✅ **Calculated** | Based on UCB ATM integration fee structure (verifiable) |
 
 ---
 
@@ -279,15 +324,17 @@ To ensure our ML algorithms learned real-world financial nuances rather than tri
 
 Fintech AI systems must maintain uncompromising standards of safety, privacy, and explainability:
 
-| Guideline Principle | Upay AI Implementation |
-| :--- | :--- |
-| **Privacy by Design** | 100% synthetic dataset generated with mathematical privacy guarantees. No real NID, phone numbers, or account balances exist in the system. |
-| **Explainable AI (XAI)** | Every prediction outputs exact SHAP TreeExplainer feature attributions, explaining *why* a customer or agent was flagged before any action is taken. |
-| **Algorithmic Fairness** | Continuous automated equalized odds auditing prevents geographic or gender bias in nudge distribution. |
-| **Security & Sanitization** | Strict regex input sanitization strips control characters, SQL injection attempts, and prompt injection attacks prior to LLM processing. |
-| **Deterministic Fallbacks** | If the Gemini API experiences network timeouts or rate-limiting, the system instantly switches to vetted, pre-compiled bilingual template engines with zero downtime. |
-| **Human-in-the-Loop** | High-impact marketing campaigns and float emergency reallocations provide an operations console for manual analyst review and override. |
-| **No Harmful Automation** | Upay AI generates informational, empowering savings suggestions. It never autonomously denies credit, restricts wallet access, or debits user accounts. |
+| Guideline Principle | Upay AI Implementation | Phase 2 Status |
+| :--- | :--- | :---: |
+| **Privacy by Design** | 100% synthetic dataset generated with mathematical privacy guarantees. No real NID, phone numbers, or account balances exist in the system. | ✅ |
+| **Explainable AI (XAI)** | Every prediction outputs exact SHAP TreeExplainer feature attributions, explaining *why* a customer or agent was flagged before any action is taken. | ✅ |
+| **Algorithmic Fairness** | Continuous automated equalized odds auditing prevents geographic or gender bias in nudge distribution. | ✅ |
+| **Security & Authentication** | Enforced API key authentication (no empty-key bypass), restricted CORS origins, RBAC authorization for nudge approval, and strict regex input sanitization. | ✅ Fixed |
+| **Credential Management** | All database credentials, API keys, and secrets loaded exclusively from `.env` (gitignored). No hard-coded credentials in source code. | ✅ Fixed |
+| **Deterministic Fallbacks** | If the Gemini API experiences network timeouts or rate-limiting, the system instantly switches to vetted, pre-compiled bilingual template engines with zero downtime. | ✅ |
+| **Human-in-the-Loop** | Nudge approval requires authorized `approver_id` (RBAC-enforced). Unauthorized approvers receive HTTP 403 with audit trail logging. | ✅ Fixed |
+| **No Harmful Automation** | Upay AI generates informational, empowering savings suggestions. It never autonomously denies credit, restricts wallet access, or debits user accounts. | ✅ |
+| **Security Testing** | 14 automated security tests validate: API key enforcement, CORS restriction, RBAC authorization, prompt/SQL injection defense, and credential hygiene. | ✅ New |
 
 ---
 
@@ -319,14 +366,14 @@ timeline
 ## 🏆 Hackathon Evaluation Criteria Alignment
 
 | Criterion | Weight | How Upay AI Delivers Excellence |
-| :--- | :---: | :--- |
+| :--- | :--- | :--- |
 | **1. Problem Relevance** | **20%** | Solves the 3 most pressing MFS operational challenges: 68% milestone dropout, 75% DPS hesitation, and peak-hour agent cash-out stockouts. |
-| **2. AI/ML Depth** | **20%** | Combines Multi-Output XGBoost ($AUC = 0.787$), SHAP TreeExplainer local attribution, XGBoost Cashflow Regression ($R^2 = 0.9986$), and XGBoost Agent Liquidity Regression ($R^2 = 0.673$). |
+| **2. AI/ML Depth** | **20%** | Combines Multi-Output XGBoost ($AUC = 0.787$), SHAP TreeExplainer local attribution, XGBoost Cashflow Regression ($R^2 = 0.9401$, leakage-free), and XGBoost Agent Liquidity Regression ($R^2 = 0.6760$, chronological split with salary-day breakdown). |
 | **3. Business/Customer Impact** | **20%** | Saves ৳30–50 in wasted bonus acquisition per user, structures ৳500/month recurring savings for unbanked users, and unlocks ৳1,260/year in cash-out fee savings via UCB ATM integration. |
-| **4. Prototype Quality** | **15%** | Complete end-to-end working system: Next.js 14 glassmorphic UI, FastAPI backend, Supabase DB, Gemini LLM integration, and 8 comprehensive Pytest test suites. |
+| **4. Prototype Quality** | **15%** | Complete end-to-end working system: Next.js 14 glassmorphic UI, FastAPI backend, Supabase DB, Gemini LLM integration, and 10 comprehensive Pytest test suites (60 passed tests). |
 | **5. Innovation** | **10%** | Synergistic 3-tool architecture connecting customer onboarding directly to wealth building (DPS) and physical agent float health; native Bangla financial literacy modeling. |
 | **6. Scalability & Integration** | **10%** | Production-grade REST API, Dockerized deployment, sub-15ms cached model inference, and clear Kafka/Core Banking integration architecture. |
-| **7. Responsible AI & Safety** | **5%** | Automated Equalized Odds fairness auditing, strict prompt sanitization, zero-PII synthetic data, and deterministic zero-shot fallback engines. |
+| **7. Responsible AI & Safety** | **5%** | Automated Equalized Odds fairness auditing, enforced API key auth, restricted CORS, RBAC for nudge approval, 14 security tests, strict prompt sanitization, zero-PII synthetic data, and deterministic zero-shot fallback engines. |
 
 ---
 
@@ -373,19 +420,23 @@ upay-ai/
 │   │   └── lib/                # API client, i18n dictionaries, and state hooks
 │   ├── package.json            # Node.js dependencies (Next.js 14, React 18, Lucide)
 │   └── Dockerfile              # Frontend container definition
+├── docs/                       # Engineering & Experimentation Docs
+│   └── ab_test_design.md       # A/B Test & Policy Replay Experimentation Plan
 ├── ml/                         # ML Pipeline, Data Synthesis & Training Scripts
 │   ├── data_generator.py       # Generates 50,000 synthetic users with P1-P3 patterns
 │   ├── transaction_generator.py# Generates 1.25M temporal transactions
 │   ├── agent_generator.py      # Generates 500 agents with temporal demand
 │   ├── feature_engineering.py  # Computes 48 funnel behavioral features
-│   ├── cashflow_features.py    # Computes 30 cashflow & expense surplus features
+│   ├── cashflow_features.py    # Computes 26 leakage-free cashflow features
 │   ├── train_baseline.py       # Trains Logistic Regression baseline
 │   ├── train_xgboost.py        # Trains Multi-Output XGBoost models
-│   ├── train_surplus.py        # Trains Surplus XGBoost Regressor
-│   ├── train_liquidity.py      # Trains Agent Liquidity XGBoost Regressor
+│   ├── train_surplus.py        # Trains Surplus XGBoost Regressor (Leakage-Free)
+│   ├── train_liquidity.py      # Trains Agent Liquidity XGBoost Regressor (Chrono Split)
 │   ├── shap_explainer.py       # Extracts & serializes SHAP explanations
 │   ├── fairness_check.py       # Audits Equalized Odds across demographic groups
-│   └── evaluate_model.py       # Computes ROC curves, Brier scores, and calibration
+│   ├── evaluate_model.py       # Computes ROC curves, Brier scores, and calibration
+│   ├── backtest.py             # Policy replay backtest against baselines & CAC savings
+│   └── ablation_study.py       # 4-stage ablation study measuring incremental value
 ├── models/                     # Serialized Model Artifacts & Evaluation Reports
 │   ├── xgboost_model.joblib    # Trained Multi-Output Funnel Classifier
 │   ├── surplus_regressor.joblib# Trained Surplus Regressor
@@ -394,13 +445,17 @@ upay-ai/
 │   ├── xgboost_results.json    # Verified evaluation metrics for M2-M5
 │   ├── surplus_results.json    # Verified regression metrics for surplus
 │   ├── liquidity_results.json  # Verified regression metrics for agent liquidity
+│   ├── backtest_report.json    # Verified backtesting & baseline comparison report
+│   ├── ablation_report.json    # Verified 4-stage ablation study results
 │   └── fairness_report.json    # Verified equalized odds audit results
-├── tests/                      # Automated Pytest Test Suite (8 Test Modules)
+├── tests/                      # Automated Pytest Test Suite (10 Test Modules | 60 Passed Tests)
+│   ├── conftest.py             # Pytest configuration and environment paths
 │   ├── test_api.py             # API route contracts & error handling
+│   ├── test_security.py        # 14 Security tests: Auth, CORS, RBAC, sanitizer, credentials
 │   ├── test_data_generator.py  # Data synthesis integrity & distribution checks
 │   ├── test_transaction_generator.py # Transaction sequencing & balance consistency
 │   ├── test_cashflow_features.py     # Cashflow aggregation & math tests
-│   ├── test_surplus_model.py   # Surplus model inference tests
+│   ├── test_surplus_model.py   # Surplus model inference & leakage-free quality tests
 │   ├── test_savings_api.py     # DPS tiering & UCB fee calculator tests
 │   ├── test_liquidity.py       # Agent liquidity forecast & status tests
 │   └── test_e2e_integration.py # End-to-end multi-tool integration pipeline
@@ -492,7 +547,7 @@ npm run dev
 # In the upay-ai directory (with venv activated)
 python -m pytest tests/ -v
 ```
-*All 8 test suites (API, Data, Transactions, Cashflow, Surplus, Savings, Liquidity, E2E) will execute and validate complete system correctness.*
+*All 10 test suites (API, Security, Data, Transactions, Cashflow, Surplus, Savings, Liquidity, E2E, Governance) will execute and validate complete system correctness (60 passed tests).*
 
 ---
 

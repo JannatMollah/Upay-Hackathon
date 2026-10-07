@@ -1,0 +1,224 @@
+{
+  "disclaimer": "These are offline backtest results using synthetic data. Actual business impact requires live A/B testing with real users.",
+  "methodology": "Policy replay on held-out test data with chronological split.",
+  "activation_targeting": {
+    "M2": {
+      "random_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.1951,
+        "wasted_nudges": 1811
+      },
+      "ml_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.3738,
+        "wasted_nudges": 1409
+      },
+      "incremental_lift": 1.916,
+      "cac_saved_bdt": 16080,
+      "threshold_analysis": [
+        {
+          "threshold": 0.4,
+          "n_flagged": 35,
+          "pct_flagged": 0.5,
+          "precision": 0.4857,
+          "recall": 0.012
+        },
+        {
+          "threshold": 0.5,
+          "n_flagged": 164,
+          "pct_flagged": 2.2,
+          "precision": 0.5366,
+          "recall": 0.0621
+        },
+        {
+          "threshold": 0.6,
+          "n_flagged": 800,
+          "pct_flagged": 10.7,
+          "precision": 0.4725,
+          "recall": 0.2668
+        },
+        {
+          "threshold": 0.7,
+          "n_flagged": 1667,
+          "pct_flagged": 22.2,
+          "precision": 0.4055,
+          "recall": 0.4771
+        }
+      ]
+    },
+    "M3": {
+      "random_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.2987,
+        "wasted_nudges": 1578
+      },
+      "ml_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.5142,
+        "wasted_nudges": 1093
+      },
+      "incremental_lift": 1.722,
+      "cac_saved_bdt": 19400,
+      "threshold_analysis": [
+        {
+          "threshold": 0.4,
+          "n_flagged": 283,
+          "pct_flagged": 3.8,
+          "precision": 0.6749,
+          "recall": 0.0904
+        },
+        {
+          "threshold": 0.5,
+          "n_flagged": 949,
+          "pct_flagged": 12.7,
+          "precision": 0.5764,
+          "recall": 0.2589
+        },
+        {
+          "threshold": 0.6,
+          "n_flagged": 1840,
+          "pct_flagged": 24.5,
+          "precision": 0.5321,
+          "recall": 0.4633
+        },
+        {
+          "threshold": 0.7,
+          "n_flagged": 3033,
+          "pct_flagged": 40.4,
+          "precision": 0.4685,
+          "recall": 0.6725
+        }
+      ]
+    },
+    "M4": {
+      "random_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.5524,
+        "wasted_nudges": 1007
+      },
+      "ml_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.8613,
+        "wasted_nudges": 312
+      },
+      "incremental_lift": 1.559,
+      "cac_saved_bdt": 27800,
+      "threshold_analysis": [
+        {
+          "threshold": 0.3,
+          "n_flagged": 2067,
+          "pct_flagged": 27.6,
+          "precision": 0.8771,
+          "recall": 0.4471
+        },
+        {
+          "threshold": 0.4,
+          "n_flagged": 2890,
+          "pct_flagged": 38.5,
+          "precision": 0.8062,
+          "recall": 0.5746
+        },
+        {
+          "threshold": 0.5,
+          "n_flagged": 3923,
+          "pct_flagged": 52.3,
+          "precision": 0.7385,
+          "recall": 0.7144
+        },
+        {
+          "threshold": 0.6,
+          "n_flagged": 4592,
+          "pct_flagged": 61.2,
+          "precision": 0.6993,
+          "recall": 0.7919
+        },
+        {
+          "threshold": 0.7,
+          "n_flagged": 6281,
+          "pct_flagged": 83.7,
+          "precision": 0.608,
+          "recall": 0.9418
+        }
+      ]
+    },
+    "M5": {
+      "random_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.6444,
+        "wasted_nudges": 799
+      },
+      "ml_targeting": {
+        "n_targeted": 2250,
+        "hit_rate": 0.9378,
+        "wasted_nudges": 139
+      },
+      "incremental_lift": 1.455,
+      "cac_saved_bdt": 26400,
+      "threshold_analysis": [
+        {
+          "threshold": 0.3,
+          "n_flagged": 2677,
+          "pct_flagged": 35.7,
+          "precision": 0.9059,
+          "recall": 0.5138
+        },
+        {
+          "threshold": 0.4,
+          "n_flagged": 3313,
+          "pct_flagged": 44.2,
+          "precision": 0.8584,
+          "recall": 0.6025
+        },
+        {
+          "threshold": 0.5,
+          "n_flagged": 5262,
+          "pct_flagged": 70.2,
+          "precision": 0.7419,
+          "recall": 0.8271
+        },
+        {
+          "threshold": 0.6,
+          "n_flagged": 5931,
+          "pct_flagged": 79.1,
+          "precision": 0.714,
+          "recall": 0.8972
+        },
+        {
+          "threshold": 0.7,
+          "n_flagged": 7500,
+          "pct_flagged": 100.0,
+          "precision": 0.6293,
+          "recall": 1.0
+        }
+      ]
+    }
+  },
+  "liquidity_forecast": {
+    "test_period": "2026-09-11 to 2026-09-28",
+    "n_test_samples": 9000,
+    "last_week_same_day": {
+      "mae": 36337.68,
+      "rmse": 55983.84,
+      "r2": 0.0349,
+      "n_evaluated": 8995
+    },
+    "rolling_7d_avg": {
+      "mae": 29073.64,
+      "rmse": 42617.38,
+      "r2": 0.4408,
+      "n_evaluated": 9000
+    },
+    "ml_model": {
+      "mae": 22358.88,
+      "rmse": 32573.49,
+      "r2": 0.676,
+      "split_method": "chronological"
+    },
+    "stockout_analysis": {
+      "total_test_observations": 9000,
+      "actual_critical_events": 1311,
+      "critical_rate": 14.57,
+      "note": "Stockout reduction claim requires A/B test with actual intervention"
+    }
+  }
+}

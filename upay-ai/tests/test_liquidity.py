@@ -7,6 +7,7 @@ from backend.app.main import app
 import os
 
 client = TestClient(app)
+HEADERS = {"X-API-Key": "milestone-ai-dev-key-2026"}
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 
@@ -23,7 +24,7 @@ def test_agent_daily_csv_exists():
 
 def test_liquidity_agents_endpoint():
     """Test GET /api/v1/liquidity/agents returns agent overview."""
-    resp = client.get("/api/v1/liquidity/agents")
+    resp = client.get("/api/v1/liquidity/agents", headers=HEADERS)
     assert resp.status_code == 200
     data = resp.json()
     assert "agents" in data
@@ -36,7 +37,7 @@ def test_liquidity_agents_endpoint():
 
 def test_liquidity_agents_filter_by_area():
     """Test area filter on agents endpoint."""
-    resp = client.get("/api/v1/liquidity/agents?area=urban")
+    resp = client.get("/api/v1/liquidity/agents?area=urban", headers=HEADERS)
     assert resp.status_code == 200
     data = resp.json()
     for agent in data["agents"]:
@@ -45,7 +46,7 @@ def test_liquidity_agents_filter_by_area():
 
 def test_liquidity_agent_forecast():
     """Test GET /api/v1/liquidity/agents/{id}/forecast returns 7-day forecast."""
-    resp = client.get("/api/v1/liquidity/agents/AG00000/forecast")
+    resp = client.get("/api/v1/liquidity/agents/AG00000/forecast", headers=HEADERS)
     assert resp.status_code == 200
     data = resp.json()
     assert data["agent_id"] == "AG00000"
@@ -58,13 +59,13 @@ def test_liquidity_agent_forecast():
 
 def test_liquidity_agent_forecast_404():
     """Test 404 for unknown agent."""
-    resp = client.get("/api/v1/liquidity/agents/INVALID/forecast")
+    resp = client.get("/api/v1/liquidity/agents/INVALID/forecast", headers=HEADERS)
     assert resp.status_code == 404
 
 
 def test_liquidity_model_metrics():
     """Test GET /api/v1/liquidity/model/metrics returns model results."""
-    resp = client.get("/api/v1/liquidity/model/metrics")
+    resp = client.get("/api/v1/liquidity/model/metrics", headers=HEADERS)
     assert resp.status_code == 200
     data = resp.json()
     assert "test_r2" in data

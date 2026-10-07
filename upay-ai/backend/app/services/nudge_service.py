@@ -144,6 +144,7 @@ class NudgeGenerator:
                         "temperature": 0.7,
                         "max_output_tokens": 256,
                     },
+                    request_options={"timeout": 5},
                 )
 
                 nudge_text = response.text.strip()

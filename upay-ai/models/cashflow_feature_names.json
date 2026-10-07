@@ -1,11 +1,7 @@
 [
   "has_bank_account",
   "salary_wallet_active",
-  "monthly_income",
-  "monthly_expenses",
-  "cash_out_amount",
   "cash_out_ratio",
-  "savings_rate",
   "tx_count",
   "income_per_tx",
   "expense_diversity",

@@ -49,17 +49,15 @@ class Config:
     )
 
     # Supabase / PostgreSQL connection (Session Mode Pooler)
-    DATABASE_URL = os.getenv(
-        "DATABASE_URL",
-        "postgresql://postgres.dqkkdxlicrmtamxicmms:R7Y2jvgA41cN8O3S@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres"
-    )
+    # IMPORTANT: Configure via .env — never hard-code credentials in source code.
+    DATABASE_URL = os.getenv("DATABASE_URL", "")
 
-    SUPABASE_URL = os.getenv("SUPABASE_URL", "https://dqkkdxlicrmtamxicmms.supabase.co")
+    SUPABASE_URL = os.getenv("SUPABASE_URL", "")
     SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
 
     API_HOST = os.getenv("API_HOST", "0.0.0.0")
     API_PORT = int(os.getenv("API_PORT", "8000"))
-    API_KEY = os.getenv("API_KEY", "milestone-ai-dev-key-2026")
+    API_KEY = os.getenv("API_KEY", "")
 
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")

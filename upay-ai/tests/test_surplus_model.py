@@ -30,15 +30,15 @@ def test_surplus_results_exist():
 
 
 def test_surplus_model_quality():
-    """Surplus regressor must meet minimum quality thresholds."""
+    """Surplus regressor must meet minimum quality thresholds (Phase 2 leakage-free)."""
     with open(os.path.join(MODELS_DIR, "surplus_results.json")) as f:
         results = json.load(f)
 
-    # R² should be > 0.85 (our model achieves 0.9986)
+    # R² should be > 0.85 (leakage-free model achieves 0.9401)
     assert results["test_r2"] > 0.85, f"R² too low: {results['test_r2']}"
 
-    # MAE should be < ৳2000 (our model achieves ৳279)
-    assert results["test_mae"] < 2000, f"MAE too high: {results['test_mae']}"
+    # MAE should be < BDT 5000 (leakage-free model achieves BDT ~2,657)
+    assert results["test_mae"] < 5000, f"MAE too high: {results['test_mae']}"
 
 
 def test_surplus_prediction_shape():
@@ -65,22 +65,15 @@ def test_surplus_scatter_plot_exists():
 
 def test_surplus_model_r2_explanation():
     """
-    NOTE: The R² = 0.9986 is legitimately high because the surplus regressor
-    predicts monthly_surplus from features that include monthly_income and
-    monthly_expenses — the surplus is algebraically derived (income - expenses).
-
-    In production, this model would operate on real transaction histories where
-    income/expense aggregation introduces natural temporal variance, noise from
-    irregular transactions, and stochastic category classification. The synthetic
-    data follows deterministic rules, producing a tight fit.
-
-    This test documents the design decision and validates it is intentional.
+    Phase 2 Validation:
+    Data leakage features (monthly_income, monthly_expenses) have been removed.
+    The model now predicts surplus with a realistic R² of ~0.94 and MAE ~2,657.
     """
     with open(os.path.join(MODELS_DIR, "surplus_results.json")) as f:
         results = json.load(f)
 
-    # High R² is expected and documented
-    assert results["test_r2"] > 0.95, "R² dropped below expected range — investigate feature set"
+    # R² should be strong and realistic (> 0.85)
+    assert results["test_r2"] > 0.85, "R² dropped below expected range — investigate feature set"
 
-    # MAE should still be meaningful (not zero)
-    assert results["test_mae"] > 50, "MAE suspiciously low — possible data leakage"
+    # MAE should reflect honest prediction uncertainty (> 100)
+    assert results["test_mae"] > 100, "MAE suspiciously low — possible data leakage"
